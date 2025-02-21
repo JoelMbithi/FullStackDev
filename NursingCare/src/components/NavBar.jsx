@@ -54,19 +54,20 @@ const NavBar = () => {
                 alt="User Profile"
                 onClick={() => setShowProfileMenu(!showProfileMenu)}
               />
-              {showProfileMenu && (
-                <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md py-2 w-40">
-                  <p onClick={() => { navigate('/profile'); setShowProfileMenu(false); }} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    My Profile
-                  </p>
-                  <p onClick={() => { navigate('/myAppointments'); setShowProfileMenu(false); }} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                    My Appointments
-                  </p>
-                  <p onClick={() => { setToken(false); setShowProfileMenu(false); }} className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black">
-                    Logout
-                  </p>
-                </div>
-              )}
+             {showProfileMenu && (
+  <div className="absolute right-0 mt-2 bg-white shadow-lg rounded-md py-2 w-40 z-50">
+    <p onClick={() => { navigate('/profile'); setShowProfileMenu(false); }} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+      My Profile
+    </p>
+    <p onClick={() => { navigate('/myAppointments'); setShowProfileMenu(false); }} className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+      My Appointments
+    </p>
+    <p onClick={() => { setToken(false); setShowProfileMenu(false); }} className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-black">
+      Logout
+    </p>
+  </div>
+)}
+
             </div>
           ) : (
             <button onClick={() => navigate('/login')} className="bg-blue-500 text-white px-4 py-2 rounded-full">
