@@ -1,0 +1,69 @@
+@import url('https://fonts.googleapis.com/css2?family=Outfit:wght@100..900&display=swap');
+@import "tailwindcss";
+
+* {
+    font-family: Outfit;
+}
+
+.active hr {
+    @apply block;
+}
+
+::-webkit-scrollbar {
+    @apply hidden;
+}
+
+@media (max-width: 740px) {
+    .active p {
+        @apply text-white bg-blue-600;
+    }
+}
+
+@keyframes scroll {
+    0% {
+        transform: translateX(0); /* Start from the original position */
+    }
+    100% {
+        transform: translateX(-50%); /* Move to the left by 50% of the container width */
+    }
+}
+
+.animate-scroll {
+    display: flex;
+    animation: scroll 20s linear infinite; /* Adjust duration for speed */
+    width: max-content; /* Ensure the container expands to fit all items */
+}
+
+@keyframes slideIn {
+    from {
+        opacity: 0;
+        transform: translateX(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+.slide-in {
+    animation: slideIn 0.8s linear forwards;
+}
+
+@keyframes alternate {
+    0%, 50% {
+        opacity: 1; /* Visible for the first 50% of the animation */
+    }
+    50.01%, 100% {
+        opacity: 0; /* Hidden for the second 50% of the animation */
+    }
+}
+
+.animate-alternate {
+    animation: alternate 10s infinite; /* Total duration = 10s (5s visible, 5s hidden) */
+    opacity: 0; /* Start hidden */
+}
+
+.animate-alternate-delay {
+    animation: alternate 10s infinite 5s; /* Delay the second div by 5s */
+    opacity: 0; /* Start hidden */
+}
