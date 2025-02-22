@@ -2,12 +2,11 @@
 @tailwind components;
 @tailwind utilities;
 
-
 html,
-body,:roo{
-  height: 100%;
+body,
+#__next {
+  min-height: 100vh; /* Ensures full-page height */
 }
-
 
 :root {
   --background: #ffffff;
@@ -16,8 +15,8 @@ body,:roo{
 
 @media (prefers-color-scheme: dark) {
   :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+    --background: hsl(0, 0%, 100%);
+    --foreground: #000000;
   }
 }
 
