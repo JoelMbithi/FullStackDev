@@ -2,7 +2,7 @@ import Image from "next/image";
 
 export const Logo = () => {
     return (
-        <Image
+        <Image 
          height={50}
          width={50}
          alt="logo"
