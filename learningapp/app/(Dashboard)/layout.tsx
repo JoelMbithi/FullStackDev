@@ -1,3 +1,4 @@
+"use client"
 import { ReactNode } from "react";
 import Sidebar from "./_components/Sidebar";
 import { Navbar } from "./_components/Navbar";
