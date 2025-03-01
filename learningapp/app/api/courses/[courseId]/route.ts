@@ -4,7 +4,7 @@ import { NextResponse } from "next/server";
 
 export async function PATCH(
     req: Request,
-    context: { params?: { courseId?: string } } // Ensure params are properly handled
+    { params }: { params: { courseId?: string } } // Directly destructure params
 ) {
     try {
         const { userId } = await auth();
@@ -13,11 +13,11 @@ export async function PATCH(
             return new NextResponse("Unauthorized", { status: 401 });
         }
 
-        if (!context?.params?.courseId) {
+        if (!params?.courseId) {
             return new NextResponse("Bad Request: Missing Course ID", { status: 400 });
         }
 
-        const { courseId } = context.params;
+        const { courseId } = params; // Now params is available properly
         const values = await req.json();
 
         const course = await db.course.update({
