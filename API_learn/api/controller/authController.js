@@ -1,17 +1,58 @@
-import Users from "../models/Users.js"
+import Users from "../models/Users.js";
+import bcrypt from "bcryptjs";
+import { createError } from "../utils/error.js";
+import jwt from "jsonwebtoken";
 
-export const Register = async (req,res,next) => {
+// REGISTER FUNCTION
+export const Register = async (req, res, next) => {
     try {
+        const salt = bcrypt.genSaltSync(10);
+        const hash = bcrypt.hashSync(req.body.password, salt);
         const newUser = new Users({
-            username:req.body.username,
+            username: req.body.username,
             email: req.body.email,
-            password: req.body.password
-        })
+            password: hash
+        });
 
-        await newUser.save()
-        res.status(200).send("User has been created")
-        
+        await newUser.save();
+        res.status(201).json({ message: "User has been created" });
+
     } catch (error) {
-        next(error)
+        next(error);
     }
-}
+};
+
+// LOGIN FUNCTION
+export const Login = async (req, res, next) => {
+    try {
+        const user = await Users.findOne({ username: req.body.username });
+
+        if (!user) {
+            return next(createError(404, "User not found"));
+        }
+
+        const isPasswordCorrect = await bcrypt.compare(req.body.password, user.password);
+
+        if (!isPasswordCorrect) return next(createError(400, "Wrong password or username"));
+
+        // Generate Token
+        const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, {
+            expiresIn: "1h"
+        });
+
+        const { password, isAdmin, ...otherDetails } = user._doc;
+
+        // Send cookie & response in ONE call
+        res
+            .cookie("access_token", token, {
+                httpOnly: true,
+                secure: process.env.NODE_ENV === "production",
+                sameSite: "Strict",
+            })
+            .status(200)
+            .json({ message: "Login successful", token, user: otherDetails });
+
+    } catch (error) {
+        next(error);
+    }
+};
