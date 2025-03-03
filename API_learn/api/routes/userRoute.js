@@ -1,27 +1,36 @@
 import express from "express"
 import { deleteUser, getUser, getUsers, updateUser } from "../controller/userController.js"
-import { verifyToken } from "../utils/verifyToken.js"
-
+import { verifyAdmin, verifyToken, verifyUser } from "../utils/verifyToken.js"
 
 const router = express.Router()
-
-router.get("/checkauth",verifyToken, (req,res,next) => { 
+/*
+ // Route to check if a user is authenticated
+router.get("/checkAuthentication", verifyToken, (req, res, next) => { 
     res.send("Hello user, you are logged in")
 })
 
-//Update User
-router.put("/:id", updateUser)
+// Route to check if a user is authorized (authenticated user with matching ID or admin)
+router.get("/checkUser/:id", verifyUser, (req, res, next) => {
+    res.send("Hello user, you are logged in. Now you can delete the account")
+})
 
-//Delete User
+// Route to check if an admin is authenticated
+router.get("/checkAdmin/:id", verifyAdmin, (req, res, next) => {
+    res.send("Hello admin, you are logged in and now you can delete all the accounts")
+})
+*/
 
-router.delete("/:id", deleteUser)
 
-//Get user
-router.get("/:id", getUser)
+// Route to UPDATE user details
+router.put("/:id", verifyUser, updateUser)
 
-//Get All User
+// Route to DELETE a user
+router.delete("/:id",verifyUser, deleteUser)
 
-router.get("/", getUsers)
+// Route to fetch details of a specific user
+router.get("/:id",verifyUser, getUser)
 
+// Route to fetch details of all users
+router.get("/",verifyAdmin, getUsers)
 
 export default router
