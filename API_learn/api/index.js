@@ -27,17 +27,15 @@ app.use(cookieParser())
 // Middleware to parse JSON request bodies
 app.use(express.json());
 
-// Route handlers
-app.use("/api/authRoute", AuthRoutes);
-app.use("/api/hotelRoute", hotelRoute);
-app.use("/api/userRoute",userRoute)
-app.use("/api/roomRoute", roomRoute)
+// Route handlers app.use("/api/hotels", hotelRoute);
+app.use("/api/hotels", hotelRoute)
+app.use("/api/auth", AuthRoutes);
+app.use("/api/users", userRoute);
+app.use("/api/rooms", roomRoute);
 
-//app.use("/api/register", AuthRoutes);
-//app.use("/api/login",AuthRoutes)
-app.use("/api", AuthRoutes);
-app.listen(5890, () => {
+
+app.listen(8800, () => {
   connect();
-  console.log("Server running on port 8000");
+  console.log("Server running on port 8800");
 });
  

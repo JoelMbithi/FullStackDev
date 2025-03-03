@@ -1,6 +1,6 @@
 import express from "express";
 import Hotel from "../models/Hotel.js";
-import { createHotel, deleteHotel, getHotels, updatedHotel } from "../controller/hotelController.js";
+import { countByCity, createHotel, deleteHotel, getHotels, updatedHotel } from "../controller/hotelController.js";
 import { verifyAdmin } from "../utils/verifyToken.js"
 
 
@@ -13,9 +13,12 @@ router.post("/",verifyAdmin, createHotel)
 router.put("/:id",verifyAdmin,updatedHotel) 
 //API to DELETE
 
-router.delete("/",verifyAdmin,deleteHotel)
+router.delete("/",verifyAdmin, deleteHotel)
 
 //API TO GET ALL
-router.get("/:id", getHotels)
+router.get("/find/:id", getHotels)
+
+router.get("/countByCity", countByCity)
+router.get("/countByType", getHotels)
   
 export default router;
