@@ -37,15 +37,26 @@ export const updateRooms = async (req,res,next) => {
         next(error)
     }
 }
-
-export const deleteRoom = async (req,res,next) => {
+export const deleteRoom = async (req, res, next) => {
     try {
-        await Room.findByIdAndUpdate(req.params.id)
-        res.status(200).json(Room)
+        const { hotelId, id } = req.params;
+
+        // Delete the room
+        const deletedRoom = await Room.findByIdAndDelete(id);
+        if (!deletedRoom) {
+            return next(createError(404, "Room not found"));
+        }
+
+        // Remove the room from the hotel's rooms array
+        await Hotel.findByIdAndUpdate(hotelId, {
+            $pull: { rooms: id }
+        });
+
+        res.status(200).json({ message: "Room deleted successfully" });
     } catch (error) {
-        next(error)
+        next(error);
     }
-}
+};
 
 
 export const getRoom = async (req,res,next) => {

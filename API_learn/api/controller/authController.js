@@ -36,18 +36,17 @@ export const Login = async (req, res, next) => {
         if (!isPasswordCorrect) return next(createError(400, "Wrong password or username"));
 
         // Generate Token
-        const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET, {
-            expiresIn: "1h"
-        });
+        const token = jwt.sign({ id: user._id, isAdmin: user.isAdmin }, process.env.JWT_SECRET)
 
-        const { password, isAdmin, ...otherDetails } = user._doc;
+
+    
 
         // Send cookie & response in ONE call
+        const { password, isAdmin, ...otherDetails} = user._doc
         res
             .cookie("access_token", token, {
                 httpOnly: true,
-                secure: process.env.NODE_ENV === "production",
-                sameSite: "Strict",
+                
             })
             .status(200)
             .json({ message: "Login successful", token, user: otherDetails });
