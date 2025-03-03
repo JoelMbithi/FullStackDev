@@ -4,6 +4,7 @@ import mongoose from "mongoose";
 import AuthRoutes from "./routes/authRoute.js";
 import hotelRoute from "./routes/hotelRoute.js";
 import userRoute from "./routes/userRoute.js"
+import roomRoute from "./routes/roomsRouter.js"
 import cookieParser from "cookie-parser";
 
 // Create an Express application
@@ -30,6 +31,7 @@ app.use(express.json());
 app.use("/api/authRoute", AuthRoutes);
 app.use("/api/hotelRoute", hotelRoute);
 app.use("/api/userRoute",userRoute)
+app.use("/api/roomRoute", roomRoute)
 
 //app.use("/api/register", AuthRoutes);
 //app.use("/api/login",AuthRoutes)
