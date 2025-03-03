@@ -29,7 +29,7 @@ app.use(express.json());
 // Route handlers
 app.use("/api/authRoute", AuthRoutes);
 app.use("/api/hotelRoute", hotelRoute);
-app.use("/api/users",userRoute)
+app.use("/api/userRoute",userRoute)
 
 //app.use("/api/register", AuthRoutes);
 //app.use("/api/login",AuthRoutes)
