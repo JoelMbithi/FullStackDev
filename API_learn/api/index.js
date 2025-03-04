@@ -15,7 +15,11 @@ const app = express();
 dotenv.config();
 
 //cors
-app.use(cors())
+app.use(cors({
+  origin: "http://localhost:3000", // Adjust if your frontend runs elsewhere
+  credentials: true
+}));
+
 const connect = async () => {
   // Function to connect to MongoDB
   try {
