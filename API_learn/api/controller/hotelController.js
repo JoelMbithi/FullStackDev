@@ -42,8 +42,12 @@ export const deleteHotel = async (req, res, next) => {
 };
 
 export const getHotels = async (req, res, next) => {
+    const { min, max, ...others } = req.query
     try {
-        const hotels = await Hotel.find();
+        const hotels = await Hotel.find({
+            ...others,
+            cheapestPrice: { $gt: min || 1, $lt: max || 9990976 }
+        }).limit(req.query.limit);
         res.status(200).json(hotels);
     } catch (error) {
         next(createError(500, "Failed to fetch hotels"));
@@ -66,8 +70,20 @@ export const countByCity  = async (req,res,next) => {
 
 export const countByType = async (req,res,next) => {
               try {
-                const hotelCount = await Hotel.countDocuments({})
+                const hotelCount = await Hotel.countDocuments({type : "hotel"})
+                const apartmentCount = await Hotel.countDocuments({type: "apartment"})
+                 const resortCount = await Hotel.countDocuments({type: "resort"})
+                 const villaCount = await Hotel.countDocuments({type: "vila"})
+                 const cabinCount = await Hotel.countDocuments({type: "cabin"})
                 
+
+                 res.status(200).json([
+                    {type: "hotel", count: hotelCount},
+                    {type: "apartment", count: apartmentCount},
+                    {type: "resort", count: resortCount},
+                    {type: "vila", count: villaCount},
+                    { type: "cabin", count: cabinCount},
+                 ])
               } catch (error) {
                 next(error)
               }
