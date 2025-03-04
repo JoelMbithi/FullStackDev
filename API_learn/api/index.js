@@ -6,12 +6,16 @@ import hotelRoute from "./routes/hotelRoute.js";
 import userRoute from "./routes/userRoute.js"
 import roomRoute from "./routes/roomsRouter.js"
 import cookieParser from "cookie-parser";
+import cors from "cors";
+
 
 // Create an Express application
 const app = express();
 // Load environment variables from .env file
 dotenv.config();
 
+//cors
+app.use(cors())
 const connect = async () => {
   // Function to connect to MongoDB
   try {
