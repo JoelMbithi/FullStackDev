@@ -41,12 +41,25 @@ export const deleteHotel = async (req, res, next) => {
     }
 };
 
+
+export const getHotel = async (req, res, next) => {
+    try {
+        const hotel = await Hotel.findById(req.params.id);
+        if (!hotel) {
+            return next(createError(404, "Hotel not found"));
+        }
+        res.status(200).json(hotel);
+    } catch (error) {
+        next(createError(500, "Failed to fetch hotel"));
+    }
+};
+
 export const getHotels = async (req, res, next) => {
     const { min, max, ...others } = req.query
     try {
         const hotels = await Hotel.find({
             ...others,
-            cheapestPrice: { $gt: min || 1, $lt: max || 9990976 }
+            cheapestPrice: { $gt: min || 0, $lt: max || 999 }
         }).limit(req.query.limit);
         res.status(200).json(hotels);
     } catch (error) {
