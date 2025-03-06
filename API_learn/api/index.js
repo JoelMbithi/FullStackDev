@@ -1,49 +1,45 @@
 import express from "express";
 import dotenv from "dotenv";
 import mongoose from "mongoose";
-import AuthRoutes from "./routes/authRoute.js";
+import AuthRoutes from "./routes/authRoute.js"; // Ensure the correct path
 import hotelRoute from "./routes/hotelRoute.js";
-import userRoute from "./routes/userRoute.js"
-import roomRoute from "./routes/roomsRouter.js"
+import userRoute from "./routes/userRoute.js";
+import roomRoute from "./routes/roomsRouter.js";
 import cookieParser from "cookie-parser";
 import cors from "cors";
 
-
 // Create an Express application
 const app = express();
-// Load environment variables from .env file
 dotenv.config();
 
-//cors
+// CORS configuration
 app.use(cors({
-  origin: "http://localhost:3000", // Adjust if your frontend runs elsewhere
+  origin: "http://localhost:3000",
   credentials: true
 }));
 
+// MongoDB connection function
 const connect = async () => {
-  // Function to connect to MongoDB
   try {
     await mongoose.connect(process.env.MONGODB_URI);
-    console.log("connected to DB");
+    console.log("Connected to DB");
   } catch (error) {
-    throw error;
+    console.error("MongoDB Connection Error:", error);
   }
 };
 
-//middleware
-app.use(cookieParser())
-// Middleware to parse JSON request bodies
+// Middleware
+app.use(cookieParser());
 app.use(express.json());
 
-// Route handlers app.use("/api/hotels", hotelRoute);
-app.use("/api/hotels", hotelRoute)
-app.use("/api/auth", AuthRoutes);
+// Routes
+app.use("/api/hotels", hotelRoute);
+app.use("/api/auth", AuthRoutes);  // This now correctly uses `authRoute.js`
 app.use("/api/users", userRoute);
 app.use("/api/rooms", roomRoute);
 
-
+// Start server
 app.listen(8880, () => {
   connect();
   console.log("Server running on port 8880");
 });
- 

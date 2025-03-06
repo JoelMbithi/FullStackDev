@@ -101,3 +101,4 @@ export const countByType = async (req,res,next) => {
                 next(error)
               }
 }
+
