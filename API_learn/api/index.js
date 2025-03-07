@@ -39,7 +39,7 @@ app.use("/api/users", userRoute);
 app.use("/api/rooms", roomRoute);
 
 // Start server
-app.listen(8880, () => {
+app.listen(8888, () => {
   connect();
-  console.log("Server running on port 8880");
+  console.log("Server running on port 8888");
 });

@@ -1,5 +1,5 @@
 import express from "express"
-import { createRooms, deleteRoom, getRoom, getRooms, updateRooms } from "../controller/roomController.js"
+import { createRooms, deleteRoom, getRoom, getRooms, updateRooms, updateRoomsAvailable } from "../controller/roomController.js"
 import { verifyAdmin } from "../utils/verifyToken.js"
 
 
@@ -11,6 +11,7 @@ router.post("/:hotelId",verifyAdmin, createRooms)
 
 //API to Update rooms
 router.put("/:id",verifyAdmin,updateRooms)
+router.put("/available/:id",updateRoomsAvailable)
 
 //API to delete Room 
 router.delete("/:hotelId/:id",verifyAdmin, deleteRoom )
@@ -21,6 +22,8 @@ router.get("/:id", getRoom)
 //API to get All Rooms
 
 router.get("/", getRooms)
+
+
 
 
 export default router
