@@ -49,7 +49,7 @@ export const Login = async (req, res, next) => {
                 
             })
             .status(200)
-            .json({ message: "Login successful", token, user: otherDetails });
+            .json({ message: "Login successful", details: {...otherDetails},isAdmin });
 
     } catch (error) {
         next(error);
