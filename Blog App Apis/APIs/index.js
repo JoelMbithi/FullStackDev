@@ -3,6 +3,7 @@ import { config } from "dotenv"
 import { connect } from "mongoose"
 import authRouter from "./routes/authRoutes.js"
 import userRoutes from "./routes/UserRoutes.js"
+import PostRouter from "./routes/PostRoutes.js"
 
 const app = express()
 config()
@@ -26,6 +27,10 @@ app.use("/api/auth",authRouter)
 //API to Update user
 
 app.use("/api/user",userRoutes)
+
+//API to Create a PostModel
+
+app.use("/api/post", PostRouter)
 
 
 app.listen("4001", ()=> {
