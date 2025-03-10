@@ -88,4 +88,25 @@ router.get("/getPost/:id", async(req,res)=>{
     }
 })
 
+//Get all Post
+
+router.get("/createPost", async (req, res) => {
+    try {
+        const username = req.query.user;
+        const categoryName = req.query.category;
+        let posts;
+
+        if (username) {
+            posts = await Post.find({ username });
+        } else if (categoryName) {
+            posts = await Post.find({ category: { $in: [categoryName] } });
+        } else {
+            posts = await Post.find();
+        }
+        res.status(200).json(posts);
+    } catch (error) {
+        res.status(500).json(error);
+    }
+});
+
 export default router;
