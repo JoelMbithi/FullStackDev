@@ -1,10 +1,10 @@
 import React from 'react'
-import "gig.scss"
+import "./Gig.scss"
 
 const gig = () => {
   return (
     <div>
-      
+      gig
     </div>
   )
 }

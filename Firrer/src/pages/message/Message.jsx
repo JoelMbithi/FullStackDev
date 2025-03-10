@@ -1,10 +1,10 @@
 import React from 'react'
-import "message.scss"
+import "./Message.scss"
 
 const Message = () => {
   return (
     <div>
-      
+      message
     </div>
   )
 }

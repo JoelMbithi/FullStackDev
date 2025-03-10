@@ -1,9 +1,9 @@
 import React from 'react'
-import 'gigs.scss'
+import './Gigs.scss'
 const gigs = () => {
   return (
     <div>
-      
+      gig
     </div>
   )
 }
