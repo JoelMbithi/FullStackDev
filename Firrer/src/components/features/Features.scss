@@ -1,0 +1,65 @@
+.features {
+    background-color: #b0b0b0;
+    display: flex;
+    justify-content: center;
+    padding: 100px 0px;
+  
+    .container {
+   
+      width: 1200px;
+      display: flex;
+      align-items: center;
+      gap: 50px; /* Adjusted for better spacing */
+      flex-wrap: wrap; /* Make it responsive */
+  
+      .leftItem {
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+        flex: 2;
+  
+        h1 {
+       margin-bottom: 10px;
+          font-weight: 500;
+        }
+  
+        .title {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          color: gray;
+          font-size: 18px;
+          font-weight: 600;
+  
+          img {
+            width: 24px;
+            height: 24px;
+          }
+        }
+  
+        p {
+          color: #333;
+         font-size: 18px;
+         font-weight: 300;
+         line-height: 28px;
+         letter-spacing: 1px;
+        }
+      }
+  
+      .rightItem {
+        flex: 3;
+        background-color: black;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px;
+        border-radius: 10px;
+  
+        video {
+          width: 720px;
+         
+        }
+      }
+    }
+  }
+  

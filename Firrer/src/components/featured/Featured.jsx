@@ -1,6 +1,7 @@
 import React from 'react'
 import "./Featured.scss"
 import profileImage from "../../assets/back.jpeg"
+import search from "../../assets/search.png"
 
 
 const Featured = () => {
@@ -8,10 +9,10 @@ const Featured = () => {
     <div className='featured'>
       <div className="container">
         <div className="left">
-            <h1>Find The perfect Freelance service for your business</h1>
+            <h1>Find The perfect <i>Freelance </i>service for your business</h1>
             <div className="search">
                 <div className="searchInput">
-                    <img src="" alt="" />
+                    <img src={search} alt="" />
                     <input type="text" placeholder='Try "building mobile app"' />
                 </div>
                 <button>search</button>
