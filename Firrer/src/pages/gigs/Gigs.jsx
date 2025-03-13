@@ -1,7 +1,19 @@
-import React from 'react'
+import React, { useState } from 'react'
 import './Gigs.scss'
 import dropDown from '../../assets/down.png'
+import GigCard from "../../components/gigCard/GigCard"
+import { gigs } from "../../data"
 const Gigs = () => {
+
+  const [open,setOpen] = useState(false)
+  const [ sort, setSort] =useState("sales")
+
+  const reSort = (type) => {
+    setSort(type)
+    setOpen(false)
+  }
+
+
   return (
     <div className='gigs'>
       <div className="container">
@@ -21,13 +33,21 @@ const Gigs = () => {
 
           <div className="rightMenu">
             <span className="sortBy">SortBy</span>
-            <span className="sortType">Best Selling</span>
-            <img src={dropDown} alt="" />
-            <div className="dropDownMenu">
-              <span>Newest</span>
-              <span>Best Selling</span>
+            <span className="sortType">{sort === "sales" ? "Best Selling" : "Newest"}</span>
+            <img src={dropDown} alt="" onClick={()=>setOpen( !open)}/>
+            { open && (<div className="dropDownMenu">
+             { sort === "sales" ?( <span onClick={()=> reSort("createAt")}>Newest</span>
+             ) :( <span onClick={()=> reSort("sales")}>Best Selling</span>
+             )}
             </div>
+          )}
           </div>
+        </div>
+
+        <div className="cards">
+          {gigs.map(gig=>{
+            return <GigCard key={gig.id} item={gig}/>
+          })}
         </div>
       </div>
 
