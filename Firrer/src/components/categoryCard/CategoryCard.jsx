@@ -4,7 +4,7 @@ import "./CategoryCard.scss"
 
 const Slide = ({item}) => {
   return (
-   <Link to="/gigs?category=design">
+   <Link to="/Gigs?category=design">
     <div className="categoryCard">
     <img src={item.img} alt="" />
     <span className="desc">{item.desc}</span>

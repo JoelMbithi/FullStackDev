@@ -66,8 +66,9 @@ const Footer = () => {
         <hr />
         <div className="bottom">
           <div className="left">
-            <h2>TaskNova</h2>
-            <span>TaskNova International Ltd. 2025</span>
+            <h2>JoeGigs</h2>
+            <span>&copy;JoeGigs 2025 </span>
+            <span>joellembithi@gmail.com</span>
           </div>
           <div className="right">
             <div className="social">

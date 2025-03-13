@@ -1,0 +1,24 @@
+.gigs{
+
+    display: flex;
+    justify-content: center;
+
+    .container{
+        width: 1200px;
+        padding: 160px 0px;
+        display: flex;
+        flex-direction: column;
+        gap: 15px;
+
+        .intro{
+            font-weight: 300;
+            font-size: 13px;
+            color: #555;
+        }
+
+        p{
+            color: #999;
+            font-weight: 300;
+        }
+    }
+}
