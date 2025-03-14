@@ -82,6 +82,7 @@ const App = () => {
        <Link className='link'>Business</Link>
        <Link className='link'>Lifestyle</Link>
        </div>
+       <hr />
        </>
        )}
     </div>

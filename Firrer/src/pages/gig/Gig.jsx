@@ -14,8 +14,6 @@ import clock from "../../assets/clock.png";
 import cycle from "../../assets/recycle.png";
 import greenCheck from "../../assets/greencheck.png";
 
-
-
 const gig = () => {
   const settings = {
     dots: false,
