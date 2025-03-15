@@ -1,0 +1,134 @@
+.navbar {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    background-color: #003366; // Primary Deep Blue
+    color: white;
+    transition: 0.5s all ease;
+    position: fixed;
+    top: 0;
+
+    width: 100%;
+    z-index: 999;
+   
+    &.active {
+        background-color: white;
+        color: black;
+
+        .logo {
+            color: black; // Change logo text color
+        }
+
+        .links {
+            color: black; // Change links color
+
+            .options {
+                color: black; // Ensure dropdown text remains readable
+            }
+
+            button {
+                color: black;
+                border: 1px solid black;
+            }
+
+            button:hover {
+                background-color: #1DBF73;
+                color: white;
+            }
+        }
+    }
+
+    .container {
+        width: 1300px;
+        display: flex;
+        justify-content: space-between;
+        padding: 20px 0;
+    }
+
+    .logo {
+        font-size: 34px;
+        font-weight: bold;
+        color: white; // Default white
+    }
+
+    .dot {
+        color: #1DBF73; // Accent Vibrant Green
+    }
+
+    .links {
+        display: flex;
+        gap: 24px;
+        align-items: center;
+        font-weight: 500;
+        font-family: "Montserrat", sans-serif;
+        color: white;
+
+
+        span:hover{
+            border:1px solid #b0b0b0;
+            padding: 10px;
+            
+        }
+
+        }
+        .user {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            position: relative;
+        }
+
+        img {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        .options {
+            position: absolute;
+            top: 50px;
+            right: 0;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            border: 1px solid #1DBF73;
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            color: #B0B0B0; // Secondary Soft Gray
+            width: 200px;
+            font-weight: 300;
+        }
+
+        button {
+            color: white;
+            padding: 10px 20px;
+            border: 1px solid white;
+            border-radius: 5px;
+            cursor: pointer;
+            background-color: transparent;
+        }
+
+        button:hover {
+            background-color: #1DBF73;
+            border-color: #1DBF73;
+        }
+    }
+
+    hr {
+        width: 100%;
+        height: 0;
+        border: 0.5px solid #B0B0B0; // Soft Gray Divider
+    }
+
+    .menu {
+        width: 1100px;
+        padding: 10px 0;
+        display: flex;
+        justify-content: space-between;
+        font-weight: 300;
+        color: #B0B0B0; // Soft Gray Text
+        font-family: "Montserrat", sans-serif;
+    }
+
