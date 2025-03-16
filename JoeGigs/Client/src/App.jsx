@@ -11,6 +11,7 @@ import Add from './pages/add/Add'
 import Messages from './pages/messages/Messages'
 import Message from './pages/message/Message'
 import "./app.css"
+import Login from './pages/login/Login'
 
 const Layout = ()=> {
   return (
@@ -59,7 +60,8 @@ const router = createBrowserRouter([
     {
       path:"/message/:id",
       element:<Message/>
-    }
+    },
+    { path: "/login", element: <Login /> },
     ]
   },
 ]);
@@ -68,6 +70,7 @@ const App = () => {
   return (
     <div>
       <RouterProvider router={router} />
+     
      
     </div>
   );

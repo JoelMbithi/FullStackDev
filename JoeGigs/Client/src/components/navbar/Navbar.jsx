@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import "./Navbar.scss"
-import profileImage from "../../assets/profile.jpeg"
-import { Link, useLocation } from 'react-router-dom'
+import avatar from "../../assets/noavatar.jpg"
+import { Link, useLocation, useNavigate } from 'react-router-dom'
+import newRequest from '../../utils/newRequest'
 
 
 const App = () => {
@@ -10,7 +11,8 @@ const App = () => {
     const [open,setOpen] = useState(false)
 
     const {pathname} = useLocation(false)
-
+  
+  
 
     const isActive = ()=> {
         window.scrollY > 0 ? setActive(true)  : setActive(false);
@@ -24,11 +26,22 @@ const App = () => {
         }
     },[])
 
+//Setting the current user name
+    const currentUser= JSON.parse(localStorage.getItem("currentUser"))
 
-    const currentUser= {
-        id:1,
-        username:"Joe Mbithi",
-        isSeller:true
+
+    //logout function
+    const navigate = useNavigate()
+    const handleLogout = async () => {
+      try {
+        
+        await newRequest.post("/auth/logout")
+        localStorage.setItem("currentUser",null)
+        navigate("/")
+
+      } catch (error) {
+        console.log(error)
+      }
     }
 
   return (
@@ -46,11 +59,11 @@ const App = () => {
           <span>English</span>
           <span >Sign In</span>
          { !currentUser?.isSeller && <span>Become a Seller</span>}
-         { !currentUser && <button >Join</button>}
+         { !currentUser && <button  >Join</button>}
 
 {currentUser && (
     <div className="user" onClick={()=> setOpen(!open)}>
-        <img src={profileImage} alt="" />
+        <img src={currentUser.img || avatar} alt="" />
         <span>{currentUser?.username}</span>
         {  open &&
             <div className="options">
@@ -62,7 +75,7 @@ const App = () => {
             )}
             <Link className='link' to="/orders" >Orders</Link >
             <Link className='link' to="/messages">Messages</Link >
-            <Link className='link'>Logout</Link >
+            <Link className='link' onClick={handleLogout}>Logout</Link >
         </div>}
     </div>
 )}
