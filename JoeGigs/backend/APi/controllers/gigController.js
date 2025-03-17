@@ -62,11 +62,11 @@ export const getGigs = async (req,res) => {
 
     const q = req.query;
     const filters = {
+    ...(q.userId && { userId: q.userId}),
    ...(q.category && { category: q.category }),
-   ...(q.price && { price: { $gt: q.price } }),
+   ...((q.min || q.max) && { price: { ...(q.min && { $gt: q.min }), ...(q.max && { $lt: q.max }) } }),
    ...(q.search && { title: { $regex: q.search, $options: "i" } })
-        
-    }
+};
 
     try {
 
