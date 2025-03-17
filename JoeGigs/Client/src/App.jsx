@@ -12,13 +12,27 @@ import Messages from './pages/messages/Messages'
 import Message from './pages/message/Message'
 import "./app.css"
 import Login from './pages/login/Login'
+import Register from './pages/register/Register'
+
+import {
+  QueryClient,
+  QueryClientProvider,
+  useQuery,
+} from '@tanstack/react-query'
+
+const queryClient = new QueryClient()
+
+
 
 const Layout = ()=> {
   return (
     <div className='app'>
-      <Navbar/>
+       <QueryClientProvider client={queryClient}>
+       <Navbar/>
       <Outlet/>
       <Footer/>
+    </QueryClientProvider>
+     
     </div>
   )
 }
@@ -62,6 +76,10 @@ const router = createBrowserRouter([
       element:<Message/>
     },
     { path: "/login", element: <Login /> },
+    {
+      path:"/register" ,
+      element: <Register/>
+    }
     ]
   },
 ]);
