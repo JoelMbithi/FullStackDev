@@ -12,7 +12,9 @@ export const register = async (req, res) => {
          username: req.body.username,
          email: req.body.email,
          password: hashedPassword,
-         country: req.body.country
+         country: req.body.country,
+         img: req.body.img, 
+         isSeller: req.body.isSeller === "true" || req.body.isSeller === true,
       });
 
       const user = await newUser.save();
@@ -24,38 +26,31 @@ export const register = async (req, res) => {
 };
 
 // Login
-export const login = async (req, res) => {
-   try {
-      const user = await User.findOne({ username: req.body.username });
+export const login = async (req, res, next) => {
+  try {
+   const user = await User.findOne({ username: req.body.username });
+   if (!user) return next(createError(403, "User not found"));
 
-      if (!user) {
-         return res.status(403).send("User not found");
-      }
+   const isCorrect = await bcrypt.compare(req.body.password, user.password);
+   if (!isCorrect) return next(createError(403, "Invalid username or password"));
 
-      const isCorrect = await bcrypt.compare(req.body.password, user.password);
+   const token = jwt.sign({ id: user._id, isSeller: user.isSeller }, process.env.JWT_SECRET);
+   const { password, ...others } = user._doc;
 
-      if (!isCorrect) {
-         return res.status(403).send("Invalid username or password");
-      }
+   res.cookie("accessToken", token, { httpOnly: true }).status(200).json(others);
+ } catch (error) {
+   next(error);
+ }
+};
 
 
-      //jsonwebtoken 
-
-      const token = jwt.sign({
-        id:user._id,
-        isSeller: user.isSeller
-      },
-    process.env.JWR_KEY)
-
-      const { password, ...others } = user._doc;
-
-      res.cookie("accessToken",token,{
-        httpOnly: true
-      })
-        
-        .status(200).send(others);
-
-   } catch (error) {
-      res.status(500).json({ message: "Error logging in", error });
-   }
+// Logout
+export const logout = (req, res) => {
+   res.clearCookie("accessToken", {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "None"
+   })
+   .status(200)
+   .json({ message: "Logout successful" });
 };

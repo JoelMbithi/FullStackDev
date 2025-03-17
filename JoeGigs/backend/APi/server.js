@@ -2,7 +2,10 @@ import express from  "express"
 import mongoose from "mongoose"
 import dotenv from "dotenv"
 import authRoute from "./routes/authRoute.js"
+import userRoute from "./routes/userRoute.js"
+import gigRoute from "./routes/gigRoute.js"
 import cookieParser from "cookie-parser"
+import cors from "cors"
 
 const app = express()
 dotenv.config()
@@ -22,10 +25,22 @@ const connect = async ()=>{
 //middlewares
 app.use(express.json());
 app.use(cookieParser())
+app.use(cors({origin:" http://localhost:5173",Credential:true}))
 
 
 
 app.use("/api/auth",authRoute)
+app.use("/api/user", userRoute)
+app.use("/api/gig", gigRoute)
+
+//Error Handling
+app.use((error,req,res,next)=> {
+    const errorStatus = error.status || 500;
+    const errorMessage = error.message || "Something went wrong!"
+
+    return res.status(errorStatus).send(errorMessage)
+})
+
 
 app.listen(8000,()=>{
     connect()
