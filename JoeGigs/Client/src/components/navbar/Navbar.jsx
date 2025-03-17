@@ -44,6 +44,11 @@ const App = () => {
       }
     }
 
+    const handleClick = async ()=>{
+     
+      navigate("/register")
+    }
+
   return (
     <div className={active || pathname !=="/" ? "navbar active": "navbar"}>
       <div className="container">
@@ -57,9 +62,10 @@ const App = () => {
           <span>Business</span>
           <span>Explore</span>
           <span>English</span>
-          <span >Sign In</span>
+          <span><Link to="/login" className='link' >Sign In</Link></span>
+          
          { !currentUser?.isSeller && <span>Become a Seller</span>}
-         { !currentUser && <button  >Join</button>}
+         { !currentUser && <button  onClick={handleClick}>Join</button>}
 
 {currentUser && (
     <div className="user" onClick={()=> setOpen(!open)}>

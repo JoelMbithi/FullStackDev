@@ -3,6 +3,10 @@ import './Gigs.scss'
 import dropDown from '../../assets/down.png'
 import GigCard from "../../components/gigCard/GigCard"
 import { gigs } from "../../data"
+import { useQuery } from '@tanstack/react-query'
+import newRequest from '../../utils/newRequest'
+
+
 const Gigs = () => {
 
   const [open,setOpen] = useState(false)
@@ -13,6 +17,15 @@ const Gigs = () => {
     setOpen(false)
   }
 
+  const { data } = useQuery({
+    queryKey: ['repoData'],
+    queryFn: () => 
+      newRequest.get("/gigs/getGigs", {
+        headers: { Authorization: `Bearer ${localStorage.getItem("accessToken")}` }
+      }).then(res => res.data)
+  });
+  
+console.log(data)
 
   return (
     <div className='gigs'>
