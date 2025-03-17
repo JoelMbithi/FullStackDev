@@ -17,7 +17,7 @@ function Gigs() {
   const { search } = useLocation();
 
   const { isLoading, error, data, refetch } = useQuery({
-    queryKey: ["repoData", search, min, max, sort], // Include sort in query key
+    queryKey: ["gigs", search, min, max, sort], // Include sort in query key
     queryFn: () => {
       const queryParams = new URLSearchParams(search);
       if (min) queryParams.append("min", min);
