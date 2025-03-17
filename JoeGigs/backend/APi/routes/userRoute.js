@@ -1,5 +1,9 @@
-import express from "express"
+import express from "express";
+import { deleteUser } from "../controllers/userController.js";
+import { verifyToken } from "../middleware/jwt.js";
 
-const route = express.Router()
+const router = express.Router();
 
-route.use("/api/")
+router.delete("/delete/:id", verifyToken, deleteUser);
+
+export default router;
