@@ -23,13 +23,12 @@ const gig = () => {
  
 
   //to fetch gig from gigs
-  const {isLoading,error,data, refetch} = useQuery({
-    queryKey:["gig"],
-    qqueryFn: ()=>
-      newRequest.get(`/gigs/singleGig/${id}`).then((res) => {
-        return res.data;
-      })
-  })
+  const { isLoading, error, data, refetch } = useQuery({
+    queryKey: ["gig"],
+    queryFn: () =>
+      newRequest.get(`/gigs/singleGig/${id}`).then((res) => res.data),
+  });
+  
 
 
 
@@ -258,12 +257,12 @@ const gig = () => {
             </div>
           </div>
           <div className="features">
-            {data.features.map((features)=> (
-              <div className="item">
-              <img src={greenCheck} alt="" />
-              <span>{feature}</span>
-            </div>
-            ))}
+          {data.features.map((feature, index) => (
+    <div className="item" key={index}>
+      <img src={greenCheck} alt="" />
+      <span>{feature}</span>
+    </div>
+  ))}
             
            
     
