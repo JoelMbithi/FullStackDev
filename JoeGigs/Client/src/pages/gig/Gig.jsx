@@ -12,9 +12,27 @@ import chichi from "../../assets/chichi.jpeg";
 import dorro from "../../assets/dorro.jpeg";
 import clock from "../../assets/clock.png";
 import cycle from "../../assets/recycle.png";
+import { useQuery } from "@tanstack/react-query"
+import newRequest from "../../utils/newRequest"
+import { useParams } from "react-router-dom"
 import greenCheck from "../../assets/greencheck.png";
 
 const gig = () => {
+
+  const {id} = useParams()
+ 
+
+  //to fetch gig from gigs
+  const {isLoading,error,data, refetch} = useQuery({
+    queryKey:["gig"],
+    qqueryFn: ()=>
+      newRequest.get(`/gigs/singleGig/${id}`).then((res) => {
+        return res.data;
+      })
+  })
+
+
+
   const settings = {
     dots: false,
     infinite: true,
@@ -25,14 +43,19 @@ const gig = () => {
     autoplay: true,
     autoplaySpeed: 6000,
   };
+
+
+
   return (
     <div className="gig">
-      <div className="container">
+      { isLoading ? "loading" 
+      : error ? "something went wrong!"
+      : <div className="container">
         <div className="left">
           <span className="breadCrumb">
             JoeGigs {">"} Graphics & Design {">"}
           </span>
-          <h1>I will create generated art for you</h1>
+          <h1>{data.title}</h1>
 
           <div className="user">
             <div className="profile">
@@ -50,24 +73,19 @@ const gig = () => {
             </div>
           </div>
           <Slider {...settings} className="slider">
-            {[
-              "https://images.pexels.com/photos/1074535/pexels-photo-1074535.jpeg?auto=compress&cs=tinysrgb&w=1600",
-              "https://images.pexels.com/photos/1462935/pexels-photo-1462935.jpeg?auto=compress&cs=tinysrgb&w=1600",
-              "https://images.pexels.com/photos/1054777/pexels-photo-1054777.jpeg?auto=compress&cs=tinysrgb&w=1600",
-            ].map((img, index) => (
-              <img key={index} src={img} alt={`Gig image ${index + 1}`} />
+            {data.images.map((img) => (
+              <img
+              key={img}
+              src={img}
+              alt=""
+              />
             ))}
+            
           </Slider>
 
           <h2>About This Gig</h2>
           <p>
-            Get high-quality work tailored to your needs. Starting at just $5,
-            this gig delivers professional and creative results that exceed
-            expectations. Whether you need AI-generated artwork, custom digital
-            designs, or unique visual content, I am here to bring your vision to
-            life. I ensure attention to detail, prompt delivery, and outstanding
-            results. Don't miss out—order now and experience top-notch design
-            work that stands out!
+           {data.desc}
           </p>
 
           <div className="seller">
@@ -223,40 +241,36 @@ const gig = () => {
 
         <div className="right">
           <div className="price">
-            <h3>1 Ai generated image</h3>
-            <h2>$ 89.9</h2>
+            <h3>{data.shortTitle}</h3>
+            <h2>$ {data.price}</h2>
           </div>
           <p>
-            I will create a unique high quality AI generated image based on a
-            description that you gave me
+           {data.desc}
           </p>
           <div className="details">
             <div className="item">
               <img src={clock} alt="" />
-              <span>2 days Delivery</span>
+              <span>{data.deliveryDate} days Delivery</span>
             </div>
             <div className="item">
               <img src={cycle} alt="" />
-              <span>3 Revision</span>
+              <span>{data.revisionNumber} Revision</span>
             </div>
           </div>
           <div className="features">
-            <div className="item">
+            {data.features.map((features)=> (
+              <div className="item">
               <img src={greenCheck} alt="" />
-              <span>Prompt Writing</span>
+              <span>{feature}</span>
             </div>
-            <div className="item">
-              <img src={greenCheck} alt="" />
-              <span>Prompt Writing</span>
-            </div>
-            <div className="item">
-              <img src={greenCheck} alt="" />
-              <span>Prompt Writing</span>
-            </div>
+            ))}
+            
+           
+    
           </div>
           <button>Continue</button>
         </div>
-      </div>
+      </div>}
     </div>
   );
 };
