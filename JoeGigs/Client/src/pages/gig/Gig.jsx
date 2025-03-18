@@ -4,18 +4,14 @@ import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
 import star from "../../assets/star.png";
-import user from "../../assets/user.jpeg";
-import flag from "../../assets/kenya.webp";
-import like from "../../assets/like.png";
-import dislike from "../../assets/dislike.png";
-import chichi from "../../assets/chichi.jpeg";
-import dorro from "../../assets/dorro.jpeg";
 import clock from "../../assets/clock.png";
 import cycle from "../../assets/recycle.png";
 import { useQuery } from "@tanstack/react-query"
 import newRequest from "../../utils/newRequest"
+import noavatar from "../../assets/noavatar.jpg"
 import { useParams } from "react-router-dom"
 import greenCheck from "../../assets/greencheck.png";
+import Reviews from "../../components/reviews/Reviews";
 
 const gig = () => {
 
@@ -23,13 +19,19 @@ const gig = () => {
  
 
   //to fetch gig from gigs
-  const { isLoading, error, data, refetch } = useQuery({
+  const { isLoading, error, data } = useQuery({
     queryKey: ["gig"],
     queryFn: () =>
       newRequest.get(`/gigs/singleGig/${id}`).then((res) => res.data),
   });
   
 
+  const { isLoading:isLoadingUser, error: errorUser, data: dataUser} = useQuery({
+    queryKey: ["user"],
+    queryFn: () =>
+      newRequest.get(`/user/getUser/${data.userId}`).then((res) => res.data),
+  });
+  
 
 
   const settings = {
@@ -56,21 +58,26 @@ const gig = () => {
           </span>
           <h1>{data.title}</h1>
 
-          <div className="user">
+          { isLoadingUser ? ("loading"  
+          ): error ? ("Something went wrong!"
+         ) : (  <div className="user">
             <div className="profile">
-              <img src={user} alt="" />
+            <img src={dataUser.img || {noavatar}} alt=""  />
             </div>
 
-            <span>Joe Mbithi</span>
-            <div className="stars">
-              <img src={star} alt="" />
-              <img src={star} alt="" />
-              <img src={star} alt="" />
-              <img src={star} alt="" />
-              <img src={star} alt="" />
-              <span>5</span>
-            </div>
+            <span>{dataUser.username}</span>
+            {!isNaN(data.totalStars / data.starNumber) &&  (
+              <div className="stars">
+                {Array(Math.round(data.totalStars / data.starNumber)).fill().map((item,i) => (
+                  <img src={star} alt="" key={i} />
+                ))}
+              
+                <span>{Math.round(data.totalStars / data.starNumber)}</span>
+             
+              </div>
+                   )} 
           </div>
+        )}
           <Slider {...settings} className="slider">
             {data.images.map((img) => (
               <img
@@ -87,20 +94,24 @@ const gig = () => {
            {data.desc}
           </p>
 
-          <div className="seller">
+          {isLoadingUser ? ("loading" 
+         ) : error ? ("Something went wrong!"
+          ) : ( <div className="seller">
             <h2>About The Seller</h2>
             <div className="user">
-              <img src={user} alt="" />
+              <img src={dataUser.img || {noavatar}} alt=""  />
               <div className="info">
-                <span>Joe Mbithi</span>
-                <div className="stars">
-                  <img src={star} alt="" />
-                  <img src={star} alt="" />
-                  <img src={star} alt="" />
-                  <img src={star} alt="" />
-                  <img src={star} alt="" />
-                  <span>5</span>
-                </div>
+                <span>{dataUser.username}</span>
+                {!isNaN(data.totalStars / data.starNumber) &&  (
+              <div className="stars">
+                {Array(Math.round(data.totalStars / data.starNumber)).fill().map((item,i) => (
+                  <img src={star} alt="" key={i} />
+                ))}
+              
+                <span>{Math.round(data.totalStars / data.starNumber)}</span>
+             
+              </div>
+                   )} 
                 <button>Contact Me</button>
               </div>
             </div>
@@ -108,7 +119,7 @@ const gig = () => {
               <div className="items">
                 <div className="item">
                   <span className="title">From</span>
-                  <span className="desc">Kenya</span>
+                  <span className="desc">{dataUser.country}</span>
                 </div>
                 <div className="item">
                   <span className="title">Avg. response time</span>
@@ -125,117 +136,16 @@ const gig = () => {
               </div>
               <hr />
               <p>
-                My name is Karen, I enjoy creating AI generated art in my spare
-                time. I have a lot of experience using the AI programe and that
-                means i know what to prompt the AI with to get a great and
-                incredibly detailed result
+               {dataUser.description}
               </p>
             </div>
           </div>
+          )}
 
-          {/*reviews*/}
-          <div className="reviews">
-            <h2>Reviews</h2>
-            <div className="item">
-              <div className="user">
-                <img className="profile" src={user} alt="" />
-                <div className="info">
-                  <span>Joe Mbithi</span>
-                  <div className="country">
-                    <img src={flag} alt="" />
-                    <span>Kenya</span>
-                  </div>
-                </div>
-              </div>
-              <div className="stars">
-                <img src={star} alt="" />
-                <img src={star} alt="" />
-                <img src={star} alt="" />
-                <img src={star} alt="" />
-                <img src={star} alt="" />
-                <span>5</span>
-              </div>
+          {/* Reviews */}
 
-              <p>
-                Excellent service! The quality of work exceeded my expectations,
-                and the delivery was on time. Highly recommended!
-              </p>
-
-              <div className="helpful">
-                <img src={like} alt="" />
-                <span>Yes</span>
-                <img src={dislike} alt="" />
-                <span>No</span>
-              </div>
-            </div>
-            <hr />
-            <div className="item">
-              <div className="user">
-                <img className="profile" src={chichi} alt="" />
-                <div className="info">
-                  <span>Christine Mutheu</span>
-                  <div className="country">
-                    <img src={flag} alt="" />
-                    <span>Kenya</span>
-                  </div>
-                </div>
-              </div>
-              <div className="stars">
-                <img src={star} alt="" />
-                <img src={star} alt="" />
-                <img src={star} alt="" />
-                <img src={star} alt="" />
-                <img src={star} alt="" />
-                <span>5</span>
-              </div>
-
-              <p>
-                Excellent service! The quality of work exceeded my expectations,
-                and the delivery was on time. Highly recommended!
-              </p>
-
-              <div className="helpful">
-                <img src={like} alt="" />
-                <span>Yes</span>
-                <img src={dislike} alt="" />
-                <span>No</span>
-              </div>
-            </div>
-            <hr />
-            <div className="item">
-              <div className="user">
-                <img className="profile" src={dorro} alt="" />
-                <div className="info">
-                  <span>Dorcus Wanza</span>
-                  <div className="country">
-                    <img src={flag} alt="" />
-                    <span>Kenya</span>
-                  </div>
-                </div>
-              </div>
-              <div className="stars">
-                <img src={star} alt="" />
-                <img src={star} alt="" />
-                <img src={star} alt="" />
-                <img src={star} alt="" />
-                <img src={star} alt="" />
-                <span>5</span>
-              </div>
-
-              <p>
-                Excellent service! The quality of work exceeded my expectations,
-                and the delivery was on time. Highly recommended!
-              </p>
-
-              <div className="helpful">
-                <img src={like} alt="" />
-                <span>Yes</span>
-                <img src={dislike} alt="" />
-                <span>No</span>
-              </div>
-            </div>
-            <hr />
-          </div>
+        <Reviews gigId={id} />
+          
         </div>
 
         <div className="right">
