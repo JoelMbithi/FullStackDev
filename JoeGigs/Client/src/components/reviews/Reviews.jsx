@@ -1,13 +1,13 @@
-import React from "react";
+import React, { useRef } from "react";
 import "./Reviews.scss";
 import Review from "../review/Review";
 import { useQuery, useQueryClient, useMutation } from "@tanstack/react-query";
 import newRequest from "../../utils/newRequest";
 
-
 const Reviews = ({ gigId }) => {
-
-  const queryClient =  useQueryClient()
+  const queryClient = useQueryClient();
+  const inputRef = useRef(null);
+  const selectRef = useRef(null);
 
   const { isLoading, error, data } = useQuery({
     queryKey: ["reviews", gigId],
@@ -21,22 +21,36 @@ const Reviews = ({ gigId }) => {
   console.log("Fetched reviews:", data);
 
   const mutation = useMutation({
-    mutationFn: (review) => {
-      return  newRequest.post("/review/createReview",review)
+    mutationFn: async (review) => {
+      return await newRequest.post("/review/createReview", review);
     },
-    onSuccess:()=>{
-      queryClient.invalidateQueries(["reviews"])
-    }
-  })
+    onSuccess: () => {
+      queryClient.invalidateQueries(["reviews", gigId]); // Refresh the reviews list
 
-  //Function to handle the post add and post form
+      // Clear the input field and reset the star rating after submission
+      if (inputRef.current) inputRef.current.value = "";
+      if (selectRef.current) selectRef.current.value = "1";
+    },
+    onError: (error) => {
+      console.error("Error posting review:", error);
+    },
+  });
+
+  // Function to handle form submission
   const handleSubmit = (e) => {
-    e.preventDefault()
-     const desc = e.target[0].value;
-     const star = e.target[1].value;
-     mutation.mutate({gigId,desc,star})
-  }
+    e.preventDefault();
+    
+    // Get values from input fields
+    const desc = inputRef.current.value.trim();
+    const star = selectRef.current.value;
 
+    if (!desc) {
+      alert("Please write a review before submitting.");
+      return;
+    }
+
+    mutation.mutate({ gigId, desc, star });
+  };
 
   return (
     <div className="reviews">
@@ -49,22 +63,22 @@ const Reviews = ({ gigId }) => {
         <p>No reviews available.</p>
       ) : (
         data.map((review) => <Review key={review._id} review={review} />)
-
-       
       )}
-       <div className="add">
-          <form action="" onSubmit={handleSubmit}>
-            <input type="text" placeholder="write your opinion" />
-            <select name="" id="">
+
+      {/* Review Submission Form */}
+      <div className="add">
+        <form className="addForm" onSubmit={handleSubmit}>
+          <input type="text" ref={inputRef} placeholder="Write your opinion" required />
+          <select ref={selectRef}>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
             <option value="4">4</option>
             <option value="5">5</option>
-            </select>
-            <button>send</button>
-          </form>
-          </div>
+          </select>
+          <button type="submit">Send</button>
+        </form>
+      </div>
     </div>
   );
 };

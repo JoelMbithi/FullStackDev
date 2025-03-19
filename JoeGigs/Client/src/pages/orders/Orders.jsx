@@ -1,20 +1,29 @@
 import React from 'react'
 import"./Orders.scss"
 import {Link } from 'react-router-dom'
+import { useQuery } from '@tanstack/react-query'
+import newRequest from '../../utils/newRequest'
 import message from "../../assets/message.png"
 
 
 const Orders = () => {
 
-  const currentUser = {
-    id:1,
-    username:"Edwin Mukongwe",
-    isSeller:true,
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"))
 
-  }
+ 
+   const { isLoading, error, data } = useQuery({
+    queryKey: ["orders"],
+    queryFn: () => {
+
+      return newRequest.get(`/orders`).then((res) => res.data);
+    },
+  
+  });
   return (
     <div className='orders'>
-      <div className="container">
+     { isLoading ? "loading" 
+     : error ? "something went wrong!"
+     : <div className="container">
         <div className="title">
           <h1>Orders</h1>
          
@@ -25,71 +34,28 @@ const Orders = () => {
             <th>Image</th>
             <th>Title</th>
             <th>Price</th>
-            <th>{ currentUser?.isSeller ? "Buyer" : "Seller"}</th>
+            
             <th>Action</th>
           </tr>
-          <tr>
+          
+          {
+            data.map((order) => (
+            <tr key={order._id}>
             <td>
-           <img className='image' src="https://images.pexels.com/photos/270408/pexels-photo-270408.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" /> 
+           <img className='image' src={order.img} alt="" /> 
             </td>
-            <td>Gig1</td>
-            <td>88</td>
-            <td>123</td>
+            <td>{order.title}</td>
+            <td>
+              {order.price}
+            </td>
+
            <td> <img className='delete' src={message} alt="" /></td>
          
           </tr>
-          <tr>
-            <td>
-           <img className='image' src="https://images.pexels.com/photos/270408/pexels-photo-270408.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" /> 
-            </td>
-            <td>Gig1</td>
-            <td>88</td>
-            <td>123</td>
-           <td> <img className='delete' src={message} alt="" /></td>
-         
-          </tr>
-          <tr>
-            <td>
-           <img className='image' src="https://images.pexels.com/photos/270408/pexels-photo-270408.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" /> 
-            </td>
-            <td>Gig1</td>
-            <td>88</td>
-            <td>123</td>
-           <td> <img className='delete' src={message} alt="" /></td>
-         
-          </tr>
-          <tr>
-            <td>
-           <img className='image' src="https://images.pexels.com/photos/270408/pexels-photo-270408.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" /> 
-            </td>
-            <td>Gig1</td>
-            <td>88</td>
-            <td>123</td>
-           <td> <img className='delete' src={message} alt="" /></td>
-         
-          </tr>
-          <tr>
-            <td>
-           <img className='image' src="https://images.pexels.com/photos/270408/pexels-photo-270408.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" /> 
-            </td>
-            <td>Gig1</td>
-            <td>88</td>
-            <td>123</td>
-           <td> <img className='delete' src={message} alt="" /></td>
-         
-          </tr>
-          <tr>
-            <td>
-           <img className='image' src="https://images.pexels.com/photos/270408/pexels-photo-270408.jpeg?auto=compress&cs=tinysrgb&w=1600" alt="" /> 
-            </td>
-            <td>Gig1</td>
-            <td>88</td>
-            <td>123</td>
-           <td> <img className='delete' src={message} alt="" /></td>
-         
-          </tr>
+              )) }
+          
         </table>
-      </div>
+      </div>}
     </div>
   )
 }
