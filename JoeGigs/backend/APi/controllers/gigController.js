@@ -44,36 +44,39 @@ export const deleteGig = async (req,res) => {
 }
 
 //Get a Gig
-
-export const getGig = async (req,res) => {
+export const getGig = async (req, res) => {
     try {
-        
-        const gig = await Gig.findById(req.params.id)
-        res.status(200).json(gig)
-
+      const gig = await Gig.findById(req.params.id);
+      if (!gig) return res.status(404).json({ message: "Gig not found" });
+  
+      res.status(200).json(gig);
     } catch (error) {
-        res.status(500).json(error)
+      res.status(500).json({ message: "Error fetching gig", error });
     }
-}
-
+  };
+  
 //get gigs
-
-export const getGigs = async (req,res) => {
-
+export const getGigs = async (req, res) => {
+     // Extract query parameters from the request URL
     const q = req.query;
+
     const filters = {
-    ...(q.userId && { userId: q.userId}),
-   ...(q.category && { category: q.category }),
-   ...((q.min || q.max) && { price: { ...(q.min && { $gt: q.min }), ...(q.max && { $lt: q.max }) } }),
-   ...(q.search && { title: { $regex: q.search, $options: "i" } })
-};
+         // Filter by userId if provided
+        ...(q.userId && { userId: q.userId }),
+        ...(q.category && { category: q.category }), // Filter by category if provided
+        ...((q.min || q.max) && { // Price filtering if min or max is provided
+            price: { 
+                ...(q.min && { $gt: q.min }), // If min price is provided, use $gt (greater than)
+                ...(q.max && { $lt: q.max })  // If max price is provided, use $lt (less than)
+            } 
+        }),
+        ...(q.search && { title: { $regex: q.search, $options: "i" } }) // Search by title using regex (case-insensitive)
+    };
 
     try {
-
-        const gig = await Gig.find(filters)
-        res.status(200).json(gig)
-        
+    const gigs = await Gig.find(filters).sort({ [q.sort]:-1}); // Query MongoDB with the filters
+        res.status(200).json(gigs); // Send the result as a JSON response
     } catch (error) {
-        res.status(500).json(error)
+        res.status(500).json(error); // Handle errors
     }
-}
+};
