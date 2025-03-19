@@ -34,10 +34,22 @@ export const login = async (req, res, next) => {
    const isCorrect = await bcrypt.compare(req.body.password, user.password);
    if (!isCorrect) return next(createError(403, "Invalid username or password"));
 
-   const token = jwt.sign({ id: user._id, isSeller: user.isSeller }, process.env.JWT_SECRET);
+   // Generate token
+   const token = jwt.sign({ id: user._id, isSeller: user.isSeller }, process.env.JWT_SECRET, {
+     expiresIn: "1d"
+   });
+
    const { password, ...others } = user._doc;
 
-   res.cookie("accessToken", token, { httpOnly: true }).status(200).json(others);
+   // ✅ Set cookie with correct settings
+   res.cookie("accessToken", token, {
+     httpOnly: true, 
+     secure: process.env.NODE_ENV === "production", // Secure in production
+     sameSite: "lax", // Try "strict" if needed
+     path: "/" // Set to root path
+   });
+
+   res.status(200).json(others);
  } catch (error) {
    next(error);
  }
