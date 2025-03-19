@@ -4,6 +4,7 @@ import dotenv from "dotenv"
 import authRoute from "./routes/authRoute.js"
 import userRoute from "./routes/userRoute.js"
 import gigRoute from "./routes/gigRoute.js"
+import orderRoute from "./routes/orderRoute.js"
 import reviewRoute from "./routes/reviewRoute.js"
 import cookieParser from "cookie-parser"
 import cors from "cors"
@@ -38,6 +39,7 @@ app.use("/api/auth",authRoute)
 app.use("/api/user", userRoute)
 app.use("/api/gigs", gigRoute)
 app.use("/api/review", reviewRoute)
+app.use("/api/orders",  orderRoute)
 
 //Error Handling
 app.use((error,req,res,next)=> {
