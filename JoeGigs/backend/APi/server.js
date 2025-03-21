@@ -8,6 +8,7 @@ import orderRoute from "./routes/orderRoute.js"
 import reviewRoute from "./routes/reviewRoute.js"
 import cookieParser from "cookie-parser"
 import cors from "cors"
+import conversationRoute from "./routes/conversationRoute.js"
 
 const app = express()
 dotenv.config()
@@ -40,6 +41,7 @@ app.use("/api/user", userRoute)
 app.use("/api/gigs", gigRoute)
 app.use("/api/review", reviewRoute)
 app.use("/api/orders",  orderRoute)
+app.use("/api/conversation", conversationRoute)
 
 //Error Handling
 app.use((error,req,res,next)=> {
