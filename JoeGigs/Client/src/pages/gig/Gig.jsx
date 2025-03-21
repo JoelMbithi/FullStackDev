@@ -9,7 +9,7 @@ import cycle from "../../assets/recycle.png";
 import { useQuery } from "@tanstack/react-query"
 import newRequest from "../../utils/newRequest"
 import noavatar from "../../assets/noavatar.jpg"
-import { useParams } from "react-router-dom"
+import { Link, useParams } from "react-router-dom"
 import greenCheck from "../../assets/greencheck.png";
 import Reviews from "../../components/reviews/Reviews";
 
@@ -177,7 +177,9 @@ const gig = () => {
            
     
           </div>
+          <Link to={`/pay/${id}`}>
           <button>Continue</button>
+          </Link>
         </div>
       </div>}
     </div>
