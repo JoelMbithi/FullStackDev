@@ -1,30 +1,49 @@
-import Order from "../Models/orderModel.js"
-import Gig from "../Models/gigModel.js"
+import Stripe from "stripe";
+import dotenv from "dotenv";
+dotenv.config(); // Ensure env variables are loaded
 
-export const createOrder = async (req,res) => {
+console.log("STRIPE_KEY:", process.env.STRIPE_KEY); // Debugging
 
-    //fetch gig id from Gig model
-     const gig = await Gig.findById(req.params.gigId)
+const stripe = new Stripe(process.env.STRIPE_KEY); // Ensure the key is set
 
+import Order from "../Models/orderModel.js";
+import Gig from "../Models/gigModel.js";
 
+// Payment Intent Endpoint
+export const intent = async (req, res) => {
     try {
-        
-        const newOrder = new Order({
-            gigId:gig._id,
-            img:gig.cover,
-            title:gig.title,
-            buyerId:req.userId,
-            sellerId: gig.userId,
-            price:gig.price,
-            payment_intent:"temporary"
-        })
-        const savedOrder = await newOrder.save()
-        res.status(200).send("successful")
+        const gig = await Gig.findById(req.params.id);
+        if (!gig) {
+            return res.status(404).json({ message: "Gig not found" });
+        }
 
+        const paymentIntent = await stripe.paymentIntents.create({
+            amount: gig.price * 100, // Convert to cents
+            currency: "usd",
+            automatic_payment_methods: {
+                enabled: true,
+            },
+        });
+
+        const newOrder = new Order({
+            gigId: gig._id,
+            img: gig.cover,
+            title: gig.title,
+            buyerId: req.userId,
+            sellerId: gig.userId,
+            price: gig.price,
+            payment_intent: paymentIntent.id,
+        });
+
+        await newOrder.save();
+        res.status(200).json({
+            clientSecret: paymentIntent.client_secret,
+        });
     } catch (error) {
-        res.status(500).json(error)
+        console.error("Error creating payment intent:", error);
+        res.status(500).json({ message: error.message });
     }
-}
+};
 
 
 //get Order
