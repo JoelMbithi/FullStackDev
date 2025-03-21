@@ -5,8 +5,8 @@ import {getConversations,createConversations,getSingleConversations,updateConver
 const router = express.Router()
 
 router.get("/",verifyToken, getConversations)
-router.get("/",verifyToken, createConversations)
+router.post("/",verifyToken, createConversations)
 router.get("/singleConversation/:id",verifyToken, getSingleConversations)
-router.get("/:id",verifyToken, updateConversations)
+router.put("/:id",verifyToken, updateConversations)
 
 export default router
