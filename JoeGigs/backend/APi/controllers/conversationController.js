@@ -38,53 +38,61 @@ export const createConversations = async (req, res) => {
 
 
 //Update conversation
-
-export const updateConversations = async(req,res)=> {
+export const updateConversations = async (req, res) => {
     try {
-        const updatedConversation = await Conversation.findOneAndUpdate({
-            id: req.params.id},
-        {
-            $set: {
-                //readBySeller:true,
-                // readByBuyer: true,
+        const conversation = await Conversation.findOne({ id: req.params.id });
 
-                ...(req.isSeller ? {readBySeller: true} : { readByBuyer : true})
-            }
-        },
-        //to show the updated conversations
-      {  new:true}
-    )
+        if (!conversation) {
+            return res.status(404).json({ message: "Conversation not found" });
+        }
 
-    res.status(200).json(updatedConversation)
+        const updatedFields = req.isSeller
+            ? { readBySeller: true }
+            : { readByBuyer: true };
+
+        const updatedConversation = await Conversation.findOneAndUpdate(
+            { id: req.params.id },
+            { $set: updatedFields },
+            { new: true }
+        );
+
+        console.log("Updated Conversation:", updatedConversation); // Debugging
+
+        res.status(200).json(updatedConversation);
     } catch (error) {
-        res.status(500).json(error)
+        res.status(500).json({ message: "Internal Server Error" });
     }
-}
+};
 
 
 
 //get single message
-
-export const getSingleConversations = async (req,res) => {
+export const getSingleConversations = async (req, res) => {
     try {
-        const conversation = await findOne({id: req.params.id})
-
-        res.status(200).json(conversation)
+        const conversation = await Conversation.findOne({
+            $or: [
+                { id: `${req.userId}_${req.params.id}` },
+                { id: `${req.params.id}_${req.userId}` }
+            ]
+        });
+        
+        res.status(200).json(conversation);
     } catch (error) {
-        res.status(500).json(error)
+        console.error("Error fetching conversation:", error);
+        res.status(500).json({ message: "Internal Server Error" });
     }
-}
+};
 
-//get All conversations
+    //get All conversations
 
-export const getConversations = async (req,res) => {
-    try {
-        const conversations = await Conversation.find(
-            req.isSeller ? { sellerId: req.userId} : { buyerId: req.userId}
-        )
-    
-        res.status(200).json(conversations)
-    } catch (error) {
-        res.status(500).json(error)
-    }
+    export const getConversations = async (req,res) => {
+        try {
+            const conversations = await Conversation.find(
+                req.isSeller ? { sellerId: req.userId} : { buyerId: req.userId}
+            ).sort({updatedAt: -1})
+        
+            res.status(200).json(conversations)
+        } catch (error) {
+            res.status(500).json(error)
+        }
 }

@@ -10,6 +10,10 @@ const MessageSchema = new Schema({
     type: String,
     required: true,
   },
+  image: {
+    type: Object,
+    required: null,
+  },
   description: {
     type: String,
     required: true,
