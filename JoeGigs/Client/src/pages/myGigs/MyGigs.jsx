@@ -16,14 +16,18 @@ const MyGigs = () => {
   // ✅ Fetch gigs for the current user
   const { isLoading, data, error } = useQuery({
     queryKey: ["myGigs", currentUser?.id],
-    queryFn: () =>
-      newRequest.get(`/gigs/user/${currentUser?.id}`).then((res) => res.data),
+    queryFn: async () => {
+      const response = await newRequest.get(`/gigs/user/${currentUser?._id}`);
+      return response.data; // Ensure we're returning only the data
+    },
     enabled: !!currentUser,
   });
 
   // ✅ Delete gig mutation
   const mutation = useMutation({
-    mutationFn: (id) => newRequest.delete(`/gigs/deleteGig/${id}`), // ✅ Fixed endpoint
+    mutationFn: async (id) => {
+      await newRequest.delete(`/gigs/${id}`);
+    },
     onSuccess: () => {
       queryClient.invalidateQueries(["myGigs"]);
     },
@@ -64,24 +68,30 @@ const MyGigs = () => {
               </tr>
             </thead>
             <tbody>
-              {data?.map((gig) => (
-                <tr key={gig._id}>
-                  <td>
-                    <img className="image" src={gig.cover} alt="Gig Cover" />
-                  </td>
-                  <td>{gig.title}</td>
-                  <td>${gig.price}</td>
-                  <td>{gig.sales}</td>
-                  <td>
-                    <img
-                      className="delete"
-                      src={deleteIcon}
-                      onClick={() => handleDelete(gig._id)}
-                      alt="Delete Icon"
-                    />
-                  </td>
+              {Array.isArray(data) && data.length > 0 ? (
+                data.map((gig) => (
+                  <tr key={gig._id}>
+                    <td>
+                      <img className="image" src={gig.cover} alt="Gig Cover" />
+                    </td>
+                    <td>{gig.title}</td>
+                    <td>${gig.price}</td>
+                    <td>{gig.sales}</td>
+                    <td>
+                      <img
+                        className="delete"
+                        src={deleteIcon}
+                        onClick={() => handleDelete(gig._id)}
+                        alt="Delete Icon"
+                      />
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="5">No gigs found</td>
                 </tr>
-              ))}
+              )}
             </tbody>
           </table>
         </div>
