@@ -1,82 +1,84 @@
+import Gig from "../Models/gigModel.js";
 
-import Gig from "../Models/gigModel.js"
-//Creating new Gig
-export const createGig = async (req,res) => {
-
-    //confirm if its Seller
-    if(!req.isSeller)
-        return res.status(500).send("Only Sellers can Create  Gig")
+// ✅ Creating a new gig (Only for Sellers)
+export const createGig = async (req, res) => {
+    console.log("Request Body:", req.body); // Log the request payload
+    if (!req.isSeller)
+        return res.status(403).json({ message: "Only Sellers can create a gig" });
 
     const newGig = new Gig({
         userId: req.userId,
         ...req.body,
-
-    })
+    });
 
     try {
-
-        const savedGig = await newGig.save()
-        res.status(200).json(savedGig)
-        
+        const savedGig = await newGig.save();
+        res.status(201).json(savedGig);
     } catch (error) {
-        res.status(500).send("Unable to create a new gig")
+        console.error("Error creating gig:", error); // Log the error
+        res.status(500).json({ message: "Unable to create a new gig", error: error.message });
     }
-    
+};
 
-}
-
-//delete the Gig
-
-export const deleteGig = async (req,res) => {
+// ✅ Deleting a gig (Only the gig owner can delete)
+export const deleteGig = async (req, res) => {
     try {
-      
-        const gig = await Gig.findById(req.params.id)
+        const gig = await Gig.findById(req.params.id);
+        if (!gig) return res.status(404).json({ message: "Gig not found" });
 
-        if(gig.userId !== req.userId)
-            return res.status(400).send("You can only delete your Gig only")
+        if (gig.userId.toString() !== req.userId) {
+            return res.status(403).json({ message: "You can only delete your own gig" });
+        }
 
-        await Gig.findByIdAndDelete(req.params.id)
-        res.status(200).send("Gig has been deleted")
-
+        await Gig.findByIdAndDelete(req.params.id);
+        res.status(200).json({ message: "Gig has been deleted" });
     } catch (error) {
-        res.status(500).json(error)
+        res.status(500).json({ message: "Error deleting gig", error });
     }
-}
+};
 
-//Get a Gig
+// ✅ Getting a single gig
 export const getGig = async (req, res) => {
     try {
-      const gig = await Gig.findById(req.params.id);
-      if (!gig) return res.status(404).json({ message: "Gig not found" });
-  
-      res.status(200).json(gig);
+        const gig = await Gig.findById(req.params.id);
+        if (!gig) return res.status(404).json({ message: "Gig not found" });
+
+        res.status(200).json(gig);
     } catch (error) {
-      res.status(500).json({ message: "Error fetching gig", error });
+        res.status(500).json({ message: "Error fetching gig", error });
     }
-  };
-  
-//get gigs
+};
+
+// ✅ Getting all gigs (with filtering)
 export const getGigs = async (req, res) => {
-     // Extract query parameters from the request URL
     const q = req.query;
 
     const filters = {
-         // Filter by userId if provided
         ...(q.userId && { userId: q.userId }),
-        ...(q.category && { category: q.category }), // Filter by category if provided
-        ...((q.min || q.max) && { // Price filtering if min or max is provided
+        ...(q.category && { category: q.category }),
+        ...((q.min || q.max) && {
             price: { 
-                ...(q.min && { $gt: q.min }), // If min price is provided, use $gt (greater than)
-                ...(q.max && { $lt: q.max })  // If max price is provided, use $lt (less than)
+                ...(q.min && { $gte: Number(q.min) }),
+                ...(q.max && { $lte: Number(q.max) })
             } 
         }),
-        ...(q.search && { title: { $regex: q.search, $options: "i" } }) // Search by title using regex (case-insensitive)
+        ...(q.search && { title: { $regex: q.search, $options: "i" } })
     };
 
     try {
-    const gigs = await Gig.find(filters).sort({ [q.sort]:-1}); // Query MongoDB with the filters
-        res.status(200).json(gigs); // Send the result as a JSON response
+        const gigs = await Gig.find(filters).sort({ [q.sort]: -1 });
+        res.status(200).json(gigs);
     } catch (error) {
-        res.status(500).json(error); // Handle errors
+        res.status(500).json({ message: "Error fetching gigs", error });
+    }
+};
+
+// ✅ Getting all gigs for a specific user
+export const getUserGigs = async (req, res) => {
+    try {
+        const gigs = await Gig.find({ userId: req.params.id });
+        res.status(200).json(gigs);
+    } catch (error) {
+        res.status(500).json({ message: "Error fetching user gigs", error });
     }
 };
