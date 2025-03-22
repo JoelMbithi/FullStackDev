@@ -9,13 +9,11 @@ const CheckoutForm = () => {
     const [message, setMessage] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
 
-    // Define paymentElementOptions
     const paymentElementOptions = {
-        layout: "tabs", // You can change layout as needed (tabs, accordion, etc.)
+        layout: "tabs",
     };
 
     useEffect(() => {
-        // Check to see if this is a redirect back from Checkout
         const query = new URLSearchParams(window.location.search);
 
         if (query.get("success")) {
@@ -56,7 +54,7 @@ const CheckoutForm = () => {
         <form onSubmit={handleSubmit}>
             <LinkAuthenticationElement
                 id="link-authentication-element"
-                onChange={(e) => setEmail(e.target.value)}
+                onChange={(event) => setEmail(event.value)} // ✅ Fixed this line
             />
             <PaymentElement id="payment-element" options={paymentElementOptions} />
             <button disabled={isLoading || !stripe || !elements} id="submit">

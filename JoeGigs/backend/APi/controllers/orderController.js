@@ -1,13 +1,15 @@
 import Stripe from "stripe";
 import dotenv from "dotenv";
+
+import Order from "../Models/orderModel.js";
+import Gig from "../Models/gigModel.js";
+
 dotenv.config(); // Ensure env variables are loaded
 
 console.log("STRIPE_KEY:", process.env.STRIPE_KEY); // Debugging
 
 const stripe = new Stripe(process.env.STRIPE_KEY); // Ensure the key is set
 
-import Order from "../Models/orderModel.js";
-import Gig from "../Models/gigModel.js";
 
 // Payment Intent Endpoint
 export const intent = async (req, res) => {
@@ -65,3 +67,24 @@ export const getOrder = async (req,res) => {
     }
 
 }
+
+//confirm payment
+export const confirmPayment = async (req, res) => {
+    try {
+        const order = await Order.findOneAndUpdate(
+            { payment_intent: req.body.payment_intent },
+            { $set: { isCompleted: true } },
+            { new: true } // Returns updated order
+        );
+
+        if (!order) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+
+        res.status(200).send("Order has been confirmed");
+    } catch (error) {
+        console.error("Error confirming payment:", error);
+        res.status(500).json({ message: error.message });
+    }
+};
+ 
