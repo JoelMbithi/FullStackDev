@@ -8,30 +8,30 @@ const Explore = () => {
       <div className="container">
         <div className="leftItem">
           <h1>
-            WorkMate<i>business</i>
+          JoeGigs <i>business</i>
           </h1>
           <div className="item">
-            <h1>
-              A business solution design for <i>teams</i>
-            </h1>
-            <p>
-              Upgrade to a curated experience with tools and benefits dedicated
-              to business
-            </p>
-            <div className="title">
-              <img src={check} alt="" />
-              Find the right talent. Build without limits. Grow with confidence.
-            </div>
-            <div className="title">
-              <img src={check} alt="" />
-              Find the right talent. Build without limits. Grow with confidence.
-            </div>
-            <div className="title">
-              <img src={check} alt="" />
-              Find the right talent. Build without limits. Grow with confidence.
-            </div>
+          <h1>
+                A Business Solution Designed for <i>High-Performing Teams</i>
+              </h1>
+              <p>
+                Experience a seamless integration of tools and resources that are crafted to help your team perform at its best and achieve long-term success.
+              </p>
+              <div className="title">
+                <img src={check} alt="" />
+                Access a network of skilled professionals ready to contribute to your projects and help you scale effortlessly.
+              </div>
+              <div className="title">
+                <img src={check} alt="" />
+                Empower your team with custom solutions that streamline workflows, enhance productivity, and deliver impactful results.
+              </div>
+              <div className="title">
+                <img src={check} alt="" />
+                Collaborate with experts in various fields to bring innovative ideas to life and push your business forward.
+              </div>
 
-            <button>Explore WorkMate Business</button>
+              <button>Explore JoeGigs Business Solutions</button>
+
           </div>
         </div>
         <div className="rightItem">

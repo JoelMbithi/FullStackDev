@@ -78,6 +78,7 @@ const Footer = () => {
               <img src={linked} alt="" />
               <img src={facebook} alt="" />
             </div>
+            <div className="linkF">
             <div className="link">
               <img src={language} alt="" />
               <span>English</span>
@@ -91,6 +92,7 @@ const Footer = () => {
         <div className="link">
           <img src={accessibility} alt="" />
           <span>Accessibility</span>
+          </div>
             </div>
           </div>
         </div>
