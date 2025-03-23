@@ -30,10 +30,9 @@ const connect = async ()=>{
 app.use(express.json());
 app.use(cookieParser())
 app.use(cors({
-    origin: ["http://localhost:5173", "https://full-stack-dev-virid.vercel.app"], // Allow local & deployed frontend
+    origin: "http://localhost:5173",
     credentials: true
 }));
-
 
 
 
@@ -54,9 +53,8 @@ app.use((error,req,res,next)=> {
     return res.status(errorStatus).send(errorMessage)
 })
 
-const PORT = process.env.PORT || 8000;  // Use Railway-assigned port
 
-app.listen(PORT, () => {
-    connect();
-    console.log(`Server is Running on Port ${PORT}`);
-});
+app.listen(8000,()=>{
+    connect()
+    console.log("Server is Running on Port 8000")
+})
