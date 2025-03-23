@@ -13,20 +13,21 @@ const MyGigs = () => {
   const currentUser = getCurrentUser();
   const queryClient = useQueryClient();
 
-  // ✅ Fetch gigs for the current user
+  //  Fetch gigs for the current user
   const { isLoading, data, error } = useQuery({
     queryKey: ["myGigs", currentUser?.id],
     queryFn: async () => {
       const response = await newRequest.get(`/gigs/user/${currentUser?._id}`);
-      return response.data; // Ensure we're returning only the data
+      return response.data; 
     },
     enabled: !!currentUser,
   });
 
-  // ✅ Delete gig mutation
+  //  Delete gig mutation
   const mutation = useMutation({
     mutationFn: async (id) => {
-      await newRequest.delete(`/gigs/${id}`);
+      await newRequest.delete(`/gigs/deleteGig/${id}`);
+      
     },
     onSuccess: () => {
       queryClient.invalidateQueries(["myGigs"]);

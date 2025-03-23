@@ -153,4 +153,59 @@
             }
         }
     }
+     // **Mobile-Only Adjustments**
+     @media (max-width: 760px) {
+      .joeGigs {
+        display: none;  
+      }
+  
+      .container {
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+     
+        margin-top: 50px;  // Add space below navbar in mobile view
+      }
+  
+      .left {
+        text-align: center;
+  
+        h2 {
+          font-size: 28px;  // Smaller font size for mobile
+        }
+  
+        .search {
+          width: 100%;
+          max-width: 90%;  // Ensure the search input is responsive
+        }
+  
+        .popular {
+          display: flex;
+          flex-wrap: wrap;
+          justify-content: center;
+          gap:10px;
+        }
+      }
+  
+      .right {
+        width: 100%;
+        max-width: 400px; 
+        img {
+        display: none;
+         // width: 100%;
+         // height:20px;
+        }
+      }
+  
+      .extraText {
+        h3 {
+          font-size: 40px;  // Adjust h3 font size for mobile
+        }
+  
+        p {
+          font-size: 14px;  // Adjust paragraph text for mobile
+        }
+      }
+    }
+  
 }
