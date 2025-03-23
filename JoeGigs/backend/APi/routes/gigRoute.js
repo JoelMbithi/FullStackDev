@@ -8,6 +8,6 @@ router.post("/createGig", verifyToken, createGig);
 router.delete("/deleteGig/:id", verifyToken, deleteGig);
 router.get("/singleGig/:id", getGig);
 router.get("/getGigs", getGigs);
-router.get("/user/:id", getUserGigs); // ✅ Added route for fetching user gigs
+router.get("/user/:id", getUserGigs); 
 
 export default router;
