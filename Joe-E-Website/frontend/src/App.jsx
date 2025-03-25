@@ -6,16 +6,17 @@ import "./App.css";
 import Footer from "./components/Footer.jsx";
 import Login from "./pages/Login.jsx";
 import ForgotPassword from "./pages/ForgotPassword.jsx";
-import SignUp from "./pages/SigUp.jsx";
-
+import SignUp from "./pages/SignUp.jsx";
 
 
 const Layout = () => {
   return (
-    <div className="app ">
-       <Header />
-      <Outlet />
-      <Footer/>
+    <div className="flex flex-col w-full min-h-screen">
+      <Header />
+      <main className="flex-grow w-full ">
+        <Outlet />
+      </main>
+      <Footer className="w-full " />
     </div>
   );
 };
