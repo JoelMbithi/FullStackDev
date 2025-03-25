@@ -1,0 +1,11 @@
+@import "tailwindcss";
+
+/* Global Styles */
+:root {
+  max-width: 1400px;
+  margin: 1px;
+  padding: 1px;
+  text-align: center;
+}
+
+
