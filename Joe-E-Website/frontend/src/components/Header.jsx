@@ -31,9 +31,11 @@ const Header = () => {
         <button className="px-3 py-1 rounded-full text-white bg-[#FF6016] hover:bg-[#ff2020]">
           About us
         </button>
+        <Link to="/signup">
         <button className="px-3 py-1 rounded-full text-white bg-[#FF6016] hover:bg-[#FF4120]">
           Register
         </button>
+        </Link>
         <Link to="/login">
           <button className="px-3 py-1 rounded-full text-white bg-[#FF6016] hover:bg-[#FF4120]">
             Login

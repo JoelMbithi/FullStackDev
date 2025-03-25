@@ -8,6 +8,24 @@ import signin from "../assets/signin.gif";
 const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [data , setData] = useState({
+    email:"",
+    password:"",
+   
+} )
+
+const handleChange = (e) => {
+  const { name, value } = e.target;
+  setData((prev) => ({ ...prev, [name]: value }));
+};
+
+const handleSubmit = (e) => {
+  e.preventDefault();
+  console.log("Login Data:", data);
+  // Handle login logic here
+};
+
+console.log("data login", data)
 
   return (
     <section id="login" className="bg-[#F1EFE1]">
@@ -21,11 +39,14 @@ const Login = () => {
 
           {/* form */}
 
-          <form>
+          <form className="flex flex-col gap-2" onClick={handleSubmit}>
             <div className="grid py-3 mt-10">
               <label>Email</label>
               <div className="bg-slate-100">
                 <input
+                  onChange={handleChange}
+                  name="email"
+                  value={data.email}
                   className="rounded-2xl outline-none bg-transparent w-full h-full p-3"
                   type="text"
                   placeholder="enter email"
@@ -36,6 +57,9 @@ const Login = () => {
               <label>Password</label>
               <div className="bg-slate-100 flex">
                 <input
+                onChange={handleChange}
+                name="password"
+                value={data.password}
                   type={showPassword ? "text" : "password"}
                   className="rounded-2xl outline-none bg-transparent w-full h-full p-3"
                   placeholder="enter password"
@@ -76,7 +100,7 @@ const Login = () => {
               </div>
             </div>
             <div className=" mt-5">
-              <button className="bg-[#FF6016] text-white w-full p-3 hover:scale-105 transition-all">
+              <button type="submit" className="bg-[#FF6016] text-white w-full p-3 hover:scale-105 transition-all">
                 Login
               </button>
               <Link to="/signup">
