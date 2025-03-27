@@ -1,11 +1,10 @@
-import express  from "express"
-import { createUser, readUser, updateUser, deleteRoute } from "../Controllers/UserSignupController.js"
+import express from "express";
+import { deleteUser } from "../Controllers/UserController.js";
+import { verifyTokens } from "../middlewares/jwt.js";
 
-const router = express.Router()
+const router = express.Router();
 
-router.post("/create", createUser)
-router.get("/read/:username", readUser)
-router.put("/update/:username", updateUser)
-router.delete("/delete", deleteRoute)
+router.delete("/delete/:id",verifyTokens, deleteUser);
+//router.get("/getUser/:id",getUser)
 
-export default router
+export default router;  

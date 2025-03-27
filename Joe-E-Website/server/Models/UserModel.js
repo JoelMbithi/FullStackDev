@@ -1,24 +1,30 @@
 import mongoose from "mongoose";
 
 const UserSchema = new mongoose.Schema({
-    username:{
+    username: {
         type: String,
         required: true,
-        
+        trim: true
     },
-    email:{
+    email: {
         type: String,
         required: true,
-        unique: true
+        unique: true,
+        lowercase: true
     },
-    password:{
+    password: {
         type: String,
         required: true
     },
-    profilePic:{
-        type:Object,
+    profilePic: {
+        type: String, // Store profile picture URL
         default: ""
+    },
+    role: {
+        type: String,
+        enum: ["user", "admin"], // Restrict role values
+        default: "user" // Default role is "user"
     }
-},{timestamps:true})
+}, { timestamps: true });
 
 export default mongoose.model("User", UserSchema);

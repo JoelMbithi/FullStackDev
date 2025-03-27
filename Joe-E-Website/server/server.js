@@ -1,38 +1,44 @@
-import express from "express"
-import mongoose from "mongoose"
-import dotenv from "dotenv"
-import cors from "cors"
-import userRoutes from "./routes/UserRoutes.js" 
+import express from "express";
+import mongoose from "mongoose";
+import dotenv from "dotenv";
+import cors from "cors";
+import cookieParser from "cookie-parser";
+import authRoutes from "./routes/authRoutes.js";
+import userRoute from "./routes/UserRoutes.js";
 
+dotenv.config();
 
+const app = express();
+app.use(cookieParser());
 
-const app = express()
-dotenv.config()
+// ✅ Increase request size limit
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
-//COnnecting to Mongoose DB
-
-const connect = async ()=>{
+// ✅ MongoDB Connection
+const connect = async () => {
     try {
-     await  mongoose.connect(process.env.MONGODB_URI)
-     console.log("DB connected")
+        await mongoose.connect(process.env.MONGODB_URI);
+        console.log("✅ DB connected");
     } catch (error) {
-     console.error("MongoDB Connection Error:", error);
-     
+        console.error("❌ MongoDB Connection Error:", error);
     }
- }
+};
 
- //middlewares
- app.use(cors({
-    origin: "http://localhost:5173",
-    methods: ["GET,HEAD,PUT,PATCH,POST,DELETE"],
-    allowedHeaders: "Content-Type,Authorization,Cache-Control,Express,Pragma",
+// ✅ CORS Middleware
+app.use(cors({
+    origin: "http://localhost:5174",
+    methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
+    allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
- }))
- app.use(express.json())
+}));
 
- app.use("/api/user",userRoutes)
+// ✅ User Routes
+app.use("/api/user", authRoutes);
+app.use("/api/user", userRoute);
 
-app.listen(8000,()=> {
-    connect()
-    console.log("Server is running on port 8000")
-})
+// ✅ Start Server
+app.listen(8000, () => {
+    connect();
+    console.log("🚀 Server is running on port 8000");
+});
