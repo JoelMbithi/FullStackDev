@@ -75,6 +75,47 @@ export const login = async (req, res) => {
     }
 };
 
+//get roles 
+
+export const getRoles = async(req,res)=>{
+    try {
+        const roles = ["user","admin"]
+
+        res.status(200).json({roles})
+    } catch (error) {
+        res.status(500).json(error)
+    }
+}
+
+//update Role
+
+export const updateRole = async (req,res)=>{
+    try {
+        
+        const { userId, newRole } = req.body
+
+        //ensure user is database
+
+        if(!userId || !newRole)
+            return res.status(400).send("User is not available")
+
+        //find user and update role
+
+        const updatedUser = await User.findByIdAndUpdate(
+            userId,
+            {role: newRole},
+            { new: true}
+        )
+        res.status(200).json({
+            message:"User Role Updated successfully",
+            user: updatedUser
+        })
+
+    } catch (error) {
+        res.status(500).json(error)
+    }
+}
+
 //logout
 export const logout = (req, res) => {
     res.clearCookie("accessToken", {
