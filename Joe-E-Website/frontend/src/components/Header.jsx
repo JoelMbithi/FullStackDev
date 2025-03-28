@@ -47,8 +47,8 @@ const Header = () => {
       </div>
   
       {/* Search Bar */}
-      <div className="hidden md:flex items-center w-full justify-between max-w-lg border border-gray-400 pl-2 rounded-full focus-within:shadow-md">
-        <input type="text" placeholder="Search products here..." className="w-full outline-none max-w-xl" />
+      <div className="hidden md:flex items-center mr-4 w-full justify-between max-w-lg border border-gray-400 pl-2 rounded-full focus-within:shadow-md">
+        <input type="text" placeholder="Search products here..." className="w-full outline-none  max-w-xl" />
         <div className="text-lg min-w-[50px] h-8 flex items-center justify-center rounded-r-full text-white" style={{ backgroundColor: "#FF6016" }}>
           <ImSearch />
         </div>
