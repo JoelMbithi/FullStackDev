@@ -1,148 +1,173 @@
-import React, { useState, useEffect } from 'react';
-import { HiUserCircle, HiOutlinePencilAlt } from 'react-icons/hi';
 
-const Profile = () => {
-  const [user, setUser] = useState(null);
-  const [isEditing, setIsEditing] = useState(false);
-  const [formData, setFormData] = useState({
-    username: '',
-    email: '',
-    bio: ''
-  });
+import React, { useState } from 'react';
+import { FiSettings, FiUser, FiLock, FiBell, FiMoon, FiSun } from 'react-icons/fi';
 
-  useEffect(() => {
-    // Simulate fetching user data
-    const fetchUser = () => {
-      const userData = JSON.parse(localStorage.getItem('User')) || {
-        username: 'JohnDoe',
-        email: 'john@example.com',
-        profilePic: null,
-        bio: 'Frontend developer and design enthusiast'
-      };
-      setUser(userData);
-      setFormData({
-        username: userData.username,
-        email: userData.email,
-        bio: userData.bio || ''
-      });
-    };
-    fetchUser();
-  }, []);
+const Setting = () => {
+  const [darkMode, setDarkMode] = useState(false);
+  const [notifications, setNotifications] = useState(true);
+  const [currentTab, setCurrentTab] = useState('account');
 
-  const handleInputChange = (e) => {
-    const { name, value } = e.target;
-    setFormData(prev => ({ ...prev, [name]: value }));
-  };
-
-  const handleSave = () => {
-    // In a real app, you would update the user data via API
-    const updatedUser = { ...user, ...formData };
-    localStorage.setItem('User', JSON.stringify(updatedUser));
-    setUser(updatedUser);
-    setIsEditing(false);
-    alert('Profile updated successfully!');
-  };
+  const settingsTabs = [
+    { id: 'account', icon: <FiUser />, label: 'Account' },
+    { id: 'security', icon: <FiLock />, label: 'Security' },
+    { id: 'notifications', icon: <FiBell />, label: 'Notifications' },
+    { id: 'appearance', icon: darkMode ? <FiSun /> : <FiMoon />, label: 'Appearance' }
+  ];
 
   return (
-    <div className="w-full min-h-screen flex justify-center items-start py-12 px-4">
-      <div className="w-full max-w-2xl bg-white rounded-lg shadow-xl overflow-hidden">
-        {/* Profile Header */}
-        <div className="bg-red-700 p-6 text-center">
-          <div className="relative inline-block">
-            {user?.profilePic ? (
-              <img 
-                src={user.profilePic} 
-                alt="Profile" 
-                className="w-32 h-32 rounded-full border-4 border-white object-cover"
-              />
-            ) : (
-              <HiUserCircle className="w-32 h-32 text-white" />
-            )}
-            <button 
-              className="absolute bottom-0 right-0 bg-white p-2 rounded-full shadow-md"
-              onClick={() => document.getElementById('profilePicInput').click()}
-            >
-              <HiOutlinePencilAlt className="text-red-600" />
-              <input type="file" id="profilePicInput" className="hidden" />
-            </button>
+    <div className={`w-full min-h-screen ${darkMode ? 'bg-gray-900' : 'bg-red-500'} transition-colors duration-300`}>
+      <div className="container mx-auto px-4 py-8">
+        <div className={`max-w-4xl mx-auto rounded-xl shadow-lg overflow-hidden ${darkMode ? 'bg-gray-800 text-white' : 'bg-white text-gray-800'}`}>
+          {/* Settings Header */}
+          <div className={`p-6 border-b ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+            <div className="flex items-center space-x-3">
+              <FiSettings className="text-2xl" />
+              <h1 className="text-2xl font-bold">Settings</h1>
+            </div>
+            <p className={`mt-1 ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+              Manage your account preferences and settings
+            </p>
           </div>
-          <h1 className="text-2xl font-bold text-white mt-4">
-            {user?.username || 'User'}
-          </h1>
-        </div>
 
-        {/* Profile Content */}
-        <div className="p-6">
-          {isEditing ? (
-            <div className="space-y-4">
-              <div>
-                <label className="block text-gray-700 mb-1">Username</label>
-                <input
-                  type="text"
-                  name="username"
-                  value={formData.username}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 mb-1">Email</label>
-                <input
-                  type="email"
-                  name="email"
-                  value={formData.email}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
-                />
-              </div>
-              <div>
-                <label className="block text-gray-700 mb-1">Bio</label>
-                <textarea
-                  name="bio"
-                  value={formData.bio}
-                  onChange={handleInputChange}
-                  className="w-full p-2 border rounded"
-                  rows="3"
-                />
-              </div>
-              <div className="flex justify-end space-x-2">
-                <button 
-                  onClick={() => setIsEditing(false)}
-                  className="px-4 py-2 bg-gray-300 rounded"
-                >
-                  Cancel
-                </button>
-                <button 
-                  onClick={handleSave}
-                  className="px-4 py-2 bg-red-600 text-white rounded"
-                >
-                  Save Changes
-                </button>
-              </div>
+          <div className="flex flex-col md:flex-row">
+            {/* Settings Sidebar */}
+            <div className={`w-full md:w-64 p-4 border-b md:border-b-0 md:border-r ${darkMode ? 'border-gray-700' : 'border-gray-200'}`}>
+              <nav className="space-y-1">
+                {settingsTabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setCurrentTab(tab.id)}
+                    className={`flex items-center w-full px-4 py-2 rounded-lg transition ${currentTab === tab.id 
+                      ? darkMode 
+                        ? 'bg-red-600 text-white' 
+                        : 'bg-red-100 text-red-600'
+                      : darkMode
+                        ? 'hover:bg-gray-700'
+                        : 'hover:bg-gray-100'
+                    }`}
+                  >
+                    <span className="mr-3">{tab.icon}</span>
+                    {tab.label}
+                  </button>
+                ))}
+              </nav>
             </div>
-          ) : (
-            <div className="space-y-4">
-              <div>
-                <h2 className="text-xl font-semibold text-gray-800">About</h2>
-                <p className="text-gray-600 mt-2">{user?.bio || 'No bio yet'}</p>
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold text-gray-800">Contact</h2>
-                <p className="text-gray-600 mt-2">{user?.email}</p>
-              </div>
-              <button 
-                onClick={() => setIsEditing(true)}
-                className="mt-6 px-4 py-2 bg-[#FF6016] text-white rounded flex items-center space-x-2"
-              >
-                <HiOutlinePencilAlt />
-                <span>Edit Profile</span>
-              </button>
+
+            {/* Settings Content */}
+            <div className="flex-1 p-6">
+              {currentTab === 'account' && (
+                <div>
+                  <h2 className="text-xl font-semibold mb-4">Account Settings</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <label className={`block mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Username</label>
+                      <input
+                        type="text"
+                        defaultValue="user123"
+                        className={`w-full p-2 rounded border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                      />
+                    </div>
+                    <div>
+                      <label className={`block mb-1 ${darkMode ? 'text-gray-300' : 'text-gray-700'}`}>Email</label>
+                      <input
+                        type="email"
+                        defaultValue="user@example.com"
+                        className={`w-full p-2 rounded border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                      />
+                    </div>
+                    <button className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
+                      Save Changes
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {currentTab === 'security' && (
+                <div>
+                  <h2 className="text-xl font-semibold mb-4">Security</h2>
+                  <div className="space-y-4">
+                    <div>
+                      <h3 className="font-medium mb-2">Change Password</h3>
+                      <div className="space-y-3">
+                        <input
+                          type="password"
+                          placeholder="Current Password"
+                          className={`w-full p-2 rounded border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                        />
+                        <input
+                          type="password"
+                          placeholder="New Password"
+                          className={`w-full p-2 rounded border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                        />
+                        <input
+                          type="password"
+                          placeholder="Confirm New Password"
+                          className={`w-full p-2 rounded border ${darkMode ? 'bg-gray-700 border-gray-600' : 'bg-white border-gray-300'}`}
+                        />
+                      </div>
+                    </div>
+                    <button className="px-4 py-2 bg-red-600 text-white rounded hover:bg-red-700 transition">
+                      Update Password
+                    </button>
+                  </div>
+                </div>
+              )}
+
+              {currentTab === 'notifications' && (
+                <div>
+                  <h2 className="text-xl font-semibold mb-4">Notification Preferences</h2>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-medium">Email Notifications</h3>
+                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                          Receive updates via email
+                        </p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={notifications}
+                          onChange={() => setNotifications(!notifications)}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {currentTab === 'appearance' && (
+                <div>
+                  <h2 className="text-xl font-semibold mb-4">Appearance</h2>
+                  <div className="space-y-4">
+                    <div className="flex items-center justify-between">
+                      <div>
+                        <h3 className="font-medium">Dark Mode</h3>
+                        <p className={`text-sm ${darkMode ? 'text-gray-400' : 'text-gray-600'}`}>
+                          Switch between light and dark theme
+                        </p>
+                      </div>
+                      <label className="relative inline-flex items-center cursor-pointer">
+                        <input
+                          type="checkbox"
+                          checked={darkMode}
+                          onChange={() => setDarkMode(!darkMode)}
+                          className="sr-only peer"
+                        />
+                        <div className="w-11 h-6 bg-gray-200 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-red-600"></div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              )}
             </div>
-          )}
+          </div>
         </div>
       </div>
     </div>
   );
 };
 
-export default Profile;
+export default Setting;
