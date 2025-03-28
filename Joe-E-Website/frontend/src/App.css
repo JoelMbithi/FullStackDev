@@ -2,11 +2,42 @@
 
 /* Global Styles */
 :root {
-  max-width: 1400px;
-  margin: 0px;
-  padding: 0px;
+  --primary-color: #FF6016;
+  --hover-color: #FF4120;
   font-family: 'Roboto', sans-serif;
-  
+  background-color: #F1EFE1;
+}
+
+body {
+  max-width: 1500px;
+  margin: 0 auto;
+}
+
+.customShadow {
+  box-shadow: 5px 5px 10px rgba(236, 91, 9, 0.4);
+}
+
+.userTable {
+  @apply  bg-white px-14 border border-slate-200 font-medium text-base py-2   text-left 
+}
+.userTable th{
+   @apply   px-10 border border-gray-400 font-medium text-base py-2   text-left 
 }
 
 
+.userTable td{
+  @apply  border border-gray-400 px-4 py-2 text-center
+}
+
+
+@layer components {
+  .btn-primary {
+    @apply px-3 mr-3 py-2 rounded-full text-white bg-[#FF6016] hover:bg-[#FF4120] transition-all ;
+  }
+  .btn {
+    @apply bg-[#FF6016] text-white w-full p-3 rounded-md hover:scale-105 transition-all ;
+  }
+  .btnAdmin {
+    @apply bg-[#FFC22E] hover:bg-[hsl(49,100%,59%)] text-white w-full p-3 rounded-md hover:scale-105 transition-all ;
+  }
+}
