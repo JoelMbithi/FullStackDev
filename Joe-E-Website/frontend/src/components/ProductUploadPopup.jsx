@@ -16,7 +16,8 @@ const ProductUploadPopup = ({
   previewImages,  // Changed from previewImage to previewImages
   handleUpload,
   uploading,
-  removeImage    // Added removeImage prop
+  removeImage ,
+  handleUploadProduct   // Added removeImage prop
 }) => {
 
     const [openFullScreenImage,setOpenFullScreenImage] = useState(false)
@@ -217,6 +218,7 @@ const ProductUploadPopup = ({
               </button>
               <button 
                 type="submit" 
+                onClick={handleUploadProduct}
                 className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2"
                 disabled={uploading}
               >
