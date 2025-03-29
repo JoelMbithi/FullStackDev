@@ -1,56 +1,113 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import ProductUploadPopup from '../components/ProductUploadPopup';
 import UploadImage from '../helpers/UploadImage';
+import newRequest  from '../utils/newRequest.js';
+import { toast } from 'react-toastify';
 
 const Products = () => {
   const [showPopup, setShowPopup] = useState(false);
-  const [previewImages, setPreviewImages] = useState([]); // Changed to array
+  const [previewImages, setPreviewImages] = useState([]);
   const [uploading, setUploading] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [allProduct,setAllProduct] = useState([])
+   const [loadingProducts,setLoadingProducts] = useState()
 
   const [data, setData] = useState({
     productName: "",
     brandName: "",
     category: "",
-    productImages: [], // Changed to array for multiple images
+    productImages: [],
     description: "",
     price: "",
-    selling: "",
+    sellingPrice: "", // Changed to match backend
   });
 
-  
+  const fetchProducts = async () => {
+    try {
+      setLoadingProducts(true);
+      const res = await newRequest.get("/product/getProduct");
+      console.log(res.data); // Log the actual product data
+
+      setAllProduct(res.data || []);
+    } catch (error) {
+      console.error("Fetch products error:", error);
+      toast.error("Failed to load products");
+    } finally {
+      setLoadingProducts(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProducts();
+  }, []);
+
+
   const handleOnChange = (e) => {
     const { id, value } = e.target;
-    setData(prevData => ({
-      ...prevData,
+    setData(prev => ({
+      ...prev,
       [id]: value
     }));
+  };
+
+  const handleUploadProduct = async (e) => {
+    e.preventDefault();
+    setIsSubmitting(true);
+    
+    try {
+      // Validate required fields
+      if (!data.productName || !data.price || !data.description) {
+        throw new Error('Product name, price and description are required');
+      }
+
+      if (data.productImages.length === 0) {
+        throw new Error('At least one product image is required');
+      }
+
+      // Convert price to number
+      const productData = {
+        ...data,
+        price: Number(data.price),
+        sellingPrice: Number(data.sellingPrice) || Number(data.price) // Fallback to regular price
+      };
+
+      const res = await newRequest.post("/product/uploadProduct", productData, {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      });
+
+      toast.success('Product uploaded successfully!');
+      setShowPopup(false);
+      resetForm();
+      
+    } catch (error) {
+      console.error('Upload error:', error);
+      toast.error(error.response?.data?.message || error.message || 'Failed to upload product');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const handleUpload = async (e) => {
     const files = Array.from(e.target.files);
     if (!files.length) return;
 
-    // Validate files
-    const validFiles = files.filter(file => 
-      file.type.match('image.*') && file.size <= 5 * 1024 * 1024
-    );
-
-    if (validFiles.length !== files.length) {
-      alert('Some files were invalid (must be images under 5MB)');
-    }
-
     try {
       setUploading(true);
       
+      // Validate files
+      const validFiles = files.filter(file => 
+        file.type.match('image.*') && file.size <= 5 * 1024 * 1024
+      );
+
+      if (validFiles.length !== files.length) {
+        toast.warning('Some files were invalid (must be images under 5MB)');
+      }
+
       // Create previews
       const newPreviews = await Promise.all(
-        validFiles.map(file => {
-          return new Promise((resolve) => {
-            const reader = new FileReader();
-            reader.onloadend = () => resolve(reader.result);
-            reader.readAsDataURL(file);
-          });
-        })
+        validFiles.map(createPreview)
       );
       setPreviewImages(prev => [...prev, ...newPreviews]);
 
@@ -59,18 +116,25 @@ const Products = () => {
         validFiles.map(file => UploadImage(file))
       );
       
-      const newImageUrls = uploadResults.map(result => result.secure_url);
       setData(prev => ({
         ...prev,
-        productImages: [...prev.productImages, ...newImageUrls]
+        productImages: [...prev.productImages, ...uploadResults.map(img => img.secure_url)]
       }));
       
     } catch (error) {
       console.error("Upload failed:", error);
-      alert("Upload failed. Please try again.");
+      toast.error("Image upload failed. Please try again.");
     } finally {
       setUploading(false);
     }
+  };
+
+  const createPreview = (file) => {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onloadend = () => resolve(reader.result);
+      reader.readAsDataURL(file);
+    });
   };
 
   const removeImage = (index) => {
@@ -81,10 +145,7 @@ const Products = () => {
     setPreviewImages(prev => prev.filter((_, i) => i !== index));
   };
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    console.log("Form submitted:", data);
-    setShowPopup(false);
+  const resetForm = () => {
     setData({
       productName: "",
       brandName: "",
@@ -92,34 +153,51 @@ const Products = () => {
       productImages: [],
       description: "",
       price: "",
-      selling: "",
+      sellingPrice: "",
     });
     setPreviewImages([]);
   };
 
   return (
     <div className='relative min-h-screen px-10 py-8'>
-      {/* Header Section */}
       <div className="flex justify-between items-center p-6 border-b">
         <h1 className="text-2xl font-bold text-gray-800">All Products</h1>
         <button 
           onClick={() => setShowPopup(true)}
           className="text-red-500 border border-red-500 hover:bg-red-50 rounded-full px-4 py-1 text-sm font-medium transition-colors"
+          disabled={isSubmitting}
         >
-          Upload Product
+          {isSubmitting ? 'Uploading...' : 'Upload Product'}
         </button>
       </div>
 
-      {/* Popup Modal */}
+
+    {/* All Products Display */}
+<div>
+  {allProduct?.data?.map((product, index) => (
+    <div key={product._id || index}>
+      {product?.productImages?.map((image, imgIndex) => (
+        <img 
+          key={imgIndex} 
+          src={image} 
+          width={100} 
+          height={100} 
+          alt={`Product ${index} Image ${imgIndex}`} 
+        />
+      ))}
+    </div>
+  ))}
+</div>
+
       <ProductUploadPopup 
         showPopup={showPopup}
         setShowPopup={setShowPopup}
         data={data}
         handleOnChange={handleOnChange}
-        handleSubmit={handleSubmit}
+        handleSubmit={handleUploadProduct}
         previewImages={previewImages}
         handleUpload={handleUpload}
-        uploading={uploading}
+        uploading={uploading || isSubmitting}
         removeImage={removeImage}
       />
     </div>
