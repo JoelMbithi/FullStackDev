@@ -5,6 +5,7 @@ import cors from "cors";
 import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js";
 import userRoute from "./routes/UserRoutes.js";
+import ProductRouter from "./routes/ProductRoute.js"
 
 dotenv.config();
 
@@ -36,6 +37,7 @@ app.use(cors({
 // ✅ User Routes
 app.use("/api/user", authRoutes);
 app.use("/api/user", userRoute);
+app.use("/api/product",ProductRouter)
 
 // ✅ Start Server
 app.listen(8000, () => {
