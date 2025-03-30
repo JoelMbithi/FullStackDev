@@ -3,6 +3,7 @@ import ProductUploadPopup from '../components/ProductUploadPopup';
 import UploadImage from '../helpers/UploadImage';
 import newRequest  from '../utils/newRequest.js';
 import { toast } from 'react-toastify';
+import AdminProductCard from '../components/AdminProductCard.jsx';
 
 const Products = () => {
   const [showPopup, setShowPopup] = useState(false);
@@ -10,7 +11,7 @@ const Products = () => {
   const [uploading, setUploading] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [allProduct,setAllProduct] = useState([])
-   const [loadingProducts,setLoadingProducts] = useState()
+   const [loadingProducts,setLoadingProducts,error] = useState()
 
   const [data, setData] = useState({
     productName: "",
@@ -26,6 +27,7 @@ const Products = () => {
     try {
       setLoadingProducts(true);
       const res = await newRequest.get("/product/getProduct");
+     
       console.log(res.data); // Log the actual product data
 
       setAllProduct(res.data || []);
@@ -159,7 +161,7 @@ const Products = () => {
   };
 
   return (
-    <div className='relative min-h-screen px-10 py-8'>
+    <div className=' sm:flex-row relative min-h-screen px-10 py-8'>
       <div className="flex justify-between items-center p-6 border-b">
         <h1 className="text-2xl font-bold text-gray-800">All Products</h1>
         <button 
@@ -173,19 +175,9 @@ const Products = () => {
 
 
     {/* All Products Display */}
-<div>
+    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
   {allProduct?.data?.map((product, index) => (
-    <div key={product._id || index}>
-      {product?.productImages?.map((image, imgIndex) => (
-        <img 
-          key={imgIndex} 
-          src={image} 
-          width={100} 
-          height={100} 
-          alt={`Product ${index} Image ${imgIndex}`} 
-        />
-      ))}
-    </div>
+    <AdminProductCard data={product} key={index + 1} />
   ))}
 </div>
 
