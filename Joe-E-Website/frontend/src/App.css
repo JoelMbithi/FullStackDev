@@ -41,3 +41,9 @@ body {
     @apply bg-[#FFC22E] hover:bg-[hsl(49,100%,59%)] text-white w-full p-3 rounded-md hover:scale-105 transition-all ;
   }
 }
+
+.scrollbar-none::-webkit-scrollbar{
+  display: none;
+}
+
+

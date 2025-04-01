@@ -139,28 +139,30 @@ const AdminProductCard = ({ data, onUpdate }) => {
     setPreviewImages(prev => prev.filter((_, i) => i !== index));
   };
   return (
-    <div className='bg-white group relative flex text-center justify-center mt-4 px-2 py-4 rounded shadow-2xl'>
-      <div className='h-grow'>
-        <img 
-          className='rounded justify-center mb-4 ml-5' 
+    <div className='bg-white p-4  flex text-center justify-center  rounded shadow-2xl'>
+      <div className='p-2'>
+         <div className='w-35 h-35 flex  justify-center items-center'>
+         <img 
+          className='rounded object-fill h-full max-auto' 
           src={data?.productImages?.[0] || '/placeholder.jpg'} 
           width={100} 
           height={100} 
           alt={data?.productName} 
         />
+         </div>
         <div className='text-xl text-slate-900 font-bold'>
           <h1>{data?.productName}</h1>
         </div>
         <div>
           <p className='text-xs text-gray-700 line-clamp-4'>{data.category}</p>
         </div>
-        <div className='hidden group-hover:block'>
-          <p className='text-xs text-slate-900'>
+        <div className='text-sm'>
+          <p className='text-ellipse line-clamp-2 text-slate-900'>
             {data?.description}
           </p>
         </div>
         <div>
-          <p className='text-xs text-slate-700'>$ {data.price}</p>
+          <p className='text-xs text-black font-bold mt-3'>ksh {data.price}</p>
         </div>
         <div className='w-fit ml-auto p-2 bg-slate-200 cursor-pointer hover:bg-green-500 hover:text-white rounded-full'>
           <MdEdit onClick={() => setEditProduct(true)} />

@@ -13,6 +13,7 @@ import Products from "./pages/Products.jsx";
 import Users from "./pages/Users.jsx";
 import Profile from "./pages/Profile.jsx";
 import Setting from "./pages/Setting.jsx";
+import CategoryProduct from "./pages/CategoryProduct.jsx";
 
 // Layout for main pages
 const Layout = () => {
@@ -58,6 +59,10 @@ const router = createBrowserRouter([
         path: "/settings",
         element:<Setting/>
       },
+      {
+        path:"/category-product/:category",
+        element:<CategoryProduct/>
+      }
     ],
   },
 ]);
