@@ -1,30 +1,5 @@
 import Product from "../Models/ProductModel.js";
 import User from "../Models/UserModel.js";
-import multer from 'multer';
-import path from 'path';
-
-// Configure multer for file uploads
-const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, 'uploads/');
-  },
-  filename: function (req, file, cb) {
-    const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-    cb(null, file.fieldname + '-' + uniqueSuffix + path.extname(file.originalname));
-  }
-});
-
-const upload = multer({ 
-  storage: storage,
-  fileFilter: function (req, file, cb) {
-    if (file.mimetype.startsWith('image/')) {
-      cb(null, true);
-    } else {
-      cb(new Error('Only image files are allowed!'), false);
-    }
-  },
-  limits: { fileSize: 5 * 1024 * 1024 } // 5MB limit
-});
 
 // Use consistent role constants
 const ROLES = {
@@ -32,7 +7,7 @@ const ROLES = {
   USER: "USER",
 };
 
-// Product Upload with Image Handling
+// Product Upload
 export const ProductUpload = async (req, res) => {
   try {
     const sessionUserId = req.userId;
@@ -55,19 +30,9 @@ export const ProductUpload = async (req, res) => {
       });
     }
 
-    // Handle image upload
-    let productImages = [];
-    if (req.file) {
-      productImages.push({
-        url: `/uploads/${req.file.filename}`,
-        filename: req.file.filename
-      });
-    }
-
     // Create the product
     const uploadProduct = new Product({
       ...req.body,
-      productImages,
       owner: sessionUserId,
     });
 
@@ -87,7 +52,7 @@ export const ProductUpload = async (req, res) => {
   }
 };
 
-// Get all products (unchanged)
+// Get all products
 export const getAllProducts = async (req, res) => {
   try {
     const products = await Product.find();
@@ -103,7 +68,7 @@ export const getAllProducts = async (req, res) => {
   }
 };
 
-// Product Update with Image Handling
+// Product Update
 export const updateProduct = async (req, res) => {
   try {
     const { id: productId } = req.params;
@@ -135,20 +100,9 @@ export const updateProduct = async (req, res) => {
       });
     }
 
-    // Handle image update if new file is uploaded
-    let productImages = product.productImages;
-    if (req.file) {
-      // In production, you would delete the old image file here
-      productImages = [{
-        url: `/uploads/${req.file.filename}`,
-        filename: req.file.filename
-      }];
-    }
-
     // Prepare update data
     const updateData = {
       ...req.body,
-      productImages,
       ...(req.body.price && { price: Number(req.body.price) }),
       ...(req.body.sellingPrice && { sellingPrice: Number(req.body.sellingPrice) }),
     };
@@ -190,4 +144,4 @@ export const updateProduct = async (req, res) => {
       error: process.env.NODE_ENV === "development" ? error : undefined,
     });
   }
-};
+  }
