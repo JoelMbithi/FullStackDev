@@ -161,9 +161,9 @@ const Products = () => {
   };
 
   return (
-    <div className=' sm:flex-row relative min-h-screen px-10 py-8'>
-      <div className="flex justify-between items-center p-6 border-b">
-        <h1 className="text-2xl font-bold text-gray-800">All Products</h1>
+    <div className=' sm:flex-row  min-h-screen overflow-scroll px-10 py-8'>
+      <div className="flex border-collapse  justify-between overflow-hidden items-center p-6 border-b">
+        <h1 className="text-2xl overflow-hidden font-bold text-gray-800">All Products</h1>
         <button 
           onClick={() => setShowPopup(true)}
           className="text-red-500 border border-red-500 hover:bg-red-50 rounded-full px-4 py-1 text-sm font-medium transition-colors"
@@ -175,7 +175,7 @@ const Products = () => {
 
 
     {/* All Products Display */}
-    <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
+    <div className="grid grid-cols-1  sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 mt-6">
   {allProduct?.data?.map((product, index) => (
     <AdminProductCard data={product} key={index + 1} />
   ))}
@@ -196,4 +196,4 @@ const Products = () => {
   );
 };
 
-export default Products;
+export default Products
