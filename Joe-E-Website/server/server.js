@@ -6,6 +6,7 @@ import cookieParser from "cookie-parser";
 import authRoutes from "./routes/authRoutes.js";
 import userRoute from "./routes/UserRoutes.js";
 import ProductRouter from "./routes/ProductRoute.js"
+import getCategoryRoute from "./routes/getCategoryRoutes.js"
 
 dotenv.config();
 
@@ -28,7 +29,7 @@ const connect = async () => {
 
 // ✅ CORS Middleware
 app.use(cors({
-    origin: "http://localhost:5173",
+    origin: "http://localhost:5174",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
@@ -38,6 +39,7 @@ app.use(cors({
 app.use("/api/user", authRoutes);
 app.use("/api/user", userRoute);
 app.use("/api/product",ProductRouter)
+app.use("/api/productCategory",getCategoryRoute)
 
 
 // ✅ Start Server
