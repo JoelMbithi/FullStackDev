@@ -35,14 +35,14 @@ const Header = () => {
   
 
   return (
-<header className="bg-white sticky top-0 h-20 p-1 shadow-md">
+<header className="bg-white sticky  z-[1000] top-0 h-20 p-1 shadow-md">
 <div className="container mx-auto h-full flex items-center px-3 justify-between">
   
       {/* logo */}
       <div className="p-5">
         <Link to="/">
           <img className=' h-10 p-1 ml-3  rounded-full' src={logo} alt="Logo" />
-          <h1 className='flex -ml-5 text-xl font-bold'>JoeCartify</h1>
+          <h1 className='flex -ml-5 text-xl font-bold'> <p className='italic text-sm mt-0.5'>Joe</p> <p className='text-[#FF6016]'> Cartify</p></h1>
         </Link>
       </div>
   
@@ -56,17 +56,17 @@ const Header = () => {
   
       {/* Login Button */}
       <div className="flex items-center gap-2">
-        <button className="px-2 py-1  text-black hover:bg-[#FF6016]">
+        <button className="px-2 py-1  text-black hover:underline hover:text-[#FF6016]">
          Home
         </button>
-        <button className=" px-1 py-1  text-black hover:bg-[#FF6016]">
+        <button className=" px-1 py-1  text-black hover:underline hover:text-[#FF6016]">
          Category
         </button>
-        <button className="hidden md:flex px-3 py-1  text-black hover:bg-[#FF6016]">
+        <button className="hidden md:flex px-3 py-1  text-black hover:underline hover:text-[#FF6016]">
          Blog
         </button>
         <Link to="/signup">
-        <button className=" px-3 py-1  text-black  hover:bg-[#FF6016]">
+        <button className=" px-3 py-1  text-black  hover:underline  hover:text-[#FF6016]">
          Contact
         </button>
         </Link>
@@ -89,8 +89,8 @@ const Header = () => {
   
       {/* Icons */}
       {User?._id && (
-  <div className='relative flex justify-center' onClick={() => setMenuDisplay(prev => !prev)}>
-    <div className="flex items-center gap-4">
+  <div className='  flex justify-center' onClick={() => setMenuDisplay(prev => !prev)}>
+    <div className="flex items-center gap-4  ">
       <div className="text-4xl -mr-6 flex flex-col cursor-pointer">
         {User?.profilePic ? (
           <img className="w-10 h-9 rounded-full" src={User.profilePic} alt="Profile" />
