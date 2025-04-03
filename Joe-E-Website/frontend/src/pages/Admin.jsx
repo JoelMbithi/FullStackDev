@@ -38,6 +38,20 @@ const Admin = () => {
         <h1 className="text-xl font-bold">Admin Dashboard</h1>
         <p>Welcome, {User.username || "Admin"}!</p>
         <Outlet />
+        
+       <div className="flex container gap-4 p-4">
+      
+        <div className="bg-white flex justify-center text-center p-4 h-32 w-48 rounded shadow">
+          <div className="flex justify-center">
+            users
+          </div>
+        </div>
+        <div className="bg-white p-4  h-32 w-48 rounded shadow">Product 2</div>
+        <div className="bg-white p-4  h-32 w-48 rounded shadow">Product 2</div>
+        <div className="bg-white p-4  h-32 w-48 rounded shadow">Product 2</div>
+        
+       </div>
+        
       </main>
     </div>
   );

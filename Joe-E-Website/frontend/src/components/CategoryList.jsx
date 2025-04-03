@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import newRequest from "../utils/newRequest.js";
 import { Link } from "react-router-dom";
-import { motion } from "framer-motion";
 
 const CategoryList = () => { 
   const [categoryData, setCategoryData] = useState({
@@ -48,8 +47,8 @@ const CategoryList = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
-      <h2 className="text-xl font-bold mb-4">Product Categories</h2>
+    <div className="container overflow-y-auto mx-auto p-4">
+      <h2 className="text-xl font-bold p-4">Product Categories</h2>
       
       {categoryData.categories.length > 0 ? (
         <div className="flex space-x-6 pb-4 overflow-x-auto scrollbar-hide whitespace-nowrap">
@@ -62,14 +61,9 @@ const CategoryList = () => {
                   to={`/category-product/${category}`} 
                   className="inline-flex flex-col items-center flex-shrink-0 cursor-pointer"
                 >
-                  <motion.div 
-                    className='w-16 h-16 md:w-20 md:h-20 p-4 bg-slate-100 rounded-full flex items-center justify-center overflow-hidden shadow-sm hover:shadow-md transition-all'
-                    initial={{ opacity: 0, scale: 0.8 }}
-                    animate={{ opacity: 1, scale: 1 }}
-                    transition={{ duration: 0.5 }}
-                  >
+                  <div className='w-16 h-16 md:w-20 md:h-20 p-4 bg-slate-100 rounded-full flex items-center justify-center overflow-hidden shadow-sm hover:shadow-md hover:scale-120 transition-all'>
                     {product?.productImages?.[0] ? (
-                      <motion.img 
+                      <img 
                         src={product.productImages[0]} 
                         alt={category}
                         className='object-scale-down mix-blend-multiply'
@@ -77,16 +71,13 @@ const CategoryList = () => {
                           e.target.src = '/placeholder-category.png';
                           e.target.className = 'w-full h-full object-cover';
                         }}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ duration: 0.5 }}
                       />
                     ) : (
                       <div className="w-full h-full bg-gray-200 flex items-center justify-center rounded-full">
                         <span className="text-xs text-gray-500">No image</span>
                       </div>
                     )}
-                  </motion.div>
+                  </div>
                   <p className='mt-2 text-center capitalize text-sm md:text-base'>
                     {category.replace(/-/g, ' ')}
                   </p>
