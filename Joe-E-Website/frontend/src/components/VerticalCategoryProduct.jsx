@@ -1,6 +1,8 @@
 import React, { useEffect, useState, useRef } from "react";
 import newRequest from "../utils/newRequest";
 import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
+import { addToCart } from "./AddToCart.jsx";
+import { Link } from "react-router-dom";
 
 const VerticalCategoryProduct = ({ category, header }) => {
   const [data, setData] = useState([]);
@@ -51,7 +53,7 @@ const VerticalCategoryProduct = ({ category, header }) => {
           <p>Loading...</p>
         ) : (
           data.map((product) => (
-            <div key={product._id} className="w-full min-w-[270px] md:min-w-[310px] max-w-[270px] md:max-w-[310px]  bg-white rounded shadow ">
+            <Link to={`/productDetails/${product?._id}`} key={product._id} className="w-full min-w-[270px] md:min-w-[310px] max-w-[270px] md:max-w-[310px]  bg-white rounded shadow ">
               {/* Left Section */}
               <div className="bg-slate-100 p-5 h-40 min-w-[120px] md:min-w-[145px]">
                 <img src={product.productImages[0]} className="object-scale-down h-full hover:scale-110 transition-transform" alt={product.productName} />
@@ -71,11 +73,11 @@ const VerticalCategoryProduct = ({ category, header }) => {
                   Save Ksh {(product?.price - product?.selling)?.toLocaleString()}
                 </span>
 
-                <button className="w-full py-1.5 bg-[#FF6016] hover:bg-[#E55614] text-white text-sm rounded">
+                <button onClick={(e)=> addToCart(e,product?._id)}  className="w-full py-1.5 bg-[#FF6016] hover:bg-[#E55614] text-white text-sm rounded">
                   Add to Cart
                 </button>
               </div>
-            </div>
+            </Link>
           ))
         )}
       </div>

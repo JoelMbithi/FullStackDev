@@ -12,7 +12,7 @@ const AdminProductCard = ({ data, onUpdate }) => {
     productImages: data?.productImages || [],
     description: data?.description || '',
     price: data?.price || '',
-    sellingPrice: data?.sellingPrice || '',
+    selling: data?.selling || '',
   });
   const [uploading, setUploading] = useState(false);
   const [editProduct, setEditProduct] = useState(false);
@@ -53,7 +53,7 @@ const AdminProductCard = ({ data, onUpdate }) => {
       const productData = {
         ...editData,
         price: Number(editData.price),
-        sellingPrice: Number(editData.sellingPrice) || Number(editData.price)
+        selling: Number(editData.selling) || Number(editData.price)
       };
 
       // Make the API call to update the product
@@ -248,14 +248,14 @@ const AdminProductCard = ({ data, onUpdate }) => {
 
                 {/* Selling Price */}
                 <div>
-                  <label htmlFor="sellingPrice" className="block text-sm font-medium text-gray-700 mb-1">
+                  <label htmlFor="selling" className="block text-sm font-medium text-gray-700 mb-1">
                     Selling Price
                   </label>
                   <input
                     type="number"
-                    id="sellingPrice"
-                    name="sellingPrice"
-                    value={editData.sellingPrice}
+                    id="selling"
+                    name="selling"
+                    value={editData.selling}
                     onChange={handleOnChange}
                     className="w-full p-2 border rounded focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
                     disabled={uploading}

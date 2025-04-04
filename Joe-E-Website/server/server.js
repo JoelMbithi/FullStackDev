@@ -7,6 +7,8 @@ import authRoutes from "./routes/authRoutes.js";
 import userRoute from "./routes/UserRoutes.js";
 import ProductRouter from "./routes/ProductRoute.js"
 import getCategoryRoute from "./routes/getCategoryRoutes.js"
+import getAllCategoryProductRoutes from "./routes/getCategoryProductRoutes.js"
+import getProductDetailsRouter from "./routes/getProductDetailsRoute.js"
 
 dotenv.config();
 
@@ -29,7 +31,7 @@ const connect = async () => {
 
 // ✅ CORS Middleware
 app.use(cors({
-    origin: "http://localhost:5174",
+    origin: "http://localhost:5173",
     methods: ["GET", "POST", "PUT", "DELETE", "PATCH"],
     allowedHeaders: ["Content-Type", "Authorization"],
     credentials: true
@@ -40,6 +42,8 @@ app.use("/api/user", authRoutes);
 app.use("/api/user", userRoute);
 app.use("/api/product",ProductRouter)
 app.use("/api/productCategory",getCategoryRoute)
+app.use("/api/getAllCategoryProduct",getAllCategoryProductRoutes)
+app.use("/api/getProductDetails",getProductDetailsRouter)
 
 
 // ✅ Start Server
