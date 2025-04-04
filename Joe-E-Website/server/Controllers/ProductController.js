@@ -104,7 +104,7 @@ export const updateProduct = async (req, res) => {
     const updateData = {
       ...req.body,
       ...(req.body.price && { price: Number(req.body.price) }),
-      ...(req.body.sellingPrice && { sellingPrice: Number(req.body.sellingPrice) }),
+      ...(req.body.selling && { selling: Number(req.body.selling) }),
     };
 
     // Perform update
