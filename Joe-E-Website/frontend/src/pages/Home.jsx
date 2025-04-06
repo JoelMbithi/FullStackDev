@@ -1,10 +1,13 @@
-import React from "react";
+import React, { useState } from "react";
 import CategoryList from "../components/CategoryList.jsx";
 import BannerProduct from "../components/Banner.jsx";
 import HorizontalCategoryProduct from "../components/HorizontalCategoryProduct.jsx";
 import VerticalCategoryProduct from "../components/VerticalCategoryProduct.jsx";
 
 const Home = () => {
+  // Define setCount here
+  const [count, setCount] = useState(0);
+ console.log("Cart count:", count);
   return (
     <div className="p-0.5">
       <BannerProduct />
@@ -36,14 +39,16 @@ const Home = () => {
       <HorizontalCategoryProduct 
         category={"airpods"} 
         header={"Top AirPods"} 
+        setCount={setCount} // Pass setCount here
       />
       
-    
       <HorizontalCategoryProduct 
         category={"smart-watch"} 
         header={"Smart Watches"} 
+        setCount={setCount} // Pass setCount here
       />
-     <VerticalCategoryProduct 
+
+      <VerticalCategoryProduct 
         category={"mobile-phone"} 
         header={"Latest Smartphones"} 
       />
@@ -51,13 +56,27 @@ const Home = () => {
         category={"television"} 
         header={"Premium TVs"} 
       />
-   <VerticalCategoryProduct 
+      <VerticalCategoryProduct 
         category={"camera"} 
         header={"Professional Cameras"} 
       />
+      <VerticalCategoryProduct 
+        category={"Mouse"} 
+        header={"Professional Mouse"} 
+      />
+      <VerticalCategoryProduct 
+        category={"Refrigerator"} 
+        header={"Best Refrigerators"} 
+      />
+      <VerticalCategoryProduct 
+        category={"Trimmer"} 
+        header={"Best Trimmers"} 
+      />
+      <VerticalCategoryProduct 
+        category={"Earphone"} 
+        header={"Best Earphone"} 
+      />
       
-    
-
       <section className="my-8">{/* Product cards would go here */}</section>
 
       {/* Special Offers Section */}

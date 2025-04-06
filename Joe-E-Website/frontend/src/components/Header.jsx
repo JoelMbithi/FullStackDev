@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { ImSearch } from "react-icons/im";
 import { HiUserCircle } from "react-icons/hi2";
 import { TiShoppingCart } from "react-icons/ti";
@@ -15,7 +15,63 @@ const Header = () => {
   const user = useSelector(state => state?.user?.user)
   const [menuDisplay,setMenuDisplay] = useState(false)
   console.log("user header",User)
+  const [count, setCount] = useState(0);
+  const [isLoading, setIsLoading] = useState(true);
+ 
+  // Fetch cart items count
 
+ useEffect(() => {
+  const handleAuthChange = () => {
+    setUser(JSON.parse(localStorage.getItem("User")));
+    fetchCartCount();
+  };
+
+  window.addEventListener("authChange", handleAuthChange);
+  return () => window.removeEventListener("authChange", handleAuthChange);
+}, []);
+
+// 2. Improved fetch cart count
+const fetchCartCount = async () => {
+  try {
+    const currentUser = JSON.parse(localStorage.getItem("User"));
+    
+    if (!currentUser?.token) {
+      setCount(0);
+      return;
+    }
+
+    const res = await newRequest.get("/addProductToCart/countTotalItems", {
+      headers: {
+        Authorization: `Bearer ${currentUser.token}`,
+      },
+    });
+
+    setCount(res.data.count || 0);
+  } catch (error) {
+    if (error.response?.status === 401) {
+      localStorage.removeItem("User");
+      setUser(null);
+    }
+    setCount(0);
+  }
+};
+
+// 3. Cart update listener
+useEffect(() => {
+  const handleCartUpdate = (e) => {
+    if (e.detail?.count !== undefined) {
+      setCount(e.detail.count);
+    }
+  };
+
+  window.addEventListener("cartUpdated", handleCartUpdate);
+  return () => window.removeEventListener("cartUpdated", handleCartUpdate);
+}, []);
+
+// 4. Initial load
+useEffect(() => {
+  fetchCartCount();
+}, [user]); 
   const handleLogout = async () => {
     try {
       const res = await newRequest.post("/user/logout");
@@ -129,7 +185,7 @@ const Header = () => {
           <span>
             <TiShoppingCart className='ml-3' />
             <div className="absolute -top-2 -right-2">
-              <p className="bg-[#FF6016] text-xs text-white flex items-center justify-center h-5 w-5 rounded-full">0</p>
+              <p className="bg-[#FF6016] text-xs text-white flex items-center justify-center h-5 w-5 rounded-full">{count}</p>
             </div>
           </span>
      
