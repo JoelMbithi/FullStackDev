@@ -65,12 +65,12 @@ const VerticalCategoryProduct = ({ category, header }) => {
                 <p className="capitalize text-slate-800 text-xs">{product?.brandName}</p>
                  <p className="capitalize text-slate-800 text-xs">{product?.description}</p>
                 <div className="flex gap-4">
-                  <p className="font-bold text-[#FF6016]">Ksh {product?.selling?.toLocaleString()}</p>
-                  <p className="text-xs line-through text-gray-400">Ksh {product?.price?.toLocaleString()}</p>
+                  <p className="font-bold text-[#FF6016]">Ksh {product?.selling?.toLocaleString()}.00</p>
+                  <p className="text-xs line-through text-gray-400">Ksh {product?.price?.toLocaleString()}.00</p>
                 </div>
 
                 <span className="text-xs bg-red-100 text-red-600 px-2 py-0.5 rounded-full">
-                  Save Ksh {(product?.price - product?.selling)?.toLocaleString()}
+                  Save Ksh {(product?.price - product?.selling)?.toLocaleString()}.00
                 </span>
 
                 <button onClick={(e)=> addToCart(e,product?._id)}  className="w-full py-1.5 bg-[#FF6016] hover:bg-[#E55614] text-white text-sm rounded">

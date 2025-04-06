@@ -47,11 +47,11 @@ const CategoryList = () => {
   }
 
   return (
-    <div className="container overflow-y-auto mx-auto p-4">
+    <div className="container overflow-scroll w-full mx-auto p-4">
       <h2 className="text-xl font-bold p-4">Product Categories</h2>
       
       {categoryData.categories.length > 0 ? (
-        <div className="flex space-x-6 pb-4 overflow-x-auto scrollbar-hide whitespace-nowrap">
+        <div className="flex space-x-6 pb-4 overflow-x-auto scrollbar-none whitespace-nowrap">
           {categoryData.categories.map((category, index) => {
             const product = categoryData.products.find(p => p.category === category);
             
