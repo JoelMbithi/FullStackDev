@@ -4,7 +4,7 @@ import { FaAngleRight, FaAngleLeft } from "react-icons/fa";
 import { addToCart } from "./AddToCart.jsx";
 import { Link } from "react-router-dom";
 
-const VerticalCategoryProduct = ({ category, header }) => {
+const VerticalCategoryProduct = ({ category, header, setCount }) => {
   const [data, setData] = useState([]);
   const [loading, setLoading] = useState(false);
   const scrollElement = useRef();
@@ -55,8 +55,8 @@ const VerticalCategoryProduct = ({ category, header }) => {
           data.map((product) => (
             <Link to={`/productDetails/${product?._id}`} key={product._id} className="w-full min-w-[270px] md:min-w-[310px] max-w-[270px] md:max-w-[310px]  bg-white rounded shadow ">
               {/* Left Section */}
-              <div className="bg-slate-100 p-5 h-40 min-w-[120px] md:min-w-[145px]">
-                <img src={product.productImages[0]} className="object-scale-down h-full hover:scale-110 transition-transform" alt={product.productName} />
+              <div className="bg-slate-100 flex items-center justify-center p-5 h-40 min-w-[120px] md:min-w-[145px]">
+                <img src={product.productImages[0]} className="object-scale-down h-full hover:scale-110 transition-transform mix-blend-multiply " alt={product.productName} />
               </div>
 
               {/* Right Section */}
@@ -73,7 +73,7 @@ const VerticalCategoryProduct = ({ category, header }) => {
                   Save Ksh {(product?.price - product?.selling)?.toLocaleString()}.00
                 </span>
 
-                <button onClick={(e)=> addToCart(e,product?._id)}  className="w-full py-1.5 bg-[#FF6016] hover:bg-[#E55614] text-white text-sm rounded">
+                <button onClick={(e)=> addToCart(e,product?._id, setCount)}  className="w-full py-1.5 bg-[#FF6016] hover:bg-[#E55614] text-white text-sm rounded">
                   Add to Cart
                 </button>
               </div>

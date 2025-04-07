@@ -181,7 +181,7 @@ useEffect(() => {
     )}
   </div>
 )}
-        <div className="text-3xl  ml-5 cursor-pointer relative">
+        <Link to ="/cart" className="text-3xl  ml-5 cursor-pointer relative">
           <span>
             <TiShoppingCart className='ml-3' />
             <div className="absolute -top-2 -right-2">
@@ -190,7 +190,7 @@ useEffect(() => {
           </span>
      
      
-      </div>
+      </Link>
   
     </div>
   </header>
