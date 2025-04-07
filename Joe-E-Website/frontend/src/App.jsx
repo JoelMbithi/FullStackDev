@@ -15,6 +15,7 @@ import Profile from "./pages/Profile.jsx";
 import Setting from "./pages/Setting.jsx";
 import CategoryProduct from "./pages/CategoryProduct.jsx";
 import ProductDetails from "./pages/ProductDetails.jsx";
+import Cart from "./pages/Cart.jsx";
 
 // Layout for main pages
 const Layout = () => {
@@ -67,6 +68,10 @@ const router = createBrowserRouter([
       {
         path:"productDetails/:id",
         element:<ProductDetails/>
+      },
+      {
+        path : "cart",
+        element: <Cart/>
       }
     ],
   },

@@ -47,3 +47,11 @@ body {
 }
 
 
+@keyframes spinSlow {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.animate-spin-slow {
+  animation: spinSlow 4s linear infinite; /* Adjust 4s for slower spinning */
+}

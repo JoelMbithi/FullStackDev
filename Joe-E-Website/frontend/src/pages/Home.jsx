@@ -51,30 +51,37 @@ const Home = () => {
       <VerticalCategoryProduct 
         category={"mobile-phone"} 
         header={"Latest Smartphones"} 
+        setCount={setCount} 
       />
       <VerticalCategoryProduct 
         category={"television"} 
         header={"Premium TVs"} 
+        setCount={setCount} 
       />
       <VerticalCategoryProduct 
         category={"camera"} 
         header={"Professional Cameras"} 
+        setCount={setCount} 
       />
       <VerticalCategoryProduct 
         category={"Mouse"} 
         header={"Professional Mouse"} 
+        setCount={setCount} 
       />
       <VerticalCategoryProduct 
         category={"Refrigerator"} 
         header={"Best Refrigerators"} 
+        setCount={setCount} 
       />
       <VerticalCategoryProduct 
         category={"Trimmer"} 
         header={"Best Trimmers"} 
+        setCount={setCount} 
       />
       <VerticalCategoryProduct 
         category={"Earphone"} 
         header={"Best Earphone"} 
+        setCount={setCount} 
       />
       
       <section className="my-8">{/* Product cards would go here */}</section>

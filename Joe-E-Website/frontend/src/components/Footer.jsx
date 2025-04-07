@@ -11,7 +11,7 @@ const Footer = () => {
         {/* Left Section */}
         <div className="w-full sm:w-1/3 mb-6 sm:mb-0 text-center sm:text-left">
           <Link to="/" className="flex items-center justify-center sm:justify-start space-x-2">
-            <img className="hidden md:flex h-12 rounded-full" src={logo} alt="Logo" />
+            <img className="hidden md:flex h-12  animate-spin-slow rounded-full" src={logo} alt="Logo" />
             <h1 className="text-white text-lg font-semibold">About Us</h1>
           </Link>
           <p className="mt-4 text-sm mr-10">
@@ -25,7 +25,7 @@ const Footer = () => {
         {/* Middle Section */}
         <div className="w-full sm:w-1/3 mb-6 sm:mb-0 text-center sm:text-left">
           <h1 className="text-white text-lg font-semibold">Quick Links</h1>
-          <ul className="mt-4 space-y-2">
+          <ul className="mt-4 space-y-2 ">
             <li><Link to="/" className="hover:text-[#FF6016]">Home</Link></li>
             <li><Link to="/shop" className="hover:text-[#FF6016]">Shop</Link></li>
             <li><Link to="/cart" className="hover:text-[#FF6016]">Cart</Link></li>
@@ -37,10 +37,10 @@ const Footer = () => {
         <div className="w-full sm:w-1/3 text-center sm:text-left">
           <h1 className="text-white text-lg font-semibold">Connect with Us</h1>
           <ul className="mt-4 flex justify-center sm:justify-start space-x-6">
-            <li><a href="#" className="hover:text-[#FF6016]"><FaFacebook size={22} /></a></li>
-            <li><a href="#" className="hover:text-[#FF6016]"><FaInstagram size={22} /></a></li>
-            <li><a href="#" className="hover:text-[#FF6016]"><FaTwitter size={22} /></a></li>
-            <li><a href="#" className="hover:text-[#FF6016]"><FaLinkedin size={22} /></a></li>
+            <li className=" animate-spin-slow"><a href="#" className="hover:text-[#FF6016]  "><FaFacebook size={22} /></a></li>
+            <li className=" animate-spin-slow"><a href="#" className="hover:text-[#FF6016]"><FaInstagram size={22} /></a></li>
+            <li className=" animate-spin-slow"><a href="#" className="hover:text-[#FF6016]"><FaTwitter size={22} /></a></li>
+            <li className=" animate-spin-slow"><a href="#" className="hover:text-[#FF6016]"><FaLinkedin size={22} /></a></li>
           </ul>
 
           <div className="hidden md:flex flex-col py-4 mt-6 text-sm">
