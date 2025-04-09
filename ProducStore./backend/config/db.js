@@ -1,11 +1,20 @@
-import  { neon } from "@neondatabase/serverless"
-import dotenv from "dotenv"
+import pkg from 'pg';  // Import the pg package
+const { Pool } = pkg;  // Destructure the Pool class from the package
+import dotenv from 'dotenv';
 
-dotenv.config()
+dotenv.config();
 
-const { PGHOST, PGUSER, PGPASSWORD, PGDATABASE } = process.env
+export const { PGHOST, PGUSER, PGPASSWORD, PGDATABASE } = process.env;
 
-//crete a SQL connection 
-export const sql = neon (
-    `postgresql://${PGUSER}:${PGPASSWORD}@${PGHOST}@${PGDATABASE}?sslmode=require`,
-)
+export const pool = new Pool({
+  host: PGHOST,
+  database: PGDATABASE,
+  user: PGUSER,
+  password: PGPASSWORD,
+  port: 5432,
+  ssl: {
+    require: true
+  },
+  connectionTimeoutMillis: 10000, // 10 seconds timeout
+  idleTimeoutMillis: 30000      // 30 seconds idle timeout
+});
