@@ -3,3 +3,18 @@
 background {
   color: black;
 }
+
+body {
+    font-family: Arial, sans-serif;
+    line-height: 1.6;
+    padding: 20px;
+}
+h1 {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    
+}
+.icon {
+    font-size: 1.2em;
+}
