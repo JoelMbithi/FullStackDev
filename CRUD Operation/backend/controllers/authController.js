@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 
 // REGISTER USER
 export const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password,confirmPassword, role } = req.body;
 
   try {
     // Check if user already exists
@@ -18,13 +18,22 @@ export const register = async (req, res) => {
       });
     }
 
+    if (password !== confirmPassword) {
+      return res.status(400).json({
+        message: "Passwords do not match",
+        success: false,
+      });
+    }
     // Hash password
     const hashedPassword = await bcrypt.hash(password, 10);
 
+    // Set default role to 'user' if not provided
+    const userRole = role === 'admin' ? 'admin' : 'user';  // Admin role if passed, else 'user'
+
     // Insert new user
     const result = await db.query(
-      `INSERT INTO Reg (name, email, password) VALUES ($1, $2, $3) RETURNING *`,
-      [name, email, hashedPassword]
+      `INSERT INTO Reg (name, email, password,role) VALUES ($1, $2, $3, $4) RETURNING *`,
+      [name, email, hashedPassword, userRole]
     );
 
     const newUser = result.rows[0];
@@ -36,6 +45,7 @@ export const register = async (req, res) => {
         id: newUser.user_id,
         name: newUser.name,
         email: newUser.email,
+        role:newUser.role,
       },
       token,
       success: true,
@@ -83,6 +93,7 @@ export const login = async (req, res) => {
         id: loginUser.user_id,
         name: loginUser.name,
         email: loginUser.email,
+        role: loginUser.role,
       },
       token,
       success: true,
