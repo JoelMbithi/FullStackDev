@@ -1,17 +1,73 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FiSearch } from "react-icons/fi";
+import { CiUser } from "react-icons/ci";
+import {  Link } from 'react-router-dom';
+import axios from 'axios';
+
+
 
 const NavBar = () => {
+
+  const [user,setUser] = useState('')
+  const  [isOpen,setIsOpen] = useState(false)
+  
+ const toggleDropdown = () => {
+    setIsOpen(!isOpen)
+
+ }
+
+  const fetchUser = async () => {
+    try {
+      const id = localStorage.getItem('userId');
+      const token = localStorage.getItem('token');
+  
+      const res = await axios.get(`http://localhost:3000/api/user/getUser/${id}`, {
+        headers: {
+          Authorization: `Bearer ${token}`
+        }
+      });
+  
+      console.log("User data", res.data);
+  
+      // Access the user data inside the 'data' field
+       if (res.data.success) {
+        setUser(res.data.data);  
+      } else {
+        console.log("Error: Unable to fetch user data");
+      } 
+    } catch (error) {
+      console.log("Error fetching user data:", error);
+    }
+  };
+  
+
+
+  useEffect(() => {
+    fetchUser()
+  },[])
+
+
+  const handleLogout = () => {
+    localStorage.removeItem('token');
+    localStorage.removeItem('userId');
+    setUser(null);
+    setIsOpen(false);
+    navigate('/login');
+  };
+
+  
   return (
     <nav className='w-full fixed top-0 left-0 right-0  z-50 bg-white shadow-sm'>
       <div className='container mx-auto px-4 h-20 flex items-center justify-between'>
         {/* Logo */}
-        <div className='flex items-center'>
+      <Link to="/">
+      <div className='flex items-center'>
           <h1 className='text-xl font-bold'>
             <span className='text-purple-700'>Build</span>
             <span className='text-gray-800'>Estate</span>
           </h1>
         </div>
+        </Link>
 
         {/* Navigation Links - hidden on mobile, shown on md+ screens */}
         <div className='hidden md:flex space-x-8'>
@@ -40,7 +96,76 @@ const NavBar = () => {
             aria-label="Search"
           >
             <FiSearch className='text-xl' />
+           
           </button>
+          <div className='flex flex-col items-center'>
+          
+          {isOpen && (
+              <div className='absolute right-0 mt-15 mr-10 w-48 bg-white rounded-md shadow-lg py-1 z-50'>
+                {user ? (
+                  <>
+                    <div className='px-4 py-2 text-sm text-gray-700 border-b'>
+                      Signed in as <span className='font-medium'>{user.name}</span>
+                    </div>
+                    <Link
+                      to="/profile"
+                      className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Profile
+                    </Link>
+                    {user.role === 'admin' && (
+                      <Link
+                        to="/admin"
+                        className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                        onClick={() => setIsOpen(false)}
+                      >
+                        Admin Dashboard
+                      </Link>
+                    )}
+                    <button
+                      onClick={handleLogout}
+                      className='w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                    >
+                      Logout
+                    </button>
+                  </>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/register"
+                      className='block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100'
+                      onClick={() => setIsOpen(false)}
+                    >
+                      Register
+                    </Link>
+                  </>
+                )}
+              </div>
+            )}
+          <div className='p-2  text-gray-600 bg-purple-400 rounded-full hover:text-purple-700 transition-colors'>
+          
+            
+            
+            < button onClick={() => setIsOpen(!isOpen)} className='relative' >
+            <CiUser className='text-2xl text-white' />
+            </button>
+            
+            </div>
+
+           {user && user.name ? (
+              <p className='text-xl'>{user.name}</p>
+            ) : (
+              <p className='text-xl bg-slate-300 ml-2 w-18 animate-pulse rounded h-5 mt-1'></p>  
+            )}
+          </div>
         </div>
       </div>
     </nav>
