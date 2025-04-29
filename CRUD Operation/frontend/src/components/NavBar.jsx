@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import { FiSearch } from "react-icons/fi";
 import { CiUser } from "react-icons/ci";
-import {  Link } from 'react-router-dom';
+import {  Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import { MdBookmarkAdded } from "react-icons/md";
+
 
 
 
@@ -10,6 +12,7 @@ const NavBar = () => {
 
   const [user,setUser] = useState('')
   const  [isOpen,setIsOpen] = useState(false)
+  const navigate = useNavigate()
   
  const toggleDropdown = () => {
     setIsOpen(!isOpen)
@@ -55,6 +58,9 @@ const NavBar = () => {
     navigate('/login');
   };
 
+  const handleBooking = ()=> {
+    navigate("/booking")
+  }
   
   return (
     <nav className='w-full fixed top-0 left-0 right-0  z-50 bg-white shadow-sm'>
@@ -165,7 +171,12 @@ const NavBar = () => {
             ) : (
               <p className='text-xl bg-slate-300 ml-2 w-18 animate-pulse rounded h-5 mt-1'></p>  
             )}
+            
           </div>
+          <div className='flex flex-col cursor-pointer items-center text-slate-600 font-bold -mr-10 p-5' onClick={handleBooking}>
+            Booked
+         < MdBookmarkAdded className='text-xl'/>
+            </div>
         </div>
       </div>
     </nav>

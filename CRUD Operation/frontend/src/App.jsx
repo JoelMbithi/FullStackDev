@@ -10,6 +10,7 @@ import Admin from './pages/Admin'
 import Properties from './pages/Properties'
 import Profile from './pages/Profile'
 import Users from "./pages/UsersManagement"; 
+import BookingDisplay from "./pages/BookingDisplay"
 
 const App = () => {
   return (
@@ -21,6 +22,7 @@ const App = () => {
         <Route path="/login" element={<Login/>}/>
         <Route path="/admin" element={<Admin />}/>
         <Route path="users" element={<Users />} />
+        <Route path="/booking" element={<BookingDisplay/>}/>
         <Route path="/properties" element={<Properties/>}/>
         <Route path="/profile" element={<Profile/>}/>
        </Routes>

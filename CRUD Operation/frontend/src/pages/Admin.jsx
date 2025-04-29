@@ -9,6 +9,11 @@ const Admin = () => {
   const [count,setCount] = useState(0)
   const [apartments, setApartments] = useState(null)
   const [apartmentCount, setApartmentCount] = useState(0)
+   const [bookCount,setBookCount] = useState(0)
+    const [books,setBooks]= useState(null)
+    const [book, setBook] = useState([]);
+    const [userChartData, setUserChartData] = useState([]);
+
 
   const fetchUser = async () => {
     try {
@@ -18,8 +23,9 @@ const Admin = () => {
         }
       })
       console.log(res.data.data)
-      setUser(res.data.data)
-      setCount(res.data.count)
+      setUser(res.data.data);
+setCount(res.data.count);
+setUserChartData(getUsersByMonth(res.data.data));
 
     } catch (error) {
       console.log(error)
@@ -54,6 +60,68 @@ const Admin = () => {
   }
   , [])
 
+  const fetchBooking = async () => {
+      const id = localStorage.getItem("bookId");
+      const token = localStorage.getItem("token");
+  
+      try {
+        if (!id) {
+          console.error("Booking ID is undefined. Cannot fetch booking.");
+          return;
+        }
+        const res = await axios.get(
+          `http://localhost:3000/api/booking/getAllBooking`,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+        console.log(res.data);
+        
+        setBook(res.data.data.rows);
+        const bookings = res.data.data.rows;
+      setBook(bookings);
+        setBookCount(bookings.length);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+  
+    useEffect(() => {
+      
+      fetchBooking();
+    }, []);
+  
+    const getUsersByMonth = (userList) => {
+      const months = [
+        'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+        'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+      ];
+    
+      const monthlyCount = {};
+    
+      // Initialize all months with 0
+      months.forEach(month => {
+        monthlyCount[month] = 0;
+      });
+    
+      userList.forEach(user => {
+        const date = new Date(user.createdAt);
+        const month = date.toLocaleString('default', { month: 'short' }); // "Jan", "Feb", etc.
+        monthlyCount[month]++;
+      });
+    
+      // Convert to array suitable for BarChart
+      const result = months.map(month => ({
+        month,
+        users: monthlyCount[month]
+      }));
+    
+      return result;
+    };
+    
+    
   return (
     <div className='flex h-screen bg-gray-100'>  
       {/* Left sidebar */}
@@ -63,7 +131,7 @@ const Admin = () => {
         </div>
 
         <div className='text-white text-xl p-8'>
-          <Link to="/admin/dashboard" className='flex items-center p-3 rounded hover:bg-slate-700 transition-colors'>
+          <Link to="/admin" className='flex items-center p-3 rounded hover:bg-slate-700 transition-colors'>
             <FiHome className='mr-3' />
             Dashboard
           </Link>
@@ -120,10 +188,12 @@ const Admin = () => {
               <h1 className='text-purple-600 font-bold'>Pending Approvals</h1>
               <p>198</p>
             </div>
-            <div className='flex flex-col p-4 rounded bg-slate-50'>
-              <h1 className='text-purple-600 font-bold'>Completed Approvals</h1>
-              <p>198</p>
+            { book && book.length > 0 && (
+              <div className="flex flex-col p-4 rounded bg-slate-50">
+              <h1 className="text-purple-600 font-bold">Total Booking</h1>
+              <p>{bookCount}</p>
             </div>
+          )}
 
           </div>
       
@@ -134,13 +204,13 @@ const Admin = () => {
   <h2 className="text-2xl font-bold mb-4">User Growth</h2>
   
   <ResponsiveContainer width="100%" height={300}>
-    <BarChart data={[
-      { month: 'Jan', users: 400 },
-      { month: 'Feb', users: 800 },
-      { month: 'Mar', users: 650 },
-      { month: 'Apr', users: 900 },
-      { month: 'May', users: 750 },
-    ]}>
+  <BarChart
+  data={userChartData}
+  barCategoryGap={20}
+  barGap={5}
+>
+
+
       <CartesianGrid strokeDasharray="3 3" />
       <XAxis dataKey="month" />
       <YAxis />
