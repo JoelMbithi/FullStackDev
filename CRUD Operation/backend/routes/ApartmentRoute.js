@@ -1,6 +1,6 @@
 import express from "express";
 import multer from "multer";
-import { create, getApartment } from "../controllers/ApartmentController.js";
+import { create, getApartment, getSingleApartment } from "../controllers/ApartmentController.js";
 
 const router = express.Router();
 
@@ -12,5 +12,5 @@ router.post("/add", upload.single("image"), create);
 
 // GET route
 router.get("/get", getApartment);
-
+router.get("/getSingleApartment/:id",getSingleApartment)
 export default router;

@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 
 // REGISTER USER
 export const register = async (req, res) => {
-  const { name, email, password,confirmPassword, role } = req.body;
+  const { name, email, password,confirmPassword, role ,country,phone} = req.body;
 
   try {
     // Check if user already exists
@@ -32,8 +32,8 @@ export const register = async (req, res) => {
 
     // Insert new user
     const result = await db.query(
-      `INSERT INTO Reg (name, email, password,role) VALUES ($1, $2, $3, $4) RETURNING *`,
-      [name, email, hashedPassword, userRole]
+      `INSERT INTO Reg (name, email, password,role,country,phone) VALUES ($1, $2, $3, $4, $5,$6) RETURNING *`,
+      [name, email, hashedPassword, userRole, country, phone]
     );
 
     const newUser = result.rows[0];
@@ -46,6 +46,8 @@ export const register = async (req, res) => {
         name: newUser.name,
         email: newUser.email,
         role:newUser.role,
+        country:newUser.country,
+        phone:newUser.phone,
       },
       token,
       success: true,

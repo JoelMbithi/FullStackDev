@@ -5,7 +5,7 @@ import bcrypt from "bcrypt";
 export const getUsers = async (req, res) => {
     try {
         const result = await db.query(
-            `SELECT user_id, name, email, created_at FROM Reg`
+            `SELECT user_id, name, email, role, country, phone, created_at FROM Reg`
         );
 
         res.status(200).json({
@@ -22,13 +22,14 @@ export const getUsers = async (req, res) => {
     }
 };
 
+
 // Get single user
 export const getUser = async (req, res) => {
     const { id } = req.params;
 
     try {
         const result = await db.query(
-            `SELECT user_id, name, email, created_at 
+            `SELECT user_id, name, email, role, country, phone, created_at 
              FROM Reg WHERE user_id = $1`,
             [id]
         );
@@ -56,7 +57,7 @@ export const getUser = async (req, res) => {
 // Update user
 export const updateUser = async (req, res) => {
     const { id } = req.params;
-    const { name, email } = req.body;
+    const { name, email,role, country, phone } = req.body;
 
     try {
         // Validate input
@@ -69,10 +70,10 @@ export const updateUser = async (req, res) => {
 
         const result = await db.query(
             `UPDATE Reg 
-             SET name = $1, email = $2 
-             WHERE user_id = $3
-             RETURNING user_id, name, email, created_at`,
-            [name, email, id]
+             SET name = $1, email = $2 , role = $3, country = $4, phone = $5
+             WHERE user_id = $6
+             RETURNING user_id, name, email,role, country, phone, created_at`,
+            [name, email, role, country, phone ,id]
         );
 
         if (result.rows.length === 0) {

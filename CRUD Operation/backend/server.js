@@ -7,6 +7,9 @@ import cloudinary from "cloudinary";  // ES6 import
 import authRouter from "./routes/AuthRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import apartmentRouter from "./routes/ApartmentRoute.js";
+import bookingRouter from "./routes/BookingRoutes.js";
+import { initiateSTKPush } from "./mpesa.js"
+
 
 // Load environment variables
 dotenv.config();
@@ -20,7 +23,17 @@ cloudinary.v2.config({
 
 // Express setup
 const app = express();
-const PORT = 3000;
+const PORT = 4000;
+
+
+app.post("/api/mpesa-callback", (req, res) => {
+  console.log("M-Pesa callback received:", req.body);
+  res.status(200).json({ message: "Callback received successfully" });
+});
+
+app.listen(3000, () => {
+  console.log("Server running on port 3000");
+});
 
 // Middleware setup
 app.use(cors({
@@ -32,10 +45,27 @@ app.use(cors({
 app.use(express.json());
 app.use(cookieParser());
 
+
+/* Mpesa  */
+// Add this to your server.js file
+app.post("/api/pay", async (req, res) => {
+  const { phone, amount } = req.body;
+
+  try {
+    const response = await initiateSTKPush(phone, amount);
+    res.status(200).json(response);
+  } catch (error) {
+    console.error("Error initiating STK Push:", error?.response?.data || error.message);
+    res.status(500).json({ error: "Failed to initiate payment" });
+  }
+});
+
+
 // API routes
 app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/apartment", apartmentRouter);
+app.use("/api/booking", bookingRouter)
 
 // Start server
 app.listen(PORT, () => {
