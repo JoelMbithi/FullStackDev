@@ -22,7 +22,7 @@ const Admin = () => {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
       })
-      console.log(res.data.data)
+    /*   console.log(res.data.data) */
       setUser(res.data.data);
 setCount(res.data.count);
 setUserChartData(getUsersByMonth(res.data.data));
@@ -46,7 +46,7 @@ setUserChartData(getUsersByMonth(res.data.data));
         }
 
       })
-      console.log(res.data.apartments)
+      /* console.log(res.data.apartments) */
      setApartments(res.data.apartments)
      setApartmentCount(res.data.apartments.length)
      
