@@ -8,6 +8,7 @@ import authRouter from "./routes/AuthRoutes.js";
 import userRouter from "./routes/userRoutes.js";
 import apartmentRouter from "./routes/ApartmentRoute.js";
 import bookingRouter from "./routes/BookingRoutes.js";
+import agentRouter from "./routes/AgentRoute.js"
 import { initiateSTKPush } from "./mpesa.js"
 
 
@@ -31,7 +32,7 @@ app.post("/api/mpesa-callback", (req, res) => {
   res.status(200).json({ message: "Callback received successfully" });
 });
 
-app.listen(3000, () => {
+app.listen(3001, () => {
   console.log("Server running on port 3000");
 });
 
@@ -66,6 +67,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/user", userRouter);
 app.use("/api/apartment", apartmentRouter);
 app.use("/api/booking", bookingRouter)
+app.use("/api/agent", agentRouter)
 
 // Start server
 app.listen(PORT, () => {
