@@ -9,11 +9,13 @@ import userRouter from "./routes/userRoutes.js";
 import apartmentRouter from "./routes/ApartmentRoute.js";
 import bookingRouter from "./routes/BookingRoutes.js";
 import agentRouter from "./routes/AgentRoute.js"
+import contactRoute from "./routes/contactAgent.js"
 import { initiateSTKPush } from "./mpesa.js"
 
+import twilio from 'twilio';
 
 // Load environment variables
-dotenv.config();
+  dotenv.config();
 
 // Cloudinary configuration
 cloudinary.v2.config({
@@ -25,7 +27,45 @@ cloudinary.v2.config({
 // Express setup
 const app = express();
 const PORT = 4000;
+const port = 5000;
 
+// Set up the Twilio client using environment variables
+const client = new twilio(process.env.TWILIO_ACCOUNT_SID, process.env.TWILIO_AUTH_TOKEN);
+
+// Middleware to parse JSON request bodies
+app.use(express.json());
+
+// POST route to trigger a call
+app.post('/make-call', (req, res) => {
+  const { phoneNumber } = req.body; // Get phone number from request body
+
+  client.calls.create({
+    to: phoneNumber,             // Phone number to call
+    from: process.env.TWILIO_PHONE_NUMBER, // Your Twilio phone number
+    url: 'http://your-server.com/twiml'    // URL for the TwiML response
+  })
+  .then(call => {
+    res.status(200).send('Call initiated');
+    console.log(call.sid);  // Log call SID for debugging
+  })
+  .catch(err => {
+    res.status(500).send('Error initiating call');
+    console.error(err);
+  });
+});
+
+// TwiML endpoint that responds with instructions for the call
+app.get('/twiml', (req, res) => {
+  const twiml = new twilio.twiml.VoiceResponse();
+  twiml.say('Hello! You have a new inquiry. Please hold for an agent.');
+  res.type('text/xml');
+  res.send(twiml.toString());
+});
+
+// Start the server
+app.listen(port, () => {
+  console.log(`Server running on port ${port}`);
+});
 
 app.post("/api/mpesa-callback", (req, res) => {
   console.log("M-Pesa callback received:", req.body);
@@ -68,6 +108,7 @@ app.use("/api/user", userRouter);
 app.use("/api/apartment", apartmentRouter);
 app.use("/api/booking", bookingRouter)
 app.use("/api/agent", agentRouter)
+app.use("/api/message",contactRoute)
 
 // Start server
 app.listen(PORT, () => {

@@ -3,7 +3,7 @@ import cloudinary from 'cloudinary';
 
 /* Register Agent */
 export const registerAgent = async (req,res) => {
-    const {name, position, reviews, description,image, phone,rating,specialties} =req.body
+    const {name, position, reviews, description,image, phone,rating,specialties,email} =req.body
     // Convert the comma-separated string to a PostgreSQL array format
 let specialtiesFormatted = specialties.split(',').map(s => s.trim());
     try {
@@ -22,8 +22,8 @@ let specialtiesFormatted = specialties.split(',').map(s => s.trim());
                 finalImage = image;
               }
         const agent = await db.query(
-            `INSERT INTO    agents  (name, position, reviews, description, image, phone,rating,specialties ) VALUES ($1, $2, $3, $4, $5, $6,$7,$8) RETURNING * `,
-            [name, position, reviews, description, finalImage , phone,rating,specialtiesFormatted]
+            `INSERT INTO    agents  (name, position, reviews, description, image, phone,rating,specialties,email ) VALUES ($1, $2, $3, $4, $5, $6,$7,$8,$8) RETURNING * `,
+            [name, position, reviews, description, finalImage , phone,rating,specialtiesFormatted,email]
         )
         
         const newAgent = agent.rows[0]
@@ -43,12 +43,12 @@ let specialtiesFormatted = specialties.split(',').map(s => s.trim());
 }
 
 export const UpdateAgent = async (req,res) => {
-    const {name, position, reviews, description,image, phone,rating,specialties} =req.body
+    const {name, position, reviews, description,image, phone,rating,specialties,email} =req.body
     const {id} = req.params
     try {
         const updateAgent = await db.query(
-            `UPDATE agents SET name=$1,position =$2, description =$3, image=$4, phone=$5,rating=$6,specialties=$7  WHERE id=$8  RETURNING * `,
-            [name, position,description, image, phone,rating,specialties,id]
+            `UPDATE agents SET name=$1,position =$2, description =$3, image=$4, phone=$5,rating=$6,specialties=$7 ,email,=$8  WHERE id=$9  RETURNING * `,
+            [name, position,description, image, phone,rating,specialties,emailid]
         )
 
         const updatedAgent = updateAgent.rows[0]
