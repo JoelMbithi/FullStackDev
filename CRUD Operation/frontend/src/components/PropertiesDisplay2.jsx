@@ -4,6 +4,7 @@ import { TiHeartFullOutline } from "react-icons/ti";
 import { RiMenu4Line } from "react-icons/ri";
 import { BiSolidBuildingHouse } from "react-icons/bi";
 import axios from "axios";
+import newRequest from "../utils/newRequest";
 
 const PropertiesDisplay2 = () => {
   const [popUp, setPopUp] = useState(false);
@@ -14,7 +15,7 @@ const PropertiesDisplay2 = () => {
 
   const fetchApartments = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/api/apartment/get`, {
+      const res = await newRequest.get(`/apartment/get`, {
         headers: {
           "Content-Type": "application/json",
           "Authorization": `Bearer ${localStorage.getItem("token")}`,
@@ -51,8 +52,8 @@ const PropertiesDisplay2 = () => {
     }
   
     try {
-      const response = await axios.post(
-        `http://localhost:3000/api/apartment/add`,
+      const response = await newRequest.post(
+        `/apartment/add`,
         formData, // Send FormData directly (not as JSON)
         {
           headers: {

@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { FiUsers, FiHome, FiSettings, FiLogOut } from 'react-icons/fi';
 import { Link } from 'react-router-dom';
+import { HiOutlineUserGroup } from "react-icons/hi";
+import { RiShieldUserLine } from "react-icons/ri";
 import { BarChart, Bar, XAxis, YAxis, Tooltip, CartesianGrid, ResponsiveContainer } from 'recharts';
 import axios from 'axios';
+import newRequest from '../utils/newRequest';
 
 const Admin = () => {
   const [user,setUser] = useState(null)
@@ -17,7 +20,7 @@ const Admin = () => {
 
   const fetchUser = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/api/user/getUsers`,{
+      const res = await newRequest.get(`/user/getUsers`,{
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
@@ -40,7 +43,7 @@ setUserChartData(getUsersByMonth(res.data.data));
   const fetchApartments = async () => {
 
     try {
-      const res = await axios.get(`http://localhost:3000/api/apartment/get`,{
+      const res = await newRequest.get(`/apartment/get`,{
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`
         }
@@ -69,8 +72,8 @@ setUserChartData(getUsersByMonth(res.data.data));
           console.error("Booking ID is undefined. Cannot fetch booking.");
           return;
         }
-        const res = await axios.get(
-          `http://localhost:3000/api/booking/getAllBooking`,
+        const res = await newRequest.get(
+          `/booking/getAllBooking`,
           {
             headers: {
               Authorization: `Bearer ${token}`,
@@ -123,27 +126,31 @@ setUserChartData(getUsersByMonth(res.data.data));
     
     
   return (
-    <div className='flex h-screen bg-gray-100'>  
+    <div className='flex h-grow bg-gray-100 font-sans'>  
       {/* Left sidebar */}
-      <div className='bg-blue-950 text-white h-200 w-80 flex flex-col'>
-        <div className='flex flex-col items-center justify-center h-80 bg-slate-700'>
+      <div className="bg-blue-950 text-white flex flex-col justify-evenly h-240 w-80">
+      <div className="flex flex-col items-center justify-center h-80 bg-slate-700">
           <h1 className='text-4xl font-bold'>Build Estate</h1>
         </div>
 
-        <div className='text-white text-xl p-8'>
-          <Link to="/admin" className='flex items-center p-3 rounded hover:bg-slate-700 transition-colors'>
+        <div className='text-white text-xl  p-8 mt-4'>
+          <Link to="/admin" className='flex items-center  p-3 rounded hover:bg-slate-700 transition-colors'>
             <FiHome className='mr-3' />
             Dashboard
           </Link>
-          <Link to="/users" className='flex items-center p-3 rounded hover:bg-slate-700 transition-colors'>
+          <Link to="/users" className='flex items-center p-3 mt-4 rounded hover:bg-slate-700 transition-colors'>
             <FiUsers className='mr-3' />
             User Management
           </Link>
-          <Link to="/properties" className='flex items-center p-3 rounded hover:bg-slate-700 transition-colors'>
-            <FiHome className='mr-3' />
+          <Link to="/properties" className='flex items-center p-1 mt-4  rounded hover:bg-slate-700 transition-colors'>
+          <HiOutlineUserGroup className="mr-3" />
             Property Management
           </Link>
-          <Link to="/admin/settings" className='flex items-center p-3 rounded hover:bg-slate-700 transition-colors'>
+          <Link to="/AdminAgent" className='flex items-center p-3 mt-4  rounded hover:bg-slate-700 transition-colors'>
+          <RiShieldUserLine className='mr-3' />
+            Agents Management
+          </Link>
+          <Link to="/admin/settings" className='flex items-center p-3 mt-4  rounded hover:bg-slate-700 transition-colors'>
             <FiSettings className='mr-3' />
             Settings
           </Link>

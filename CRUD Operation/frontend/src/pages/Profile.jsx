@@ -4,6 +4,7 @@ import { MdOutlineEmail } from "react-icons/md";
 import { TiUserOutline } from "react-icons/ti";
 import { FiPhoneCall } from "react-icons/fi";
 import axios from "axios";
+import newRequest from "../utils/newRequest";
 
 const Profile = () => {
   const [user,setUser] = useState({
@@ -20,7 +21,7 @@ const Profile = () => {
     const id = localStorage.getItem('userId');
     const token = localStorage.getItem('token');
     try {
-      const res = await axios.get(`http://localhost:3000/api/user/getUser/${id}`,{
+      const res = await newRequest.get(`/user/getUser/${id}`,{
         headers:{
           Authorization: `Bearer ${localStorage.getItem('token')}`
 
@@ -46,7 +47,7 @@ const Profile = () => {
     e.preventDefault()
     const id = localStorage.getItem("userId")
     try {
-      const res = await axios.put(`http://localhost:3000/api/user/updateUser/${id}`,user,{
+      const res = await newRequest.put(`/user/updateUser/${id}`,user,{
         headers:{
           Authorization: `Bearer ${localStorage.getItem('token')}`
         }

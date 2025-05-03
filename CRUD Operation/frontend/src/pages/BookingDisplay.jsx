@@ -3,6 +3,7 @@ import { FiUsers, FiHome, FiSettings, FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 import axios from "axios";
+import newRequest from "../utils/newRequest";
 
 const UserManagement = () => {
   const [user, setUser] = useState(null);
@@ -14,12 +15,27 @@ const UserManagement = () => {
   const [bookCount, setBookCount] = useState(0);
   const [books, setBooks] = useState(null);
   const [book, setBook] = useState([]);
+  const [popUp,setPopUp] = useState(false)
+  const [name, setName] = useState("");
+  const [phone, setPhone] = useState("");
+  const [amount, setAmount] = useState("");
+  const [email, setEmail] = useState("");
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+
+
+  const toggleDropdown = () => {
+    setPopUp(!popUp)
+
+ }
+
 
   const fetchUser = async () => {
     const id = localStorage.getItem("userId");
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.get(`http://localhost:3000/api/user/getUsers`, {
+      const res = await newRequest.get(`/user/getUsers`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -29,7 +45,7 @@ const UserManagement = () => {
       setCount(res.data.count);
 
       /* get A single user */
-      const response = await axios.get(`http://localhost:3000/api/user/getUser/${id}`, {
+      const response = await newRequest.get(`/user/getUser/${id}`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -50,8 +66,8 @@ const UserManagement = () => {
         console.error("Booking ID is undefined. Cannot fetch booking.");
         return;
       }
-      const res = await axios.get(
-        `http://localhost:3000/api/booking/getAllBooking`,
+      const res = await newRequest.get(
+        `/booking/getAllBooking`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -65,8 +81,8 @@ const UserManagement = () => {
       setBookCount(bookings.length);
 
       /* Fetching single Booking */
-      const response = await axios.get(
-        `http://localhost:3000/api/booking/getBooking/${id}`,
+      const response = await newRequest.get(
+        `/booking/getBooking/${id}`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -85,7 +101,7 @@ const UserManagement = () => {
     const id = localStorage.getItem("bookId");
     const token = localStorage.getItem("token");
     try {
-      const res = await axios.get(`http://localhost:3000/api/apartment/get`, {
+      const res = await newRequest.get(`/apartment/get`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -105,9 +121,39 @@ const UserManagement = () => {
     fetchBooking();
   }, []);
 
-  const handleClose = ()=> {
+  const handleClose = () => {
+    if (window.opener) {
+      window.close();
+    } else {
+      // Fallback behavior
+      window.history.back(); // or other navigation
+    }
+  };
 
-  }
+  const handlePaymentSubmit = async (e) => {
+    e.preventDefault();
+    setLoading(true);
+    setError("");
+    setSuccess("");
+
+    try {
+      // Send the payment details to the server
+      const response = await newRequest.post("/pay", {
+        phone,
+        amount,
+      });
+
+      if (response.data.status === "success") {
+        setSuccess("Payment initiated successfully. Please check your phone.");
+      } else {
+        setError("Failed to initiate payment.");
+      }
+    } catch (err) {
+      setError("An error occurred while processing your payment.");
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="flex h-grow bg-gray-100">
@@ -248,17 +294,66 @@ const UserManagement = () => {
                 {/* buttons */}
                 <div className="flex flex-row justify-between">
                   <div className="flex flex-row items-center mt-5 justify-center gap-2 mb-2">
-                    <button className="bg-red-700 mt-5 p-2 rounded text-white hover:bg-red-800 " onClick={()=> handleClose}>
+                    <button className="bg-red-700 mt-5 p-2 rounded text-white hover:bg-red-800 " 
+                    onClick={handleClose} 
+                    >
                       Cancel Booking
                     </button>
                   </div>
-                  <div className="flex flex-row items-center mt-5 justify-center gap-2 mb-2">
+                  
+                  
+                    <div className="flex flex-row items-center mt-5 justify-center gap-2 mb-2">
+                   
                     <button className="bg-blue-700 mt-5 p-2 rounded text-white hover:bg-blue-800"
-                    onClick={()=> handleClose}
+                    onClick={toggleDropdown}
                     >
                       Complete Booking
                     </button>
+                   
                   </div>
+                  {/* popup for payment */}
+                  {popUp && (
+                   
+                   <div className="fixed inset-0 flex justify-center items-center z-50">
+      <div className="bg-white p-6 rounded shadow-lg max-w-sm w-full">
+        <div className="flex flex-row gap-4 justify-between">
+        <h2 className="text-2xl font-semibold mb-4 text-center">Payment Details</h2>
+        <p className="cursor-pointer text-xl font-bold p-1" onClick={handleClose}>X</p>
+        </div>
+        <form onSubmit={handlePaymentSubmit}>
+          <div className="mb-4">
+            <label htmlFor="name" className="block text-sm font-medium text-gray-700">Full Name</label>
+            <input type="text" id="name" value={name} onChange={(e) => setName(e.target.value)} className="mt-1 px-4 py-2 w-full border border-gray-300 rounded" placeholder="Enter your name" />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="phone" className="block text-sm font-medium text-gray-700">Phone Number</label>
+            <input type="tel" id="phone" value={phone} onChange={(e) => setPhone(e.target.value)} className="mt-1 px-4 py-2 w-full border border-gray-300 rounded" placeholder="Enter phone number" />
+          </div>
+
+          <div className="mb-4">
+            <label htmlFor="amount" className="block text-sm font-medium text-gray-700">Amount</label>
+            <input type="number" id="amount" value={amount} onChange={(e) => setAmount(e.target.value)} className="mt-1 px-4 py-2 w-full border border-gray-300 rounded" placeholder="Enter amount" />
+          </div>
+
+          <div className="mb-6">
+            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email</label>
+            <input type="email" id="email" value={email} onChange={(e) => setEmail(e.target.value)} className="mt-1 px-4 py-2 w-full border border-gray-300 rounded" placeholder="Enter email" />
+          </div>
+
+          {loading ? (
+            <div className="text-center text-blue-500">Processing Payment...</div>
+          ) : (
+            <button type="submit" className="w-full bg-indigo-600 text-white py-2 rounded hover:bg-indigo-700 transition duration-200">Pay Now</button>
+          )}
+
+          {error && <div className="mt-4 text-red-500 text-center">{error}</div>}
+          {success && <div className="mt-4 text-green-500 text-center">{success}</div>}
+        </form>
+      </div>
+    </div>
+                    
+                    )}
                 </div>
               </div>
             </div>

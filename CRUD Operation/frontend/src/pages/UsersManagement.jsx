@@ -3,6 +3,7 @@ import { FiUsers, FiHome, FiSettings, FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
 
 import axios from "axios";
+import newRequest from "../utils/newRequest";
 
 const UserManagement = () => {
   const [user, setUser] = useState(null);
@@ -17,7 +18,7 @@ const UserManagement = () => {
   const fetchUser = async () => {
     const id = localStorage.getItem("userId");
     try {
-      const res = await axios.get(`http://localhost:3000/api/user/getUsers`, {
+      const res = await newRequest.get(`/user/getUsers`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -39,8 +40,8 @@ const UserManagement = () => {
         console.error("Booking ID is undefined. Cannot fetch booking.");
         return;
       }
-      const res = await axios.get(
-        `http://localhost:3000/api/booking/getAllBooking`,
+      const res = await newRequest.get(
+        `/booking/getAllBooking`,
         {
           headers: {
             Authorization: `Bearer ${token}`,
@@ -65,7 +66,7 @@ const UserManagement = () => {
 
   const fetchApartments = async () => {
     try {
-      const res = await axios.get(`http://localhost:3000/api/apartment/get`, {
+      const res = await newRequest.get(`/apartment/get`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },

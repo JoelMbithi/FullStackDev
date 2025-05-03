@@ -3,6 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { FaRegCircleUser } from "react-icons/fa6";
 import { useState } from 'react';
 import axios from 'axios';
+import newRequest from '../utils/newRequest';
 
 const Register = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const Register = () => {
     console.log("Register data", data);  
   
     try {
-      const res = await axios.post("http://localhost:3000/api/auth/create", data);
+      const res = await newRequest.post("/auth/create", data);
   
       console.log('Registered successfully', res.data);
       alert(res.data.message || "Registered successfully");

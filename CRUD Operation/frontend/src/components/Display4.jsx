@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import BookingPopUp from "./BookingPopUp";
+import newRequest from "../utils/newRequest";
 
 const Display4 = () => {
   const [apartments, setApartments] = useState([]);
@@ -25,7 +26,7 @@ const Display4 = () => {
   const fetchApartments = async () => {
     try {
       setIsLoading(true);
-      const res = await axios.get(`http://localhost:3000/api/apartment/get`, {
+      const res = await newRequest.get(`/apartment/get`, {
         headers: {
           Authorization: `Bearer ${localStorage.getItem("token")}`,
         },
@@ -48,7 +49,7 @@ const Display4 = () => {
     const data = Object.fromEntries(formData);
 
     try {
-      const res = await axios.post(`http://localhost:3000/api/booking/book`, data);
+      const res = await newRequest.post(`/booking/book`, data);
 
       if (res.data?.booking) {
         const booking = res.data.booking;

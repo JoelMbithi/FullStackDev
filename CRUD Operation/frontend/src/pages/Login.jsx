@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import axios from 'axios';
+import newRequest from '../utils/newRequest';
 
 const Login = () => {
   const navigate = useNavigate();
@@ -16,7 +17,7 @@ const Login = () => {
       const formData = new FormData(e.target);
       const data = Object.fromEntries(formData);
       
-      const res = await axios.post("http://localhost:3000/api/auth/login", data);
+      const res = await newRequest.post("/auth/login", data);
       
       // Store auth data
       localStorage.setItem('userId', res.data.user.id); 

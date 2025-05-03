@@ -11,6 +11,8 @@ import Properties from './pages/Properties'
 import Profile from './pages/Profile'
 import Users from "./pages/UsersManagement"; 
 import BookingDisplay from "./pages/BookingDisplay"
+import Agents from './pages/Agents'
+import AdminAgentManagement from './pages/AdminAgentManagement'
 
 const App = () => {
   return (
@@ -25,6 +27,8 @@ const App = () => {
         <Route path="/booking" element={<BookingDisplay/>}/>
         <Route path="/properties" element={<Properties/>}/>
         <Route path="/profile" element={<Profile/>}/>
+        <Route path='/agents' element={<Agents/>}/>
+        <Route path='/AdminAgent' element={<AdminAgentManagement/>}/>
        </Routes>
       <Footer />
       

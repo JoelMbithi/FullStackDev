@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import newRequest from "../utils/newRequest";
 
 const BookingPopUp = ({
   handleSubmit,
@@ -16,8 +17,8 @@ const BookingPopUp = ({
 
     try {
       setIsLoading(true);
-      const res = await axios.get(
-        `http://localhost:3000/api/apartment/getSingleApartment/${apartments_id}`,
+      const res = await newRequest.get(
+        `/apartment/getSingleApartment/${apartments_id}`,
         {
           headers: {
             Authorization: `Bearer ${localStorage.getItem("token")}`,
