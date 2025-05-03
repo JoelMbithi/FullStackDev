@@ -51,6 +51,7 @@ const ContactPage = ({onClose,agent}) => {
           [name]: value,
         }));
       };    
+      console.log(agent)
 
      
       const handleSubmit = async (e) => {
@@ -65,11 +66,12 @@ const ContactPage = ({onClose,agent}) => {
           // 2. Send email using EmailJS
           const response = await emailjs.send(
             emailjsConfig.serviceId,
-            emailjsConfig.templateId,
+            emailjsConfig. agentTemplateId,
             {
               from_name: formData.name,
               from_email: formData.email,
               to_name: agent?.name || 'Agent',
+              to_email: agent?.email || 'joellembithi@gmail.com',
               message: formData.message,
               phone: formData.phone || 'Not provided',
               reply_to: formData.email
@@ -187,70 +189,72 @@ const ContactPage = ({onClose,agent}) => {
       
 
         {/* Contact Info */}
-         <div className="bg-white p-8 rounded-2xl shadow-lg flex flex-col justify-between">
-          <div>
-            <h2 className="text-2xl font-semibold text-gray-800 mb-6">Contact Details</h2>
-            <div className="flex items-center gap-4 mb-6">
-      <img
-        src="joe"
-        alt="Agent"
-        className="w-20 h-20 rounded-full object-cover shadow-md"
-      />
-      <div>
-        <h3 className="text-xl font-bold text-gray-800">Joel Mbithi</h3>
-        <p className="text-sm text-gray-600">Senior Real Estate Consultant</p>
-      </div>
-    </div>
-            <div className="space-y-5 mb-6">
-              <div className="flex items-center gap-3">
-                <FaPhone className="text-blue-600 text-xl" />
-                <a href="tel:+1234567890" className="text-gray-700 hover:text-blue-600">
-                  (123) 456-7890
-                </a>
-              </div>
-              <div className="flex items-center gap-3">
-                <FaEnvelope className="text-blue-600 text-xl" />
-                <a href="mailto:agent@example.com" className="text-gray-700 hover:text-blue-600">
-                  agent@example.com
-                </a>
-              </div>
-              <div className="flex items-start gap-3">
-                <FaMapMarkerAlt className="text-blue-600 text-xl mt-1" />
-                <p className="text-gray-700 leading-tight">
-                  123 Real Estate Ave,<br /> Suite 100, Nairobi, Kenya
-                </p>
-              </div>
-            </div> 
-            
-
-
-            {/* Socials */}
-            <div className="flex gap-4 text-2xl mb-6">
-              <a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-blue-600 hover:text-blue-800">
-                <FaFacebook />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noreferrer" className="text-pink-500 hover:text-pink-700">
-                <FaInstagram />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-blue-800 hover:text-blue-900">
-                <FaLinkedin />
-              </a>
-            </div>
-          </div>
-
-          {/* Map */}
-          <div className="h-48 mt-4 rounded-lg overflow-hidden border">
-            <MapContainer center={position} zoom={13} style={{ height: "100%", width: "100%" }}>
-              <TileLayer
-                attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
-                url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-              />
-              <Marker position={position}>
-                <Popup>Our Office — Nairobi, Kenya</Popup>
-              </Marker>
-            </MapContainer>
-          </div>
-        </div>
+           {agent && (
+             <div className="bg-white p-8 rounded-2xl shadow-lg flex flex-col justify-between">
+             <div>
+               <h2 className="text-2xl font-semibold text-gray-800 mb-6">Contact Details</h2>
+               <div className="flex items-center gap-4 mb-6">
+         <img
+           src={agent.image || "joe"}
+           alt="Agent"
+           className="w-20 h-20 rounded-full object-cover shadow-md"
+         />
+         <div>
+           <h3 className="text-xl font-bold text-gray-800">{agent.name || "Joel Mbithi"}</h3>
+           <p className="text-sm text-gray-600">{agent.position || "Senior"} Real Estate Consultant</p>
+         </div>
+       </div>
+               <div className="space-y-5 mb-6">
+                 <div className="flex items-center gap-3">
+                   <FaPhone className="text-blue-600 text-xl" />
+                   <a href="tel:+1234567890" className="text-gray-700 hover:text-blue-600">
+                     {agent.phone || "(123) 456-7890"}
+                   </a>
+                 </div>
+                 <div className="flex items-center gap-3">
+                   <FaEnvelope className="text-blue-600 text-xl" />
+                   <a href="mailto:agent@example.com" className="text-gray-700 hover:text-blue-600">
+                    {agent.email || "joellembithi@gmail.com"}
+                   </a>
+                 </div>
+                 <div className="flex items-start gap-3">
+                   <FaMapMarkerAlt className="text-blue-600 text-xl mt-1" />
+                   <p className="text-gray-700 leading-tight">
+                     123 Real Estate Ave,<br /> {agent.location || "Suite 100, Nairobi, Kenya"}
+                   </p>
+                 </div>
+               </div> 
+               
+   
+   
+               {/* Socials */}
+               <div className="flex gap-4 text-2xl mb-6">
+                 <a href="https://facebook.com" target="_blank" rel="noreferrer" className="text-blue-600 hover:text-blue-800">
+                   <FaFacebook />
+                 </a>
+                 <a href="https://instagram.com" target="_blank" rel="noreferrer" className="text-pink-500 hover:text-pink-700">
+                   <FaInstagram />
+                 </a>
+                 <a href="https://linkedin.com" target="_blank" rel="noreferrer" className="text-blue-800 hover:text-blue-900">
+                   <FaLinkedin />
+                 </a>
+               </div>
+             </div>
+   
+             {/* Map */}
+             <div className="h-48 mt-4 rounded-lg overflow-hidden border">
+               <MapContainer center={position} zoom={13} style={{ height: "100%", width: "100%" }}>
+                 <TileLayer
+                   attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a>'
+                   url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
+                 />
+                 <Marker position={position}>
+                   <Popup>Our Office — Nairobi, Kenya</Popup>
+                 </Marker>
+               </MapContainer>
+             </div>
+           </div>
+           )}
       </div>
 
       {/* Testimonial */}

@@ -3,15 +3,21 @@ import { faStar } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import newRequest from "../utils/newRequest";
 import ContactAgent from "../components/ContactAgent";
+import Testimonials from "../components/agent/Testimonials"
 
 const Agents = () => {
   const [agents, setAgents] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [visibleAgents, setVisibleAgents] = useState(3);
-  const [popUp,setPopUp] = useState(true)
+  const [popUp,setPopUp] = useState(false)
   const [selectedAgentId, setSelectedAgentId] = useState(null);
+  const [isOpen,setIsOpen] = useState(false)
 
+
+  const handleOpen = () => {
+    setIsOpen(true)
+  }
   const toggleVisibleAgents = () => {
     setVisibleAgents((prev) => (prev === 3 ? agents.length : 3));
   };
@@ -98,7 +104,7 @@ const Agents = () => {
               </div>
               <h3 className="font-bold text-xl mb-2">Local Market Experts</h3>
               <p>
-                In-depth knowledge of [Your City] neighborhoods and pricing
+                In-depth knowledge of Your City neighborhoods and pricing
                 trends.
               </p>
             </div>
@@ -408,8 +414,17 @@ const Agents = () => {
           <p className="text-xl mb-8">Let's connect you with the perfect agent for your needs.</p>
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <a href="#" className="bg-blue-700 text-white px-8 py-4 rounded-lg font-bold hover:bg-blue-800 transition">Match Me with an Agent</a>
-            <a href="tel:+1234567890" className="border-2 border-blue-700 text-blue-700 px-8 py-4 rounded-lg font-bold hover:bg-blue-50 transition">Call Now: (123) 456-7890</a>
+            <button className="border-2 border-blue-700 text-blue-700 px-8 py-4 rounded-lg font-bold hover:bg-blue-50 transition"
+            onClick={handleOpen}
+            >Tell Us What You Think</button>
           </div>
+
+    {/* Popup Modal */}
+    {isOpen && (
+     < Testimonials 
+     onClose={() => setIsOpen(false)}
+     />
+    )}
         </div>
       </section>
 

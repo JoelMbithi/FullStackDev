@@ -11,7 +11,7 @@ const NavBar = () => {
   const [user, setUser] = useState('');
   const [isOpen, setIsOpen] = useState(false);
   const navigate = useNavigate();
-  
+  const [popUp, setPopUp] = useState(false);
 
   const toggleDropdown = () => {
     setIsOpen(!isOpen);
@@ -88,15 +88,14 @@ const NavBar = () => {
           </button>
 
           <button className='hidden sm:inline-block bg-blue-800 hover:bg-blue-900 text-white px-4 py-2 rounded-md text-sm font-medium transition-colors'
-          onClick={() => handleClick()}
+          onClick={ handleClick}
           >
             Contact Us
           </button>
 {/* Popup Modal */}
-{isOpen && (
+{popUp && (
  < Contact
- onClose={() => {
-  setPopUp(false);}}
+ onClose={() => setPopUp(false)}
  />
 )}
           <button className='p-2 text-gray-600 hover:text-purple-700 transition-colors'>
