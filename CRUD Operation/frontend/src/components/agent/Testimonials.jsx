@@ -1,10 +1,13 @@
-import React from "react"
+import React, { useEffect } from "react"
 import { useState } from "react";
 import { FaStar } from "react-icons/fa";
+import newRequest from "../../utils/newRequest.js"
 
 const TestimonialForm = ({ onClose }) => {
   const [rating, setRating] = useState(0);
   const [hover, setHover] = useState(0);
+ const [user, setUser] = useState('');
+
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -13,7 +16,8 @@ const TestimonialForm = ({ onClose }) => {
   const [errors, setErrors] = useState({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
-
+  const [error, setError] = useState(null);
+  
   const handleChange = (e) => {
     const { name, value } = e.target;
     setFormData({
@@ -36,42 +40,93 @@ const TestimonialForm = ({ onClose }) => {
     return Object.keys(newErrors).length === 0;
   };
  
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-
-    if (validate()) {
-      setIsSubmitting(true);
-
+   const fetchUser = async () => {
       try {
-        // Send the data to the backend
-        const response = await axios.post(
-          `/api/contact/${agentId}`, // Your backend endpoint
-          { ...formData, rating } // Ensure you're sending rating as part of formData
-        );
-
-        // Simulate API call and reset form
-        setTimeout(() => {
-          console.log("Submitted:", { ...formData, rating });
-          setIsSubmitting(false);
-          setIsSuccess(true);
-
-          // Reset form after 2 seconds
-          setTimeout(() => {
-            setFormData({ name: "", email: "", review: "" });
-            setRating(0);
-            setIsSuccess(false);
-            if (onClose) onClose();
-          }, 2000);
-        }, 1000);
+        const id = localStorage.getItem('userId');
+        const token = localStorage.getItem('token');
+  
+        const res = await newRequest.get(`/user/getUser/${id}`, {
+          headers: {
+            Authorization: `Bearer ${token}`
+          }
+        });
+        
+  console.log(res.data.data)
+        if (res.data.success) {
+          setUser(res.data.data);
+        } else {
+          console.log("Error: Unable to fetch user data");
+        }
       } catch (error) {
-        console.error('Error sending message:', error);
-        setIsSubmitting(false);
-        // Optionally handle errors here (e.g., show an error message)
+        console.log("Error fetching user data:", error);
       }
-    } else {
-      console.log('Validation failed');
-    }
+    };
+  
+    useEffect(() => {
+      fetchUser();
+    }, []);
+
+    const handleSubmit = async (e) => {
+      e.preventDefault();
+      console.log("Form submit triggered");
+      const isValid = validate();
+      if (!isValid) return;
+    
+      setIsSubmitting(true);
+      setError(null);
+    
+      try {
+        const token = localStorage.getItem('token'); // your JWT token
+    
+        // Assuming user contains the userId after fetchUser() is called
+        const userId = user._id;  // Or use user.id depending on your API response
+    
+        const reviewData = {
+          name: formData.name,
+          email: formData.email,
+          rating,
+          review: formData.review,
+          user_id: userId,  // Add user_id to the data
+        };
+    
+        const response = await newRequest.post("/Testimonials/create", reviewData, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+    
+        console.log("Review submitted:", response.data);
+        setIsSuccess(true);
+        resetForm();
+    
+        // Close the form after displaying the success message for 3 seconds
+        setTimeout(() => {
+          onClose();
+        }, 3000);
+    
+      } catch (error) {
+        console.error("Submission error:", error);
+        setError(
+          error.response?.data?.message || "Failed to submit review. Please try again."
+        );
+      } finally {
+        setIsSubmitting(false);
+      }
+    };
+    
+    
+    
+  
+  // Helper function to reset form
+  const resetForm = () => {
+    setFormData({
+      name: '',
+      email: '',
+      review: ''
+    });
+    setRating(0);
   };
+  
 
 
   return (
@@ -98,14 +153,14 @@ const TestimonialForm = ({ onClose }) => {
               Thank You!
             </h3>
             <p className="mt-2 text-sm text-gray-500">
-              Your testimonial has been submitted.
+              Your Review  has been submitted.
             </p>
           </div>
         ) : (
           <>
             <div className="flex justify-between items-center mb-4">
               <h3 className="text-lg font-medium text-gray-900">
-                Leave a Testimonial
+              Leave a Review for Our Community
               </h3>
               <button
                 onClick={onClose}

@@ -6,41 +6,105 @@ import axios from 'axios';
 import newRequest from '../utils/newRequest';
 
 const Register = () => {
+  const [image, setImage] = useState(null);
+const [preview, setPreview] = useState(null);
+
   const navigate = useNavigate();
 
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const formData = new FormData(e.target);
-    const data = Object.fromEntries(formData);
-    console.log("Register data", data);  
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    setImage(file); // Store the file for later upload
+  
+    // Show image preview
+    if (file) {
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setPreview(reader.result); // Set preview URL for display
+      };
+      reader.readAsDataURL(file);
+    }
+  
+    // Proceed with upload to Cloudinary
+    handleImageUpload(file);
+  };
+  
+  const handleImageUpload = async (file) => {
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('upload_preset', 'Build Estate');
   
     try {
-      const res = await newRequest.post("/auth/create", data);
-  
-      console.log('Registered successfully', res.data);
-      alert(res.data.message || "Registered successfully");
-      navigate('/login'); // Redirect to login page after successful registration
-  
+      const res = await axios.post(
+        'https://api.cloudinary.com/v1_1/dz6pydmk6/image/upload',
+        formData
+      );
+      setImageUrl(res.data.secure_url); // Set Cloudinary URL
     } catch (error) {
-      console.error('Error during registration:', error);
-      if (error.response) {
-        // Server responded with an error
-        alert(error.response.data.message || "Registration failed");
-      } else {
-        // Other errors (like network error)
-        alert('An error occurred during registration');
-      }
+      console.error('Error uploading image:', error);
+      setError('Failed to upload image');
     }
   };
+  
+  
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+  const formData = new FormData(e.target);
+
+  if (image) {
+    formData.append("image", image); // 👈 Append the file manually
+  }
+
+  try {
+    const res = await newRequest.post("/auth/create", formData, {
+      headers: {
+        "Content-Type": "multipart/form-data", // 👈 Important for file upload
+      },
+    });
+
+    console.log('Registered successfully', res.data);
+    alert(res.data.message || "Registered successfully");
+    navigate('/login');
+  } catch (error) {
+    console.error('Error during registration:', error);
+    if (error.response) {
+      alert(error.response.data.message || "Registration failed");
+    } else {
+      alert('An error occurred during registration');
+    }
+  }
+};
+
   
 
   return (
     <div className='min-h-screen flex items-center justify-center bg-gray-100 p-4'>
       <div className='bg-white rounded-lg mt-20 shadow-md w-full max-w-md'>
-        <div className='flex items-center justify-center text-6xl text-slate-400 p-4 rounded-t-lg'>
-          <FaRegCircleUser />
-        </div>
+        {/* profile */}
+        <div className="flex flex-col items-center justify-center p-4 rounded-t-lg">
+  {preview ? (
+    <img
+      src={preview}
+      alt="Selected"
+      className="w-24 h-24 object-cover rounded-full"
+    />
+  ) : (
+    <>
+      <FaRegCircleUser className="text-6xl text-slate-400 cursor-pointer" />
+      <label className="text-sm text-blue-600 cursor-pointer mt-2">
+        Upload Image
+        <input
+          type="file"
+          accept="image/*"
+          onChange={handleImageChange}
+          className="hidden"
+        />
+      </label>
+    </>
+  )}
+</div>
+
         <form onSubmit={handleSubmit}>
           <div className='flex flex-col gap-2 p-6'>
             <label className='font-bold'>Full Name:</label>

@@ -1,73 +1,101 @@
-import React, { useEffect, useState } from "react";
-import { faStar } from "@fortawesome/free-solid-svg-icons";
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import newRequest from "../utils/newRequest";
-import ContactAgent from "../components/ContactAgent";
-import Testimonials from "../components/agent/Testimonials"
+  import React, { useEffect, useState } from "react";
+  import { faStar } from "@fortawesome/free-solid-svg-icons";
+  import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+  import newRequest from "../utils/newRequest";
+  import ContactAgent from "../components/ContactAgent";
+  import Testimonials from "../components/agent/Testimonials"
+  import { useParams } from 'react-router-dom';
 
-const Agents = () => {
-  const [agents, setAgents] = useState([]);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [visibleAgents, setVisibleAgents] = useState(3);
-  const [popUp,setPopUp] = useState(false)
-  const [selectedAgentId, setSelectedAgentId] = useState(null);
-  const [isOpen,setIsOpen] = useState(false)
+  const Agents = () => {
+    const [agents, setAgents] = useState([]);
+    const [loading, setLoading] = useState(true);
+    const [error, setError] = useState(null);
+    const [visibleAgents, setVisibleAgents] = useState(3);
+    const [popUp,setPopUp] = useState(false)
+    const [selectedAgentId, setSelectedAgentId] = useState(null);
+    const [isOpen,setIsOpen] = useState(false)
+  const [reviews,setReviews] = useState([])
+  const { id } = useParams();
 
-
-  const handleOpen = () => {
-    setIsOpen(true)
-  }
-  const toggleVisibleAgents = () => {
-    setVisibleAgents((prev) => (prev === 3 ? agents.length : 3));
-  };
-  
-  const handleClick = (id) => {
-    console.log("Clicked agent ID:", id);
-    setSelectedAgentId(id); // store clicked agent's ID
-    setPopUp(true);         // show popup
-  };
-
-  /* console.log("Selected agent ID:", selectedAgentId);
-  console.log("Agents array:", agents); */
-  
-  const fetchAgents = async () => {
-    const token = localStorage.getItem("token");
-    try {
-      const res = await newRequest.get("/agent/allAgents", {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
-      console.log(res.data.data);
-      setAgents(res.data.data);
-    } catch (error) {
-      console.error("Error fetching agents:", error);
-      setError("Failed to load agents. Please try again later.");
-    } finally {
-      setLoading(false);
+    const handleOpen = () => {
+      setIsOpen(true)
     }
-  };
+    const toggleVisibleAgents = () => {
+      setVisibleAgents((prev) => (prev === 3 ? agents.length : 3));
+    };
+    
+    const handleClick = (id) => {
+      console.log("Clicked agent ID:", id);
+      setSelectedAgentId(id); // store clicked agent's ID
+      setPopUp(true);         // show popup
+    };
 
-  useEffect(() => {
-    fetchAgents();
-  }, []);
+    /* console.log("Selected agent ID:", selectedAgentId);
+    console.log("Agents array:", agents); */
+    
+    /* reviews */
 
-  if (loading) {
-    return (
-      <div className="flex justify-center items-center h-screen">
-        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
-      </div>
-    );
-  }
+    const fetchReviews = async () => {
+      try {
+        const res = await newRequest.get("/Testimonials/reviews");
+        console.log("Response data:", res.data); // Log the data
+        setReviews(res.data.data);
+      } catch (error) {
+        console.log("Error fetching user reviews:", error);
+      }
+    };
+    
+    useEffect(() => {
+      fetchReviews();
+    }, []);
+    
+    useEffect(() => {
+      console.log("Reviews state:", reviews); // Log after state has been updated
+    }, [reviews]);
+    
+   
+    
+    
+    
 
-  if (error) {
-    return (
-      <div className="flex justify-center items-center h-screen text-red-500">
-        {error}
-      </div>
-    );
-  }
+    const fetchAgents = async () => {
+      const token = localStorage.getItem("token");
+      try {
+        const res = await newRequest.get("/agent/allAgents", {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        });
+        console.log(res.data.data);
+        setAgents(res.data.data);
+      } catch (error) {
+        console.error("Error fetching agents:", error);
+        setError("Failed to load agents. Please try again later.");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    useEffect(() => {
+      fetchAgents();
+      
+    }, []);
+
+    if (loading) {
+      return (
+        <div className="flex justify-center items-center h-screen">
+          <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-blue-500"></div>
+        </div>
+      );
+    }
+
+    if (error) {
+      return (
+        <div className="flex justify-center items-center h-screen text-red-500">
+          {error}
+        </div>
+      );
+    }
 
   return (
     <div className="bg-gray-50 font-sans">
@@ -320,67 +348,56 @@ const Agents = () => {
       </section>
 
  {/* Testimonials */}
+
  <section className="py-16 px-4 bg-gray-100">
-        <div className="container mx-auto">
-          <h2 className="text-3xl font-bold text-center mb-12">What Our Clients Say</h2>
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-      
-<div className="bg-white p-6 rounded-lg shadow">
-  <div className="flex items-center mb-4">
-    <img
-      src="https://randomuser.me/api/portraits/women/33.jpg"
-      alt="Client"
-      className="w-12 h-12 rounded-full mr-4"
-    />
-    <div>
-      <h4 className="font-bold">Amanda Rodriguez</h4>
-      <div className="flex text-yellow-400 text-sm">
-        {[...Array(5)].map((_, index) => (
-          <FontAwesomeIcon key={index} icon={faStar} />
-        ))}
-      </div>
-    </div>
-  </div>
-  <p className="text-gray-600 italic">
-    "Sarah helped us sell our home above asking price in just 7 days! Her marketing strategy was
-    incredible and she handled every detail perfectly."
-  </p>
-</div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="flex items-center mb-4">
-                <img src="https://randomuser.me/api/portraits/men/75.jpg" alt="Client" className="w-12 h-12 rounded-full mr-4" />
-                <div>
-                  <h4 className="font-bold">James Wilson</h4>
-                  <div className="flex text-yellow-400 text-sm">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
+      <div className="container mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-12">What Our Clients Say</h2>
+        <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {reviews && reviews.length > 0 ? (
+            reviews.slice(0, visibleAgents).map((review, index) => (
+              <div key={index} className="bg-white p-6 rounded-lg shadow mb-4">
+                <div className="flex items-center mb-4">
+                  <img
+                    src={review.image || "https://randomuser.me/api/portraits/men/41.jpg"}
+                    alt="Client"
+                    className="w-12 h-12 rounded-full mr-4"
+                  />
+                  <div>
+                    <h4 className="font-bold">{review.name || "Anonymous"}</h4>
+                    <div className="flex text-yellow-400 text-sm">
+                      {[...Array(5)].map((_, i) => (
+                        <FontAwesomeIcon
+                          key={i}
+                          icon={faStar}
+                          className={i < review.rating ? "text-yellow-400" : "text-gray-300"}
+                        />
+                      ))}
+                    </div>
                   </div>
                 </div>
+                <p className="text-gray-600 italic">
+                  "{review.review || 'Great experience!'}"
+                </p>
               </div>
-              <p className="text-gray-600 italic">"Michael found us the perfect commercial space for our new restaurant. His knowledge of zoning laws saved us months of headaches!"</p>
-            </div>
-            <div className="bg-white p-6 rounded-lg shadow">
-              <div className="flex items-center mb-4">
-                <img src="https://randomuser.me/api/portraits/women/82.jpg" alt="Client" className="w-12 h-12 rounded-full mr-4" />
-                <div>
-                  <h4 className="font-bold">Emily Thompson</h4>
-                  <div className="flex text-yellow-400 text-sm">
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                    <i className="fas fa-star"></i>
-                  </div>
-                </div>
-              </div>
-              <p className="text-gray-600 italic">"As first-time buyers, we were nervous, but Jessica made everything so easy. She explained every step and found us a home we adore in our budget."</p>
-            </div>
-          </div>
+            ))
+          ) : (
+            <p>No reviews available.</p>
+          )}
+
+          
         </div>
-      </section>
+        {reviews.length > 3 && (
+            <div className="text-center mt-12">
+              <button
+                onClick={toggleVisibleAgents}
+                className="border-2 border-blue-700 text-blue-700 px-8 py-3 rounded-lg font-bold hover:bg-blue-50 transition inline-block"
+              >
+                {visibleAgents === 3 ? "Show More" : "Show Less"}
+              </button>
+            </div>
+          )}
+      </div>
+    </section>
       
       {/* Stats */}
       <section className="py-16 px-4 bg-blue-800 text-white">
