@@ -62,13 +62,7 @@ const PropertiesDisplay2 = () => {
           },
         }
       );
-      localStorage.setItem('apartmentId', res.data.apartment.id); 
-      localStorage.setItem('userName', res.data.user.name);
-      localStorage.setItem('userEmail', res.data.user.email);
-      localStorage.setItem('userRole', res.data.user.role);
-      localStorage.setItem('token', res.data.token);
-      console.log("User data",res.data.user)
-  
+     
       if (response.data.success) {
         alert("Apartment created successfully");
         setApartments((prev) => [...prev, response.data.apartment]);

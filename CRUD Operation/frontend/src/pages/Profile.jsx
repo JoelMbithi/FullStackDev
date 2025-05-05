@@ -75,7 +75,7 @@ const Profile = () => {
           {/* profile image */}
           <div className="flex justify-center top-0 left-0 lg:mr-200 mb-6">
             <img
-              src=""
+              src={user.image || ""}
               alt="Profile"
               className="w-24 h-24 rounded-full bg-gray-200"
             />

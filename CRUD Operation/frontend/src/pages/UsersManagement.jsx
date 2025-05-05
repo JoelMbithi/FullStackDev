@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { FiUsers, FiHome, FiSettings, FiLogOut } from "react-icons/fi";
-import { Link } from "react-router-dom";
+import { Link, useParams } from "react-router-dom";
 
 import axios from "axios";
 import newRequest from "../utils/newRequest";
+import ConfirmationModal from "../components/ReusableConfirmPopUp";
+
 
 const UserManagement = () => {
   const [user, setUser] = useState(null);
@@ -14,6 +16,12 @@ const UserManagement = () => {
   const [bookCount,setBookCount] = useState(0)
   const [books,setBooks]= useState(null)
   const [book, setBook] = useState([]);
+  const {id} = useParams()
+
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+  const [bookingToDelete, setBookingToDelete] = useState(null);
+
+
 
   const fetchUser = async () => {
     const id = localStorage.getItem("userId");
@@ -82,6 +90,41 @@ const UserManagement = () => {
   useEffect(() => {
     fetchApartments();
   }, []);
+
+  const handleDeleteClick = (bookingId) => {
+    setBookingToDelete(bookingId);
+    setShowConfirmModal(true);
+  };
+
+  const handleConfirmDelete = async () => {
+    if (!bookingToDelete) return;
+    
+    try {
+      const res = await newRequest.delete(`/booking/delete/${bookingToDelete}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log("Delete response:", res.data);
+  
+      // Update UI
+      setBook((prev) => prev.filter((item) => item.id !== bookingToDelete));
+      setBookCount((prev) => prev - 1);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setShowConfirmModal(false);
+      setBookingToDelete(null);
+    }
+  };
+
+  const handleCancelDelete = () => {
+    setShowConfirmModal(false);
+    setBookingToDelete(null);
+  };
+
+ 
+  
 
   return (
     <div className="flex h-grow bg-gray-100">
@@ -261,13 +304,32 @@ const UserManagement = () => {
                           </td>
                           <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
                             <div className="flex space-x-2">
-                              <button className="text-blue-600 hover:text-blue-900">
+                              <button className="text-blue-600 hover:text-blue-900"
+                             
+                              >
+                                
                                 Edit
                               </button>
-                              <button className="text-red-600 hover:text-red-900">
+                              <button className="text-red-600 hover:text-red-900"
+                             onClick={() => handleDeleteClick(room.id)}
+                              >
                                 Delete
                               </button>
                             </div>
+                            <div className="flex h-grow bg-gray-100">
+      {/* ... existing JSX ... */}
+      
+      {/* Add this near the end of your component */}
+      <ConfirmationModal
+        isOpen={showConfirmModal}
+        onClose={handleCancelDelete}
+        onConfirm={handleConfirmDelete}
+        title="Confirm Deletion"
+        message="Are you sure you want to delete this booking?"
+        confirmText="Delete"
+        cancelText="Cancel"
+      />
+    </div>
                           </td>
                         </tr>
                       ))

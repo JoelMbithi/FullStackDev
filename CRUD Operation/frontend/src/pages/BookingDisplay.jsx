@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FiUsers, FiHome, FiSettings, FiLogOut } from "react-icons/fi";
 import { Link } from "react-router-dom";
-
+import { useNavigate } from 'react-router-dom';
 import axios from "axios";
 import newRequest from "../utils/newRequest";
 
@@ -23,13 +23,20 @@ const UserManagement = () => {
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
   const [success, setSuccess] = useState("");
-
+  const navigate = useNavigate();
 
   const toggleDropdown = () => {
     setPopUp(!popUp)
 
  }
 
+ const handleLogout = () => {
+  localStorage.removeItem('token');
+  localStorage.removeItem('userId');
+  setUser(null);
+  setIsOpen(false);
+  navigate('/');
+};
 
   const fetchUser = async () => {
     const id = localStorage.getItem("userId");
@@ -159,51 +166,56 @@ const UserManagement = () => {
     <div className="flex h-grow bg-gray-100">
       {/* Left sidebar */}
       <div className="bg-blue-950 text-white flex flex-col justify-evenly h-screen w-30">
+        
+      {user &&  (
         <div className="flex flex-col gap-4 items-center justify-center">
-          <div className="w-20 h-20  mt-20 bg-slate-300 p-2 rounded-full flex items-center justify-center"></div>
-          <h1 className="text-center">User</h1>
-        </div>
+          <div className="w-20 h-20  mt-20 bg-slate-300 p-2 rounded-full flex items-center justify-center">
+            <img className="rounded-full scale-down bg-blend-color" src={user.image} alt="" />
+          </div>
+          <h1 className="text-center font-bold">{user.name ? user.name.split(' ')[0] : "User"}</h1>
 
+        </div>
+      )}
         <div className="flex flex-col items-center ">
           <div className="text-white text-lg p-4 flex flex-col gap-2 h-full">
             {/* Logo/Header (optional) */}
 
             {/* Navigation Links */}
-            <nav className="flex flex-col gap-1 flex-grow">
+            <nav className="flex flex-col gap-1 ">
               <Link
-                to="/admin"
-                className="flex items-center px-3 py-3 hover:w-30 rounded-2xl hover:bg-slate-700 transition-all duration-200 group"
+                to="/"
+                className="flex items-center px-3 py-3  rounded-2xl "
               >
-                <FiHome className="mr-3 text-xl hover:ml-30 opacity-80 group-hover:opacity-100" />
-                <span className="group-hover:translate-x-1 transition-transform"></span>
+                <FiHome className="mr-3 text-xl " />
+               
               </Link>
 
               <Link
-                to="/users"
-                className="flex items-center px-3 py-3  hover:w-30 rounded-2xl hover:bg-slate-700 transition-all duration-200 group"
+                to="/agents"
+                className="flex items-center px-3 py-3  rounded-2xl "
               >
-                <FiUsers className="mr-3 text-xl opacity-80 group-hover:opacity-100" />
+                <FiUsers className="mr-3 text-xl " />
               </Link>
 
               {/* Spacer to push settings to bottom */}
-              <div className="flex-grow"></div>
+              <div className=""></div>
 
               <Link
-                to="/admin/settings"
-                className="flex items-center px-3 py-3  hover:w-30 rounded-2xl hover:bg-slate-700 transition-all duration-200 group mt-auto"
+                to="/profile"
+                className="flex items-center px-3 py-3   "
               >
-                <FiSettings className="mr-3 text-xl opacity-80 group-hover:opacity-100" />
+                <FiSettings className="mr-3 text-xl " />
               </Link>
             </nav>
           </div>
 
           <div className="p-4  border-slate-700 mt-4">
-            <button
-              /* onClick={handleLogout} */
-              className="flex items-center w-full p-3  hover:w-30 rounded-2xl hover:bg-slate-700 transition-colors"
-            >
-              <FiLogOut className="mr-3" />
-            </button>
+          
+               <button onClick={handleLogout} className='w-full text-left px-4 py-2 text-sm text-gray-300 hover:text-gray-100'>
+               <FiLogOut className="mr-3 text-xl" />
+          </button>
+              
+           
           </div>
         </div>
       </div>

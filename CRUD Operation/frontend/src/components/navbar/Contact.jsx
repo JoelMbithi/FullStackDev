@@ -77,7 +77,8 @@ const Contact = ({ onClose }) => {
           to_name: 'Build Estate', // generic recipient name
           message: formData.message,
           phone: formData.phone || 'Not provided',
-          reply_to: formData.email
+          reply_to: formData.email,
+          to_email: 'joellembithi@gmail.com',
         },
         emailjsConfig.publicKey
       );
@@ -191,9 +192,9 @@ const Contact = ({ onClose }) => {
                  <h2 className="text-2xl font-semibold text-gray-800 mb-6">Contact Details</h2>
                  <div className="flex items-center gap-4 mb-6">
            <img
-             src="joe"
+             src={user.image || "joe"}
              alt="Agent"
-             className="w-20 h-20 rounded-full object-cover shadow-md"
+             className="w-20 h-20 rounded-full scale-down shadow-md"
            />
            <div>
              <h3 className="text-xl font-bold text-gray-800">{user.name || "Joel Mbithi"}</h3>

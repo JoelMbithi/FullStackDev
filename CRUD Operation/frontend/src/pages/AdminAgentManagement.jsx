@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 
 import RegisterAgents from "../components/RegisterAgents";
 import newRequest from "../utils/newRequest";
+import ConfirmationModal from "../components/ReusableConfirmPopUp";
 
 const UserManagement = () => {
   const [users, setUsers] = useState(null);
@@ -13,6 +14,9 @@ const UserManagement = () => {
   const [bookCount, setBookCount] = useState(0);
   const [book, setBook] = useState([]);
   const [popUp, setPopUp] = useState(false);
+
+    const [showConfirmModal, setShowConfirmModal] = useState(false);
+    const [bookingToDelete, setBookingToDelete] = useState(null);
 
   const fetchUser = async () => {
     const id = localStorage.getItem("userId");
@@ -97,6 +101,40 @@ const UserManagement = () => {
     fetchBooking();
     fetchAgents();
   }, []);
+
+/* Confirm delete */
+  const handleDeleteClick = (agentId) => {
+    setBookingToDelete(agentId);
+    setShowConfirmModal(true);
+  };
+  const handleConfirmDelete = async () => {
+    if (!bookingToDelete) return;
+    
+    try {
+      const res = await newRequest.delete(`/agent/delete/${bookingToDelete}`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.getItem("token")}`,
+        },
+      });
+      console.log("Delete response:", res.data);
+  
+      // Update UI
+      setBook((prev) => prev.filter((agent) => agent.id !== bookingToDelete));
+      setBookCount((prev) => prev - 1);
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setShowConfirmModal(false);
+      setBookingToDelete(null);
+    }
+  };
+
+
+  const handleCancelDelete = () => {
+    setShowConfirmModal(false);
+    setBookingToDelete(null);
+  };
+
 
   return (
     <div className="flex h-grow bg-gray-100">
@@ -254,10 +292,22 @@ const UserManagement = () => {
                           <button className="text-blue-600 hover:text-blue-900">
                             Edit
                           </button>
-                          <button className="text-red-600 hover:text-red-900">
-                            Delete
-                          </button>
+                          <button className="text-red-600 hover:text-red-900"
+                             onClick={() => handleDeleteClick(agent.id)}
+                              >
+                                Delete
+                              </button>
                         </div>
+                         {/* Add this near the end of your component */}
+                              <ConfirmationModal
+                                isOpen={showConfirmModal}
+                                onClose={handleCancelDelete}
+                                onConfirm={handleConfirmDelete}
+                                title="Confirm Deletion"
+                                message="Are you sure you want to delete this booking?"
+                                confirmText="Delete"
+                                cancelText="Cancel"
+                              />
                       </td>
                     </tr>
                   ))}

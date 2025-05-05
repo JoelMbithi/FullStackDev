@@ -13,6 +13,7 @@ import Users from "./pages/UsersManagement";
 import BookingDisplay from "./pages/BookingDisplay"
 import Agents from './pages/Agents'
 import AdminAgentManagement from './pages/AdminAgentManagement'
+import OverView from './pages/OverView'
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
         <Route path="/profile" element={<Profile/>}/>
         <Route path='/agents' element={<Agents/>}/>
         <Route path='/AdminAgent' element={<AdminAgentManagement/>}/>
+        <Route path ="/overView" element={<OverView/>} />
        </Routes>
       <Footer />
       
