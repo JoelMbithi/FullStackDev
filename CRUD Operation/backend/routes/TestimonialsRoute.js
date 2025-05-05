@@ -4,7 +4,8 @@ import {verifyToken} from "../utils/jwt.js"
 const router = express.Router()
 
 router.post("/create", verifyToken, createReview);
-router.get("/singleReview/:id",getReview)
+router.get("/singleReview/:id", verifyToken, getReview);
+
 router.get("/reviews",allReviews)
 
 export default router

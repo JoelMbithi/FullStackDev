@@ -29,7 +29,7 @@ export const verifyToken = (req, res, next) => {
     console.log('Decoded token:', decoded);  // Log decoded token for debugging
 
     // Attach the decoded token (user info) to the request object
-    req.user = decoded;
+    req.userId = decoded.userId;  
 
     // Continue to the next middleware or route handler
     next();

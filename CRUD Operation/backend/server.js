@@ -10,6 +10,7 @@ import apartmentRouter from "./routes/ApartmentRoute.js";
 import bookingRouter from "./routes/BookingRoutes.js";
 import agentRouter from "./routes/AgentRoute.js"
 import contactRoute from "./routes/contactAgent.js"
+import testimonialsRoute from "./routes/TestimonialsRoute.js"
 import { initiateSTKPush } from "./mpesa.js"
 
 import twilio from 'twilio';
@@ -109,6 +110,7 @@ app.use("/api/apartment", apartmentRouter);
 app.use("/api/booking", bookingRouter)
 app.use("/api/agent", agentRouter)
 app.use("/api/message",contactRoute)
+app.use("/api/Testimonials",testimonialsRoute)
 
 // Start server
 app.listen(PORT, () => {

@@ -29,7 +29,7 @@ export const getUser = async (req, res) => {
 
     try {
         const result = await db.query(
-            `SELECT user_id, name, email, role, country, phone, created_at 
+            `SELECT user_id, name, email, role, country, phone,image, created_at 
              FROM Reg WHERE user_id = $1`,
             [id]
         );
