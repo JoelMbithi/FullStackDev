@@ -31,7 +31,7 @@ const NavBar = () => {
           Authorization: `Bearer ${token}`
         }
       });
-
+console.log(res.data.data)
       if (res.data.success) {
         setUser(res.data.data);
       } else {
