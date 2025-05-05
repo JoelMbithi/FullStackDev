@@ -14,6 +14,7 @@ import BookingDisplay from "./pages/BookingDisplay"
 import Agents from './pages/Agents'
 import AdminAgentManagement from './pages/AdminAgentManagement'
 import OverView from './pages/OverView'
+import Sales from "./pages/Sales"
 
 const App = () => {
   return (
@@ -31,6 +32,7 @@ const App = () => {
         <Route path='/agents' element={<Agents/>}/>
         <Route path='/AdminAgent' element={<AdminAgentManagement/>}/>
         <Route path ="/overView" element={<OverView/>} />
+        <Route path ="/sales" element={<Sales/>} />
        </Routes>
       <Footer />
       

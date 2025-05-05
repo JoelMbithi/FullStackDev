@@ -106,8 +106,8 @@
             Meet Our Expert Real Estate Agents
           </h1>
           <p className="text-xl mb-8 max-w-2xl mx-auto">
-            Dedicated professionals helping you find your dream home in [Your
-            City/Region].
+            Dedicated professionals helping you find your dream home in Your
+            City/Region.
           </p>
           <a
             href="#agents"

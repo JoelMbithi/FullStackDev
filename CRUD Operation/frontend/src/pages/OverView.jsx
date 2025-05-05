@@ -1,10 +1,40 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { FaSearch, FaHome, FaHandshake, FaKey, FaUserTie, FaChartLine } from 'react-icons/fa';
 import { Link } from 'react-router-dom';
+import Contact from '../components/navbar/Contact';
+import newRequest from '../utils/newRequest';
 
 const HowItWorks = () => {
+   const [popUp, setPopUp] = useState(false);
+ const [agents, setAgents] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const handleClick = () => {
+    setPopUp(true); // Show popup
+  }
+
+  const fetchAgents = async () => {
+    const token = localStorage.getItem("token");
+    try {
+      const res = await newRequest.get("/agent/allAgents", {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      });
+      console.log(res.data.data);
+      setAgents(res.data.data);
+    } catch (error) {
+      console.error("Error fetching agents:", error);
+      setError("Failed to load agents. Please try again later.");
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchAgents ()
+  },[])
   return (
-    <div className="min-h-screen bg-gray-50">
+    <div className="min-h-screen  bg-gray-50">
       {/* Hero Section */}
       <div className="bg-blue-900 text-white py-20">
         <div className="container mx-auto px-4 text-center">
@@ -39,10 +69,13 @@ const HowItWorks = () => {
 
             {/* Step 2 */}
             <div className="bg-white p-6 rounded-lg shadow-md">
-              <div className="text-blue-700 text-5xl font-bold mb-4">2</div>
+             {/* agents */}
+             {agents && agents.length > 0 && (
+               <div className="text-blue-700 text-5xl font-bold mb-4">{agents.length || "2"}</div>
+             )}
               <div className="flex items-center mb-4">
                 <FaUserTie className="text-2xl mr-3 text-blue-700" />
-                <h3 className="text-xl font-semibold">Connect with Agents</h3>
+                <Link to="/agents" className="text-xl font-semibold">Connect with Agents</Link >
               </div>
               <p className="text-gray-600">
                 Contact verified real estate agents who can provide more details and arrange viewings.
@@ -164,17 +197,21 @@ const HowItWorks = () => {
           <div className="flex flex-col sm:flex-row justify-center gap-4">
             <Link 
               to="/register" 
-              className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:bg-gray-100 transition"
+              className="bg-white text-blue-700 px-6 py-3 rounded-lg font-semibold hover:border-white hover: border-2 hover:bg-transparent hover:text-white transition"
             >
               Register Now
             </Link>
-            <Link 
-              to="/contact" 
+            <button 
+             
               className="bg-transparent border-2 border-white px-6 py-3 rounded-lg font-semibold hover:bg-white hover:text-blue-700 transition"
+              onClick={handleClick}
             >
+
               Contact Us
-            </Link>
+            </button>
           </div>
+          {/* pop up to contacts */}
+          {popUp && <Contact onClose={() => setPopUp(false)} />}
         </div>
       </div>
     </div>

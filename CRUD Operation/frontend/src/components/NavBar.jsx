@@ -100,10 +100,9 @@ console.log(res.data.data)
         {/* Navigation Links */}
         <div className={`absolute md:static top-20 left-0 w-full md:w-auto bg-white md:flex md:items-center md:space-x-8 space-y-4 md:space-y-0 px-4 py-4 md:py-0 z-40 shadow md:shadow-none ${isNavOpen ? 'block' : 'hidden'}`}>
           <a href="#" className='block text-gray-600 hover:text-purple-700 transition-colors text-sm font-medium'>Home</a>
-          <a href="#" className='block text-gray-600 hover:text-purple-700 transition-colors text-sm font-medium'>How it works</a>
+          <Link to="/overView" className='block text-gray-600 hover:text-purple-700 transition-colors text-sm font-medium'>How it works</Link >
           <Link to="/agents" className='block text-gray-600 hover:text-purple-700 transition-colors text-sm font-medium'>Agents</Link>
-          <a href="#" className='block text-gray-600 hover:text-purple-700 transition-colors text-sm font-medium'>Sales</a>
-        </div>
+          <Link to='/sales' className='block text-gray-600 hover:text-purple-700 transition-colors text-sm font-medium'>Sales</Link > </div>
 
         {/* Right Side */}
         <div className='flex items-center space-x-4'>
