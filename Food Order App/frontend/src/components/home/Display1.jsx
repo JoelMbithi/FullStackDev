@@ -16,15 +16,22 @@ const Display1 = () => {
       
       <div className="w-full max-w-320px bg-green-700 rounded shadow h-80 text-white flex flex-row justify-between items-center p-4">
       
-        <div  className="flex-1">
-        <h1 className=" text-3xl font-semibold">Delivery to Home</h1>
+        <div  className="flex flex-col gap-10 ">
+        <h1 className=" text-6xl font-semibold">Delivery to Home</h1>
         <p className="text-sm mt-2">Your items will be delivered quickly and safely to your doorstep.</p>
         <h1 className='bg-white font-bold text-xl text-slate-600 p-2 w-40 rounded'>24Hrs </h1>
         </div>
         <div>
-           <div className="ml-4">
+           <div className="hidden ml-4 md:flex flex-row gap-6">
     <img
-      className="object-cover h-55 w-55 animate-bounce duration-600000 ease-in-out rounded"
+      className="object-cover h-55 w-55 animate-pulse rounded-full"
+
+      src="https://www.cookingclassy.com/wp-content/uploads/2018/04/teriyaki-chicken-15.jpg"
+      alt="Chicken Teriyaki"
+    />
+    <img
+      className="object-cover h-55 w-55 animate-pulse rounded-full"
+
       src="https://www.cookingclassy.com/wp-content/uploads/2018/04/teriyaki-chicken-15.jpg"
       alt="Chicken Teriyaki"
     />
