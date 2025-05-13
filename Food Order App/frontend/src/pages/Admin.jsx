@@ -162,7 +162,7 @@ useEffect(() => {
           {popUp && (
             <div className='fixed top-10 inset-0 z-50 flex justify-center items-center'>
               <div className='bg-white shadow p-4 rounded-lg'>
-                <AddProductForm onClose={handleClose} />
+                <AddProductForm setPopUp={setPopUp} onClose={handleClose} />
               </div>
             </div>
           )}
