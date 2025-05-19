@@ -65,7 +65,7 @@ const Navbar = () => {
   const toggleDarkMode = () => setDarkMode(prev => !prev);
 
   return (
-    <nav className={`fixed w-full top-0 left-0 z-50 transition-all duration-300 ${scrolled ? 'bg-white/70 dark:bg-gray-900/80 backdrop-blur-md shadow-md' : 'bg-transparent'}`}>
+    <nav className={`fixed w-full top-0 left-0 shadow z-50 transition-all duration-300 ${scrolled ? 'bg-white/70 dark:bg-gray-900/80 backdrop-blur-md shadow-md' : 'bg-transparent'}`}>
       <div className="max-w-7xl mx-auto px-4 py-3 flex items-center justify-between">
         {/* Logo */}
         <Link to="/" className="flex items-center text-2xl font-bold text-green-600">

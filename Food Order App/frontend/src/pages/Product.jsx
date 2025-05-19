@@ -2,7 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { FaChevronRight, FaStar, FaRegStar, FaStarHalfAlt, FaShoppingCart, FaHeart, FaShieldAlt, FaTruck, FaExchangeAlt, FaHeadset } from 'react-icons/fa';
 import newRequest from '../utils/newRequest';
 import { Link, useParams } from 'react-router-dom';
-import AddToCart from '../components/cart/AddToCart';
+import AddToCart from '../components/cart/AddToCartButton';
+import BuyButton from '../components/cart/BuyButton';
 
 const Product = () => {
   const [products, setProducts] = useState([]);
@@ -142,14 +143,17 @@ const Product = () => {
         {/* Display filtered products */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {filteredProducts.map((product, index) => (
-            <Link to={`/product/${product.product_id}`}>
+           
             <div key={index} className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-lg transition-shadow duration-300">
+            <Link to={`/product/${product.product_id}`}>
             <img 
               src={product.image_url || "https://placehold.co/400x300?text=No+Image"} 
               alt={product.name}
               className="w-full h-48 object-cover"
             />
+           </Link>
             <div className="p-4">
+               
               <h3 className="font-medium text-gray-900">{product.name}</h3>
               <div className="flex items-center mt-1">
                 {renderStars(product.rating || 4)}
@@ -161,10 +165,17 @@ const Product = () => {
                   <span className="text-sm line-through text-gray-500 ml-2">${product.originalPrice}</span>
                 )}
               </div>
-               <AddToCart userId={user_id}  productId={product.product_id} />
+              
+              <div className='flex flex-row gap-4 ' >
+              <AddToCart userId={user_id}  productId={product.product_id} />
+               <BuyButton 
+  onClick={() => console.log('Purchase successful')} 
+  disabled={false} 
+/>
+              </div>
             </div>
           </div>
-          </Link>
+         
           ))}
         </div>
       </div>

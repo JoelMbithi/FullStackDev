@@ -2,11 +2,16 @@ import React, { useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import newRequest from '../../utils/newRequest'
 import { FaStar, FaRegStar, FaStarHalfAlt } from 'react-icons/fa'
+import AddToCart from '../cart/AddToCartButton'
+import BuyButton from '../cart/BuyButton'
 
 const ProductDetails = () => {
   const { product_id } = useParams()
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(false)
+  const user_id = localStorage.getItem("user_id");
+
+  
 
   const fetchProduct = async () => {
     
@@ -21,6 +26,8 @@ const ProductDetails = () => {
         setLoading(false)
     }
   }
+
+ 
 
   const renderStars = (rating) => {
     const stars = []
@@ -57,13 +64,13 @@ const ProductDetails = () => {
           </div>
         </div>
       ) : product ? (
-        <div className="flex flex-col md:flex-row gap-12 bg-white shadow-lg rounded-xl p-6 md:p-10">
+        <div className="flex flex-col md:flex-row gap-12 bg-slate-100 shadow-lg rounded-xl p-6 md:p-10">
   {/* Product Image */}
   <div className="md:w-1/2 w-full">
     <img
       src={product.image_url || "https://placehold.co/500x400?text=No+Image"}
       alt={product.name}
-      className="w-full h-auto max-h-[500px] object-cover rounded-lg shadow-md"
+      className="w-full h-auto max-h-[500px] object-fill rounded-lg shadow-md"
     />
   </div>
 
@@ -88,9 +95,13 @@ const ProductDetails = () => {
     <div className="mt-8 text-3xl font-bold text-blue-600">${product.price}</div>
 
     {/* Call to Action (optional) */}
-    <button className="mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition duration-200 w-max">
-      Add to Cart
-    </button>
+   <div className='flex flex-col gap-2'>
+   <AddToCart userId={user_id} productId={product.product_id}/>
+   <BuyButton
+  onClick={() => console.log('Purchase successful')} 
+  disabled={false} 
+/>
+   </div>
   </div>
 </div>
 
