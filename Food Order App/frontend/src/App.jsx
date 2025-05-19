@@ -11,6 +11,7 @@ import Admin from './pages/Admin';
 import Product from "./pages/Product"
 import ContactPage from './pages/ContactPage'
 import CartPage from './pages/CartPage';
+import ProductDetails from './components/Product/ProductDetails'
 
 // Wrapper component to access location outside of <Routes>
 const AppLayout = () => {
@@ -29,6 +30,7 @@ const AppLayout = () => {
           <Route path="/product" element={<Product />}/>
           <Route path="/cart" element={<CartPage />}/>
           <Route path="/contact" element={<ContactPage />}/>
+          <Route path="/product/:product_id" element={<ProductDetails />} />
         </Routes>
       </div>
       {!isAdminPage && <Footer />}
