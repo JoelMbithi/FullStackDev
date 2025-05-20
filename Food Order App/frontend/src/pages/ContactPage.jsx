@@ -31,7 +31,7 @@ const ContactPage = () => {
   }
 
   return (
-    <div className="bg-gray-50 min-h-screen py-12">
+    <div className="bg-gray-50 min-h-screen mt-17 py-12">
       <div className="container mx-auto px-4">
         {/* Page Header */}
         <div className="text-center mb-12">
@@ -56,7 +56,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">Phone</h3>
-                    <p className="text-gray-600">+1 (555) 123-4567</p>
+                    <p className="text-gray-600">+ (254) 743-861-565</p>
                     <p className="text-gray-600 text-sm mt-1">Mon-Fri, 9am-5pm EST</p>
                   </div>
                 </div>
@@ -67,7 +67,7 @@ const ContactPage = () => {
                   </div>
                   <div>
                     <h3 className="font-semibold text-gray-900">Email</h3>
-                    <p className="text-gray-600">support@yourstore.com</p>
+                    <p className="text-gray-600">foodify@gmail.com</p>
                     <p className="text-gray-600 text-sm mt-1">Typically respond within 24 hours</p>
                   </div>
                 </div>
@@ -79,7 +79,7 @@ const ContactPage = () => {
                   <div>
                     <h3 className="font-semibold text-gray-900">Office</h3>
                     <p className="text-gray-600">123 Commerce Street</p>
-                    <p className="text-gray-600">New York, NY 10001</p>
+                    <p className="text-gray-600">Nairobi, KE 10001</p>
                   </div>
                 </div>
 
@@ -134,7 +134,7 @@ const ContactPage = () => {
                       onChange={handleChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="John Doe"
+                      placeholder="Joe"
                     />
                   </div>
                   
@@ -150,7 +150,7 @@ const ContactPage = () => {
                       onChange={handleChange}
                       required
                       className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-blue-500 focus:border-blue-500"
-                      placeholder="your@email.com"
+                      placeholder="joellembthi@email.com"
                     />
                   </div>
                 </div>

@@ -4,6 +4,7 @@ import newRequest from '../utils/newRequest';
 import { Link, useParams } from 'react-router-dom';
 import AddToCart from '../components/cart/AddToCartButton';
 import BuyButton from '../components/cart/BuyButton';
+import PaymentPopup from '../components/popup/PaymentPopUp';
 
 const Product = () => {
   const [products, setProducts] = useState([]);
@@ -168,10 +169,9 @@ const Product = () => {
               
               <div className='flex flex-row gap-4 ' >
               <AddToCart userId={user_id}  productId={product.product_id} />
-               <BuyButton 
-  onClick={() => console.log('Purchase successful')} 
-  disabled={false} 
-/>
+              <PaymentPopup />
+
+
               </div>
             </div>
           </div>

@@ -4,14 +4,19 @@ import newRequest from '../../utils/newRequest'
 import { FaStar, FaRegStar, FaStarHalfAlt } from 'react-icons/fa'
 import AddToCart from '../cart/AddToCartButton'
 import BuyButton from '../cart/BuyButton'
+import PaymentPopup from '../popup/PaymentPopUp'
 
 const ProductDetails = () => {
   const { product_id } = useParams()
   const [product, setProduct] = useState(null)
   const [loading, setLoading] = useState(false)
   const user_id = localStorage.getItem("user_id");
-
+  const [popUp,setPopUp] = useState(false)
   
+
+  const handlePopUp = () => {
+    setPopUp(true)
+  }
 
   const fetchProduct = async () => {
     
@@ -70,7 +75,7 @@ const ProductDetails = () => {
     <img
       src={product.image_url || "https://placehold.co/500x400?text=No+Image"}
       alt={product.name}
-      className="w-full h-auto max-h-[500px] object-fill rounded-lg shadow-md"
+     className="w-full h-auto max-h-[500px] object-fill rounded-lg shadow-md"
     />
   </div>
 
@@ -97,10 +102,8 @@ const ProductDetails = () => {
     {/* Call to Action (optional) */}
    <div className='flex flex-col gap-2'>
    <AddToCart userId={user_id} productId={product.product_id}/>
-   <BuyButton
-  onClick={() => console.log('Purchase successful')} 
-  disabled={false} 
-/>
+   <PaymentPopup />
+
    </div>
   </div>
 </div>
@@ -112,4 +115,4 @@ const ProductDetails = () => {
   )
 }
 
-export default ProductDetails
+export default ProductDetails 
