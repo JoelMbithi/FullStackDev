@@ -1,6 +1,22 @@
-import React from 'react';
-
+import React, { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
+import newRequest from '../utils/newRequest'
 const CartPage = () => {
+
+  const [products,setProducts] = useState([])
+  const fetchProducts = async () => {
+    try {
+      const res = await newRequest.get('/product/allProduct');
+      setProducts(res.data.data);
+     /*  console.log(res.data.data); */
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    fetchProducts();
+  },[])
   return (
     <div className="bg-gray-50 mt-20 min-h-screen py-8">
       <div className="container mx-auto px-4">
@@ -8,17 +24,18 @@ const CartPage = () => {
           Your Shopping Cart
         </h1>
 
-        <div className="flex flex-col sm:flex-row bg-white rounded justify-between py-4 shadow w-full px-4 gap-4">
+       {products && products.map((product,index) => (
+         <div key={index} className="flex flex-col sm:flex-row bg-white rounded justify-between py-4 shadow w-full px-4 gap-4">
           <div className="p-2 flex justify-center sm:block">
             <img
               className="w-32 h-20 object-cover rounded-lg bg-blend-multiply shadow-md"
-              src="https://placehold.co/500x400?text=No+Image"
+              src={product.image_url || "https://placehold.co/500x400?text=No+Image"}
               alt="Cart item"
             />
           </div>
 
           <div className="py-2 sm:py-6 text-center sm:text-left">
-            <h1>Burger</h1>
+            <h1>{product.name ||Burger}</h1>
           </div>
 
           <div className="py-2 sm:py-6 flex flex-row justify-center sm:justify-start items-center gap-4">
@@ -28,13 +45,14 @@ const CartPage = () => {
           </div>
 
           <div className="py-2 sm:py-6 font-bold text-red-600 text-2xl text-center sm:text-left">
-            <h1>$26.00</h1>
+            <h1>${product.price || 26.00}</h1>
           </div>
 
           <div className="py-2 sm:py-6 text-center sm:text-left">
-            <h1>Stock</h1>
+            <h1> Stock</h1>
           </div>
         </div>
+       ))}
 
         <div className="bg-white mt-6 flex flex-col sm:flex-row justify-between px-2 py-4 shadow w-full gap-4">
           <div className="font-bold text-2xl px-2 py-2 text-slate-500">
@@ -49,9 +67,9 @@ const CartPage = () => {
         </div>
 
         <div className="p-4 flex flex-col sm:flex-row gap-4">
-          <button className="bg-black text-white p-2 rounded w-full">
+          <Link to="/" className="bg-black text-white p-2 rounded w-full">
             Back to Shopping
-          </button>
+          </Link>
           <button className="bg-blue-700 text-white p-2 rounded w-full">
             Checkout
           </button>

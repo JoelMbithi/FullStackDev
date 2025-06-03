@@ -13,6 +13,7 @@ const Navbar = () => {
   const [darkMode, setDarkMode] = useState(false);
   const [cartCount, setCartCount] = useState(0);
   const location = useLocation();
+  const [productsCount, setProductsCount] = useState(0);
  
 
 
@@ -56,6 +57,20 @@ const Navbar = () => {
     setMenuOpen(false); 
   }, [location]);
 
+
+  const fetchProductsCount = async () => {
+    try {
+      const res = await newRequest.get("/product/allProduct")
+      
+      setProductsCount(res.data.data.length);
+    } catch (error) {
+      console.log(error)
+    }
+  }
+
+  useEffect(() => {
+    fetchProductsCount();
+  },[])
   const handleLogout = () => {
     localStorage.removeItem("token");
     localStorage.removeItem("user_id");
@@ -89,9 +104,9 @@ const Navbar = () => {
 
           <Link to="/cart" className="relative">
             <PiShoppingCartLight className="text-2xl" />
-            {cartCount > 0 && (
+            {productsCount > 0 && (
               <span className="absolute -top-2 -right-2 text-xs bg-red-500 text-white rounded-full px-1">
-                {cartCount}
+                {productsCount}
               </span>
             )}
           </Link>
