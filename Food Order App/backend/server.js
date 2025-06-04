@@ -5,6 +5,10 @@ import cookieParser from "cookie-parser";
 import cloudinary from "cloudinary";  
 import authRoute from "./routes/authRoutes.js"
 import userRouter from "./routes/userRouter.js";
+import orderRouter from "./routes/OrderController.js"
+import revenueRouter from "./routes/Revenue.js"
+import productRouter from "./routes/addProduct.js"
+import MessageRouter from "./routes/MessagesRouter.js";
 
 
 // Load environment variables
@@ -45,6 +49,10 @@ app.use(cookieParser());
 // API routes
 app.use("/api/auth",authRoute)
 app.use("/api/user",userRouter)
+app.use("/api/order",orderRouter)
+app.use("/api/revenue",revenueRouter)
+app.use("/api/product",productRouter)
+app.use("/api/messages", MessageRouter)
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);
