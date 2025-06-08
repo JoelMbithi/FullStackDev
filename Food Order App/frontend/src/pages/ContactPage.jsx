@@ -1,5 +1,6 @@
 import React from 'react'
 import { FaPhone, FaEnvelope, FaMapMarkerAlt, FaClock, FaPaperPlane } from 'react-icons/fa'
+import newRequest from '../utils/newRequest'
 
 const ContactPage = () => {
   const [formData, setFormData] = React.useState({
@@ -17,17 +18,27 @@ const ContactPage = () => {
     }))
   }
 
-  const handleSubmit = (e) => {
+ 
+  const handleSubmit = async (e) => {
     e.preventDefault()
-    // Here you would typically send the form data to your backend
-    console.log('Form submitted:', formData)
-    alert('Thank you for your message! We will get back to you soon.')
-    setFormData({
-      name: '',
-      email: '',
-      subject: '',
-      message: ''
-    })
+
+    try {
+      const res = await newRequest.post('/messages/send',formData)
+
+      if (res.status === 200) {
+        alert ('Message sent successfully!')
+
+        setFormData({
+          name:'',
+          email:'',
+          subject:'',
+          message:''
+
+        })
+      }
+    } catch (error) {
+      console.log('Error submitting form ', error)
+    }
   }
 
   return (

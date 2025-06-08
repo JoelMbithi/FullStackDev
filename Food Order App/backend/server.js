@@ -9,6 +9,7 @@ import orderRouter from "./routes/OrderController.js"
 import revenueRouter from "./routes/Revenue.js"
 import productRouter from "./routes/addProduct.js"
 import MessageRouter from "./routes/MessagesRouter.js";
+import Subscriber from './routes/MessagesRouter.js'
 
 
 // Load environment variables
@@ -53,6 +54,7 @@ app.use("/api/order",orderRouter)
 app.use("/api/revenue",revenueRouter)
 app.use("/api/product",productRouter)
 app.use("/api/messages", MessageRouter)
+app.use("/api/subscribes", Subscriber)
 // Start server
 app.listen(PORT, () => {
   console.log(`Server is running on port ${PORT}`);

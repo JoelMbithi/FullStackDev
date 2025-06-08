@@ -1,26 +1,55 @@
 import React, { useState } from 'react';
 import BuyButton from '../cart/BuyButton';
+import newRequest from '../../utils/newRequest'
 
 const PaymentPopup = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [name, setName] = useState('');
+ 
   const [isProcessing, setIsProcessing] = useState(false);
 
-  const handleSubmit = (e) => {
-    e.preventDefault();
-    if (!name.trim()) {
-      alert('Please enter your name.');
-      return;
-    }
+  const [formData,setFormData] = useState(
+   {
+    name:'',
+    location: '',
+  station: '',
+  amount: '',
+  userId: '',
+  status: '',
+  phoneNumber: '',
+   }
+  )
 
-    setIsProcessing(true);
+  const handleChange = (e) => {
+    setFormData({...formData, [e.target.name]: e.target.value})
+  }
+
+  const handleSubmit = async (e) => {
+  e.preventDefault();
+
+  const { name, location, station, phoneNumber, product, amount, user_id, status } = formData;
+
+  if (!name || !location || !station || !phoneNumber || !product || !amount || !user_id) {
+    alert('Please fill in all required fields.');
+    return;
+  }
+
+  setIsProcessing(true);
+
+  try {
+    const res = await newRequest.post('/order/create', formData);
+    console.log(res.data.data);
     setTimeout(() => {
       setIsProcessing(false);
-      alert(`Payment successful! Thank you, ${name}.`);
+      alert(`Payment successful! Thank you.`);
       setIsOpen(false);
-      setName('');
     }, 2000);
-  };
+  } catch (error) {
+    console.log(error);
+    alert('Failed to create order. Check console for details.');
+    setIsProcessing(false);
+  }
+};
+
 
   return (
     <div>
@@ -44,9 +73,10 @@ const PaymentPopup = () => {
                 <label className="block text-sm font-medium mb-1">Your Name</label>
                 <input
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  placeholder="Joec"
+                  name='name'
+                  value={formData.name}
+                  onChange ={handleChange  }
+                   placeholder="Joe"
                   className="w-full p-2 border rounded"
                   required
                 />
@@ -56,8 +86,9 @@ const PaymentPopup = () => {
                 <label className="block text-sm font-medium mb-1">Your location</label>
                 <input
                   type="text"
-                 
-                  onChange={(e) => setName(e.target.value)}
+                  name='location'
+                 value={formData.location}
+                  onChange={handleChange}
                   placeholder="Nairobi"
                   className="w-full p-2 border rounded"
                   required
@@ -67,8 +98,9 @@ const PaymentPopup = () => {
                 <label className="block text-sm font-medium mb-1">Pick Up Station</label>
                 <input
                   type="text"
-                  
-                  onChange={(e) => setName(e.target.value)}
+                  name='station'
+                  value={formData.station}
+                  onChange={handleChange}
                   placeholder="Please enter your pick Up Station"
                   className="w-full p-2 border rounded"
                   required
@@ -78,8 +110,9 @@ const PaymentPopup = () => {
                 <label className="block text-sm font-medium mb-1">Phone Number</label>
                 <input
                   type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
+                  name='phoneNumber'
+                  value={formData.phoneNumber}
+                  onChange={handleChange}
                   placeholder="0743861565"
                   className="w-full p-2 border rounded"
                   required

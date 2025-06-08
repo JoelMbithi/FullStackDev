@@ -1,7 +1,27 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { FaFacebook, FaTwitter, FaInstagram, FaLinkedin, FaCcVisa, FaCcMastercard, FaCcAmex, FaCcPaypal, FaPhone, FaEnvelope, FaMapMarkerAlt } from 'react-icons/fa'
+import newRequest from '../utils/newRequest'
 
 const Footer = () => {
+  const [formData,setFormData] = useState({
+    email:''
+
+  })
+
+  const handleSubmit = async (e) => {
+    e.preventDefault()
+    try {
+      const res = await newRequest.post('/subscribes/subscribe', formData)
+      if (res.status === 200) {
+        alert('Subscription successful! Thank you for subscribing to our newsletter.')
+        setFormData({
+          email:''
+        })
+      }
+    } catch (error) {
+      console.log(error)
+    }
+  }
   return (
     <footer className="bg-gray-900 text-gray-300 pt-12 pb-6">
       <div className="container mx-auto px-4">
@@ -10,7 +30,7 @@ const Footer = () => {
           
           {/* About Section */}
           <div className="lg:col-span-1">
-            <h3 className="text-xl font-bold text-white mb-4">ShopName</h3>
+            <h3 className="text-xl font-bold text-white mb-4">Foodify</h3>
             <p className="mb-4">
               Your one-stop shop for premium products. We deliver quality and value to customers worldwide.
             </p>
@@ -62,19 +82,19 @@ const Footer = () => {
             <ul className="space-y-3">
               <li className="flex items-start">
                 <FaMapMarkerAlt className="mt-1 mr-3 flex-shrink-0" />
-                <span>123 Commerce Street, New York, NY 10001</span>
+                <span>Nairobi Commerce Street, Kenya, KE 10001</span>
               </li>
               <li className="flex items-start">
                 <FaPhone className="mt-1 mr-3 flex-shrink-0" />
                 <div>
-                  <a href="tel:+15551234567" className="hover:text-white transition-colors">+1 (555) 123-4567</a>
+                  <a href="tel:+15551234567" className="hover:text-white transition-colors">+(254) 743 861 565</a>
                   <p className="text-sm text-gray-400">Mon-Fri, 9am-5pm EST</p>
                 </div>
               </li>
               <li className="flex items-start">
                 <FaEnvelope className="mt-1 mr-3 flex-shrink-0" />
                 <a href="mailto:support@yourstore.com" className="hover:text-white transition-colors">
-                  support@yourstore.com
+                  foodifyStore@gmail.com
                 </a>
               </li>
             </ul>
@@ -88,15 +108,20 @@ const Footer = () => {
               <h4 className="text-lg font-semibold text-white mb-2">Subscribe to Our Newsletter</h4>
               <p className="text-gray-400">Get the latest updates on new products and upcoming sales</p>
             </div>
-            <form className="flex flex-col sm:flex-row gap-2">
+            <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-2">
               <input 
                 type="email" 
                 placeholder="Your email address" 
+                name='email'
+                value={formData.email}
+                onChange={(e) => setFormData({ ...formData, email: e.target.value })}
+                
                 className="px-4 py-3 rounded-lg bg-gray-800 text-white border border-gray-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent sm:w-64"
                 required
               />
               <button 
                 type="submit" 
+                
                 className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors"
               >
                 Subscribe
@@ -110,7 +135,7 @@ const Footer = () => {
           <div className="flex flex-col md:flex-row justify-between items-center">
             <div className="mb-4 md:mb-0">
               <p className="text-gray-400 text-sm">
-                © {new Date().getFullYear()} ShopName. All rights reserved.
+                © {new Date().getFullYear()} Foodify. All rights reserved.
               </p>
             </div>
             <div className="flex space-x-4">

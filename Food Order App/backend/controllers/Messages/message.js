@@ -76,3 +76,31 @@ export const deleteMessage = async (req,res) => {
         
     }
 }
+
+
+/* News Subscription */
+
+export const subscribeToNewsletter = async (req, res) => {
+    const {email} = req.body
+   
+    if(!email){
+        return res.status(400).json({error: "Email is required"});
+    }
+        
+    try {
+            const newSubsriber = await db.query(
+                `INSERT INTO newsletter_subscribers (email) VALUES ($1) RETURNING *`,
+                [email] 
+            )
+
+            res.status(200).json({
+                status:"success",
+                message:"Subscribed to newsletter successfully",
+                data: newSubsriber.rows[0],
+            })
+        } catch (error) {
+            console.log("Error subscribing to newsletter:", error);
+            return res.status(500).json({ error: "Internal server error" });    
+        }
+    
+}

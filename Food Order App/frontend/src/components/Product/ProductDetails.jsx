@@ -22,8 +22,10 @@ const ProductDetails = () => {
     
     try {
       const res = await newRequest.get(`/product/allProduct/${product_id}`)
+
       setLoading(true)
       setProduct(res.data.data)
+      console.log(res.data.data)
      
     } catch (error) {
       console.error(error)
